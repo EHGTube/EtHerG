@@ -489,6 +489,7 @@ namespace EtHerG
                     if (FrequencyModbusLastVal == 0)
                     {
                         FrequencyModbusLastVal = FrequencyModbusVal;
+                        MessageBox.Show(FrequencyModbusLastVal.ToString());
                     }
 
                     if (FrequencyModbusLastVal != FrequencyModbusVal)
@@ -498,6 +499,7 @@ namespace EtHerG
                             txtFrequencyLastModbusValue.Text = FrequencyModbusVal.ToString();
                             txtFrequencyLast.Text = FrequencyModbusVal.ToString();
                         }));
+                        MessageBox.Show(FrequencyModbusVal.ToString());
                         ether.WriteToInstrument(1, 0, "<FREQUENCY>" + FrequencyModbusVal * 1000 + "</FREQUENCY>");
                         EtHerG.Properties.Settings.Default.Frequency = FrequencyModbusVal;
                         EtHerG.Properties.Settings.Default.Save();
@@ -1020,6 +1022,18 @@ namespace EtHerG
             //EtHerG.Properties.Settings.Default.FilterHP;
             //EtHerG.Properties.Settings.Default.Alarm1Value;
             //EtHerG.Properties.Settings.Default.Alarm2Value;
+        }
+
+        private void txtAlarm1ModbusAddress_LostFocus(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.Alarm1ModbusAddress = ushort.Parse(txtAlarm1ModbusAddress.Text);
+            EtHerG.Properties.Settings.Default.Save();
+        }
+
+        private void txtAlarm2ModbusAddress_LostFocus(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.Alarm2ModbusAddress = ushort.Parse(txtAlarm2ModbusAddress.Text);
+            EtHerG.Properties.Settings.Default.Save();
         }
     }
 }

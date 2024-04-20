@@ -66,7 +66,6 @@
             formScatter = new ScottPlot.WinForms.FormsPlot();
             tabPage2 = new TabPage();
             panel1 = new Panel();
-            lblInflux = new Label();
             chkDisableUserInput = new CheckBox();
             lblModbusReadValue = new Label();
             lblModbusReadAdresses = new Label();
@@ -132,6 +131,10 @@
             lblPhase1 = new Label();
             DiagWorker = new System.ComponentModel.BackgroundWorker();
             ModbusWorker = new System.ComponentModel.BackgroundWorker();
+            label1 = new Label();
+            label2 = new Label();
+            txtAlarm1ModbusAddress = new TextBox();
+            txtAlarm2ModbusAddress = new TextBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panelSettings.SuspendLayout();
@@ -513,7 +516,10 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(lblInflux);
+            panel1.Controls.Add(txtAlarm2ModbusAddress);
+            panel1.Controls.Add(txtAlarm1ModbusAddress);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(label2);
             panel1.Controls.Add(chkDisableUserInput);
             panel1.Controls.Add(lblModbusReadValue);
             panel1.Controls.Add(lblModbusReadAdresses);
@@ -582,15 +588,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1890, 1007);
             panel1.TabIndex = 54;
-            // 
-            // lblInflux
-            // 
-            lblInflux.AutoSize = true;
-            lblInflux.Location = new Point(423, 467);
-            lblInflux.Name = "lblInflux";
-            lblInflux.Size = new Size(38, 15);
-            lblInflux.TabIndex = 73;
-            lblInflux.Text = "label1";
             // 
             // chkDisableUserInput
             // 
@@ -1128,6 +1125,40 @@
             lblPhase1.TabIndex = 16;
             lblPhase1.Text = "Phase:";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(367, 436);
+            label1.Name = "label1";
+            label1.Size = new Size(51, 15);
+            label1.TabIndex = 74;
+            label1.Text = "Alarm 1:";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(367, 467);
+            label2.Name = "label2";
+            label2.Size = new Size(51, 15);
+            label2.TabIndex = 73;
+            label2.Text = "Alarm 2:";
+            // 
+            // txtAlarm1ModbusAddress
+            // 
+            txtAlarm1ModbusAddress.Location = new Point(423, 433);
+            txtAlarm1ModbusAddress.Name = "txtAlarm1ModbusAddress";
+            txtAlarm1ModbusAddress.Size = new Size(100, 23);
+            txtAlarm1ModbusAddress.TabIndex = 75;
+            txtAlarm1ModbusAddress.LostFocus += txtAlarm1ModbusAddress_LostFocus;
+            // 
+            // txtAlarm2ModbusAddress
+            // 
+            txtAlarm2ModbusAddress.Location = new Point(424, 467);
+            txtAlarm2ModbusAddress.Name = "txtAlarm2ModbusAddress";
+            txtAlarm2ModbusAddress.Size = new Size(100, 23);
+            txtAlarm2ModbusAddress.TabIndex = 76;
+            txtAlarm2ModbusAddress.LostFocus += txtAlarm2ModbusAddress_LostFocus;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1253,6 +1284,9 @@
         private Label lblModbusReadValue;
         private Label lblModbusReadAdresses;
         private CheckBox chkDisableUserInput;
-        private Label lblInflux;
+        private TextBox txtAlarm2ModbusAddress;
+        private TextBox txtAlarm1ModbusAddress;
+        private Label label1;
+        private Label label2;
     }
 }
