@@ -19,6 +19,7 @@ namespace EtHerG
         public ScottPlot.Plottables.DataStreamer StreamY;
         public HorizontalLine Alarm1;
         public HorizontalLine Alarm2;
+        public ScottPlot.Plottables.Rectangle Alarm5;
 
         private TcpClient modbusClient;
         private IModbusMaster modbusMaster;
@@ -76,8 +77,6 @@ namespace EtHerG
         private readonly object dataLockX = new object();
         private readonly object dataLockY = new object();
         private readonly object dataLockScatter = new object();
-
-        ConcurrentQueue<int> QueueX = new ConcurrentQueue<int>();
 
         public Form1()
         {
@@ -161,7 +160,7 @@ namespace EtHerG
                 chkModbusAutoconnect.Checked = EtHerG.Properties.Settings.Default.ModbusAutoconnect;
                 txtCOMPort.Text = EtHerG.Properties.Settings.Default.ComPort.ToString();
                 txtPlayModbusAddress.Text = EtHerG.Properties.Settings.Default.PlayModbusAddress.ToString();
-                txtLineDiagHeight.Text = EtHerG.Properties.Settings.Default.LineDiagHeight.ToString();
+                txtDiagMaxPointSize.Text = EtHerG.Properties.Settings.Default.DiagMaxPointSize.ToString();
                 txtLineDiagPoints.Text = EtHerG.Properties.Settings.Default.LineDiagPoints.ToString();
                 chkAutologin.Checked = EtHerG.Properties.Settings.Default.Autologin;
                 txtAlarm1Value.Text = EtHerG.Properties.Settings.Default.Alarm1ModbusAddress.ToString();
@@ -182,12 +181,13 @@ namespace EtHerG
                 formScatter.Location = new Point(EtHerG.Properties.Settings.Default.ScatterDiagPosX, EtHerG.Properties.Settings.Default.ScatterDiagPosY);
                 formScatter.Size = new Size(EtHerG.Properties.Settings.Default.ScatterDiagSize, EtHerG.Properties.Settings.Default.ScatterDiagSize);
 
+
+
                 chkShowX.Checked = true;
                 chkShowY.Checked = true;
-                Form1AlarmFormat();
-                Form2AlarmFormat();
-                UpdateYAxis();
-                formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.LineDiagHeight, EtHerG.Properties.Settings.Default.LineDiagHeight);
+                FormatDiags();
+
+                formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
 
                 if (EtHerG.Properties.Settings.Default.EtherAutoconnect == true) { OpenSerialConnection(); }
 
@@ -226,38 +226,6 @@ namespace EtHerG
             }));
         }
 
-        private void Form1AlarmFormat()
-        {
-            StreamX.Clear();
-            StreamY.Clear();
-            StreamX = formLineDiag.Plot.Add.DataStreamer(EtHerG.Properties.Settings.Default.LineDiagPoints);
-            StreamY = formLineDiag.Plot.Add.DataStreamer(EtHerG.Properties.Settings.Default.LineDiagPoints);
-            StreamX.LineStyle.Color = ScottPlot.Color.FromHex("#0000FF");
-            StreamY.LineStyle.Color = ScottPlot.Color.FromHex("#00CED1");
-            StreamX.ViewScrollLeft();
-            StreamY.ViewScrollLeft();
-            formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.LineDiagHeight, EtHerG.Properties.Settings.Default.LineDiagHeight);
-
-            HorizontalLine Alarm1 = formLineDiag.Plot.Add.HorizontalLine(EtHerG.Properties.Settings.Default.Alarm1Value);
-            HorizontalLine Alarm2 = formLineDiag.Plot.Add.HorizontalLine(-EtHerG.Properties.Settings.Default.Alarm1Value);
-            Alarm1.LineStyle.Color = ScottPlot.Color.FromHex("#D22B2B");
-            Alarm2.LineStyle.Color = ScottPlot.Color.FromHex("#D22B2B");
-
-            HorizontalLine Alarm3 = formLineDiag.Plot.Add.HorizontalLine(EtHerG.Properties.Settings.Default.Alarm2Value);
-            HorizontalLine Alarm4 = formLineDiag.Plot.Add.HorizontalLine(-EtHerG.Properties.Settings.Default.Alarm2Value);
-            Alarm3.LineStyle.Color = ScottPlot.Color.FromHex("#388e3c");
-            Alarm4.LineStyle.Color = ScottPlot.Color.FromHex("#388e3c");
-        }
-
-        private void Form2AlarmFormat()
-        {
-            formScatter.Plot.Axes.SetLimits(-EtHerG.Properties.Settings.Default.LineDiagHeight, EtHerG.Properties.Settings.Default.LineDiagHeight, -EtHerG.Properties.Settings.Default.LineDiagHeight, EtHerG.Properties.Settings.Default.LineDiagHeight);
-            ScottPlot.Plottables.Rectangle Alarm5 = formScatter.Plot.Add.Rectangle(-EtHerG.Properties.Settings.Default.Alarm1Value, EtHerG.Properties.Settings.Default.Alarm1Value, -EtHerG.Properties.Settings.Default.Alarm1Value, EtHerG.Properties.Settings.Default.Alarm1Value);
-            Alarm5.LineStyle.Pattern = LinePattern.Dotted;
-            Alarm5.FillStyle.Color = Colors.Magenta.WithAlpha(0);
-            Alarm5.LineStyle.Color = ScottPlot.Color.FromHex("#D22B2B");
-        }
-
         private void ResetTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             if (IsHandleCreated)
@@ -272,7 +240,7 @@ namespace EtHerG
 
         private void initTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            UpdateYAxis();
+            FormatDiags();
         }
 
         private void ModbusTimer_Elapsed(object? sender, ElapsedEventArgs e)
@@ -297,21 +265,33 @@ namespace EtHerG
             Alarm2SingleWrite = false;
         }
 
-        private void UpdateYAxis()
+        private void FormatDiags()
         {
             Invoke(new Action(() =>
             {
+                formLineDiag.Reset();
                 StreamX.Clear();
                 StreamY.Clear();
                 StreamX = formLineDiag.Plot.Add.DataStreamer(EtHerG.Properties.Settings.Default.LineDiagPoints);
                 StreamY = formLineDiag.Plot.Add.DataStreamer(EtHerG.Properties.Settings.Default.LineDiagPoints);
                 StreamX.LineStyle.Color = ScottPlot.Color.FromHex("#0000FF");
                 StreamY.LineStyle.Color = ScottPlot.Color.FromHex("#00CED1");
-                formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.LineDiagHeight, EtHerG.Properties.Settings.Default.LineDiagHeight);
                 StreamY.ViewScrollLeft();
                 StreamX.ViewScrollLeft();
                 StreamX.ManageAxisLimits = false;
                 StreamY.ManageAxisLimits = false;
+
+                HorizontalLine Alarm1 = formLineDiag.Plot.Add.HorizontalLine(EtHerG.Properties.Settings.Default.Alarm1Value);
+                HorizontalLine Alarm2 = formLineDiag.Plot.Add.HorizontalLine(-EtHerG.Properties.Settings.Default.Alarm1Value);
+                Alarm1.LineStyle.Color = ScottPlot.Color.FromHex("#D22B2B");
+                Alarm2.LineStyle.Color = ScottPlot.Color.FromHex("#D22B2B");
+
+                HorizontalLine Alarm3 = formLineDiag.Plot.Add.HorizontalLine(EtHerG.Properties.Settings.Default.Alarm2Value);
+                HorizontalLine Alarm4 = formLineDiag.Plot.Add.HorizontalLine(-EtHerG.Properties.Settings.Default.Alarm2Value);
+                Alarm3.LineStyle.Color = ScottPlot.Color.FromHex("#388e3c");
+                Alarm4.LineStyle.Color = ScottPlot.Color.FromHex("#388e3c");
+
+                formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
                 formLineDiag.Interaction.Disable();
                 formLineDiag.Refresh();
             }));
@@ -398,40 +378,68 @@ namespace EtHerG
         {
             Invoke(new Action(() =>
             {
-                if (playX == true)
-                {
-                    lock (dataLockX) // Lock access to dataX and dataY
-                    {
-                        StreamX.AddRange(dataX);
-                    }
-                }
 
-                if (playY == true)
-                {
-                    lock (dataLockY) // Lock access to dataX and dataY
-                    {
-                        StreamY.AddRange(dataY);
-                    }
-                }
-
-                last100XValues = ScatterX.Skip(Math.Max(0, ScatterX.Count - EtHerG.Properties.Settings.Default.ScatterPoints)).ToList(); // Get last 100 X values
-                last100YValues = ScatterY.Skip(Math.Max(0, ScatterY.Count - EtHerG.Properties.Settings.Default.ScatterPoints)).ToList(); // Get last 100 Y values
-
-                if (last100XValues.Count > EtHerG.Properties.Settings.Default.ScatterPoints)
-                {
-                    last100XValues.RemoveRange(0, (last100XValues.Count - EtHerG.Properties.Settings.Default.ScatterPoints));
-                    last100YValues.RemoveRange(0, (last100YValues.Count - EtHerG.Properties.Settings.Default.ScatterPoints));
-                }
-
-                formScatter.Refresh();
-                formLineDiag.Refresh();
-
+                UpdateScatterDiag();
+                UpdateLineDiag();
 
                 txtX.Text = DisplayX1.ToString(); // Update textBox1 with X1 value
                 txtY.Text = DisplayY1.ToString();
             }));
-            dataX.Clear(); // Clear dataX list after adding to Streamer
+
+        }
+
+        private void UpdateLineDiag()
+        {
+            if (playX == true)
+            {
+                lock (dataLockX) // Lock access to dataX and dataY
+                {
+                    StreamX.AddRange(dataX);
+                }
+            }
+
+            if (playY == true)
+            {
+                lock (dataLockY) // Lock access to dataX and dataY
+                {
+                    StreamY.AddRange(dataY);
+                }
+            }
+
+            formLineDiag.Refresh();
+
+            dataX.Clear();
             dataY.Clear();
+        }
+
+        private void UpdateScatterDiag()
+        {
+            lock (dataLockScatter)
+            {
+                last100XValues = ScatterX.Skip(Math.Max(0, ScatterX.Count - EtHerG.Properties.Settings.Default.ScatterPoints)).ToList(); // Get last 100 X values
+                last100YValues = ScatterY.Skip(Math.Max(0, ScatterY.Count - EtHerG.Properties.Settings.Default.ScatterPoints)).ToList(); // Get last 100 Y values
+            }
+
+            formScatter.Plot.Clear();
+            var Alarm5 = formScatter.Plot.Add.Rectangle(-EtHerG.Properties.Settings.Default.Alarm1Value, EtHerG.Properties.Settings.Default.Alarm1Value, -EtHerG.Properties.Settings.Default.Alarm1Value, EtHerG.Properties.Settings.Default.Alarm1Value);
+            var Alarm6 = formScatter.Plot.Add.Rectangle(-EtHerG.Properties.Settings.Default.Alarm2Value, EtHerG.Properties.Settings.Default.Alarm2Value, -EtHerG.Properties.Settings.Default.Alarm2Value, EtHerG.Properties.Settings.Default.Alarm2Value);
+            Alarm5.FillStyle.Color = ScottPlot.Color.FromHex("#D22B2B").WithAlpha(0);
+            Alarm6.FillStyle.Color = ScottPlot.Color.FromHex("#388e3c").WithAlpha(0);
+            Alarm5.LineStyle.Color = ScottPlot.Color.FromHex("#D22B2B");
+            Alarm6.LineStyle.Color = ScottPlot.Color.FromHex("#388e3c");
+            Alarm5.LineStyle.Width = 3;
+            Alarm6.LineStyle.Width = 3;
+            var ScatterLine = formScatter.Plot.Add.ScatterLine(last100XValues, last100YValues);
+            ScatterLine.Color = ScottPlot.Color.FromHex("#0067E8");
+            formScatter.Plot.Axes.SetLimits(-EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
+            formScatter.Interaction.Disable();
+            formScatter.Refresh();
+
+            if (last100XValues.Count > EtHerG.Properties.Settings.Default.ScatterPoints)
+            {
+                last100XValues.RemoveRange(0, (last100XValues.Count - EtHerG.Properties.Settings.Default.ScatterPoints));
+                last100YValues.RemoveRange(0, (last100YValues.Count - EtHerG.Properties.Settings.Default.ScatterPoints));
+            }
         }
 
         private void Form1_FormClosing(object? sender, FormClosingEventArgs e)
@@ -834,8 +842,7 @@ namespace EtHerG
             {
                 EtHerG.Properties.Settings.Default.Alarm1Value = int.Parse(txtAlarm1Value.Text);
                 EtHerG.Properties.Settings.Default.Save();
-                formLineDiag.Plot.PlottableList.Clear();
-                Form1AlarmFormat();
+                FormatDiags();
             }
         }
 
@@ -845,8 +852,7 @@ namespace EtHerG
             {
                 EtHerG.Properties.Settings.Default.Alarm2Value = int.Parse(txtAlarm2Value.Text);
                 EtHerG.Properties.Settings.Default.Save();
-                formLineDiag.Plot.PlottableList.Clear();
-                Form1AlarmFormat();
+                FormatDiags();
             }
         }
 
@@ -916,17 +922,17 @@ namespace EtHerG
             {
                 EtHerG.Properties.Settings.Default.LineDiagPoints = LineDiagPoints;
                 EtHerG.Properties.Settings.Default.Save();
-                UpdateYAxis();
+                FormatDiags();
             }
         }
 
         private void txtLineDiagHeight_LostFocus(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(txtLineDiagHeight.Text) && Int32.TryParse(txtLineDiagHeight.Text, out int LineDiagHeight))
+            if (!string.IsNullOrWhiteSpace(txtDiagMaxPointSize.Text) && Int32.TryParse(txtDiagMaxPointSize.Text, out int LineDiagHeight))
             {
-                EtHerG.Properties.Settings.Default.LineDiagHeight = LineDiagHeight;
+                EtHerG.Properties.Settings.Default.DiagMaxPointSize = LineDiagHeight;
                 EtHerG.Properties.Settings.Default.Save();
-                UpdateYAxis();
+                FormatDiags();
             }
         }
 

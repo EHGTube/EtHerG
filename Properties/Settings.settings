@@ -14,7 +14,7 @@
     <Setting Name="LineDiagPoints" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="LineDiagHeight" Type="System.Int32" Scope="User">
+    <Setting Name="DiagMaxPointSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="Alarm1Value" Type="System.Int32" Scope="User">

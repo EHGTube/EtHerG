@@ -74,12 +74,12 @@ namespace EtHerG.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int LineDiagHeight {
+        public int DiagMaxPointSize {
             get {
-                return ((int)(this["LineDiagHeight"]));
+                return ((int)(this["DiagMaxPointSize"]));
             }
             set {
-                this["LineDiagHeight"] = value;
+                this["DiagMaxPointSize"] = value;
             }
         }
         

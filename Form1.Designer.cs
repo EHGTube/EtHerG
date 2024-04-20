@@ -94,10 +94,10 @@
             txtGainYLastModbusValue = new TextBox();
             txtScatterPoints = new TextBox();
             txtGainXLastModbusValue = new TextBox();
-            lblLineDiagHeight = new Label();
+            lblDiagMaxPointSize = new Label();
             txtFrequencyLastModbusValue = new TextBox();
             lblModbusServerIP = new Label();
-            txtLineDiagHeight = new TextBox();
+            txtDiagMaxPointSize = new TextBox();
             lblModbusServerPort = new Label();
             txtPlayLastModbusValue = new TextBox();
             lblLineDiagAmount = new Label();
@@ -541,10 +541,10 @@
             panel1.Controls.Add(txtGainYLastModbusValue);
             panel1.Controls.Add(txtScatterPoints);
             panel1.Controls.Add(txtGainXLastModbusValue);
-            panel1.Controls.Add(lblLineDiagHeight);
+            panel1.Controls.Add(lblDiagMaxPointSize);
             panel1.Controls.Add(txtFrequencyLastModbusValue);
             panel1.Controls.Add(lblModbusServerIP);
-            panel1.Controls.Add(txtLineDiagHeight);
+            panel1.Controls.Add(txtDiagMaxPointSize);
             panel1.Controls.Add(lblModbusServerPort);
             panel1.Controls.Add(txtPlayLastModbusValue);
             panel1.Controls.Add(lblLineDiagAmount);
@@ -650,7 +650,7 @@
             // lblLineDiagSizeY
             // 
             lblLineDiagSizeY.AutoSize = true;
-            lblLineDiagSizeY.Location = new Point(126, 434);
+            lblLineDiagSizeY.Location = new Point(126, 558);
             lblLineDiagSizeY.Name = "lblLineDiagSizeY";
             lblLineDiagSizeY.Size = new Size(95, 15);
             lblLineDiagSizeY.TabIndex = 65;
@@ -659,7 +659,7 @@
             // lblLineDiagSizeX
             // 
             lblLineDiagSizeX.AutoSize = true;
-            lblLineDiagSizeX.Location = new Point(126, 405);
+            lblLineDiagSizeX.Location = new Point(126, 529);
             lblLineDiagSizeX.Name = "lblLineDiagSizeX";
             lblLineDiagSizeX.Size = new Size(95, 15);
             lblLineDiagSizeX.TabIndex = 64;
@@ -668,7 +668,7 @@
             // lblLineDiagPosY
             // 
             lblLineDiagPosY.AutoSize = true;
-            lblLineDiagPosY.Location = new Point(124, 376);
+            lblLineDiagPosY.Location = new Point(124, 500);
             lblLineDiagPosY.Name = "lblLineDiagPosY";
             lblLineDiagPosY.Size = new Size(97, 15);
             lblLineDiagPosY.TabIndex = 63;
@@ -677,7 +677,7 @@
             // lblLineDiagPosX
             // 
             lblLineDiagPosX.AutoSize = true;
-            lblLineDiagPosX.Location = new Point(124, 347);
+            lblLineDiagPosX.Location = new Point(124, 471);
             lblLineDiagPosX.Name = "lblLineDiagPosX";
             lblLineDiagPosX.Size = new Size(97, 15);
             lblLineDiagPosX.TabIndex = 62;
@@ -685,7 +685,7 @@
             // 
             // txtLineDiagSizeY
             // 
-            txtLineDiagSizeY.Location = new Point(224, 430);
+            txtLineDiagSizeY.Location = new Point(224, 554);
             txtLineDiagSizeY.Name = "txtLineDiagSizeY";
             txtLineDiagSizeY.Size = new Size(100, 23);
             txtLineDiagSizeY.TabIndex = 61;
@@ -693,7 +693,7 @@
             // 
             // txtLineDiagSizeX
             // 
-            txtLineDiagSizeX.Location = new Point(224, 401);
+            txtLineDiagSizeX.Location = new Point(224, 525);
             txtLineDiagSizeX.Name = "txtLineDiagSizeX";
             txtLineDiagSizeX.Size = new Size(100, 23);
             txtLineDiagSizeX.TabIndex = 60;
@@ -701,7 +701,7 @@
             // 
             // txtLineDiagPosY
             // 
-            txtLineDiagPosY.Location = new Point(224, 372);
+            txtLineDiagPosY.Location = new Point(224, 496);
             txtLineDiagPosY.Name = "txtLineDiagPosY";
             txtLineDiagPosY.Size = new Size(100, 23);
             txtLineDiagPosY.TabIndex = 59;
@@ -709,7 +709,7 @@
             // 
             // txtLineDiagPosX
             // 
-            txtLineDiagPosX.Location = new Point(224, 343);
+            txtLineDiagPosX.Location = new Point(224, 467);
             txtLineDiagPosX.Name = "txtLineDiagPosX";
             txtLineDiagPosX.Size = new Size(100, 23);
             txtLineDiagPosX.TabIndex = 58;
@@ -718,7 +718,7 @@
             // lblScatterDiagSize
             // 
             lblScatterDiagSize.AutoSize = true;
-            lblScatterDiagSize.Location = new Point(122, 318);
+            lblScatterDiagSize.Location = new Point(122, 442);
             lblScatterDiagSize.Name = "lblScatterDiagSize";
             lblScatterDiagSize.Size = new Size(99, 15);
             lblScatterDiagSize.TabIndex = 57;
@@ -727,7 +727,7 @@
             // lblScatterDiagPosY
             // 
             lblScatterDiagPosY.AutoSize = true;
-            lblScatterDiagPosY.Location = new Point(110, 289);
+            lblScatterDiagPosY.Location = new Point(110, 413);
             lblScatterDiagPosY.Name = "lblScatterDiagPosY";
             lblScatterDiagPosY.Size = new Size(111, 15);
             lblScatterDiagPosY.TabIndex = 56;
@@ -735,7 +735,7 @@
             // 
             // txtScatterDiagSize
             // 
-            txtScatterDiagSize.Location = new Point(224, 314);
+            txtScatterDiagSize.Location = new Point(224, 438);
             txtScatterDiagSize.Name = "txtScatterDiagSize";
             txtScatterDiagSize.Size = new Size(100, 23);
             txtScatterDiagSize.TabIndex = 55;
@@ -743,7 +743,7 @@
             // 
             // txtScatterDiagPosY
             // 
-            txtScatterDiagPosY.Location = new Point(224, 285);
+            txtScatterDiagPosY.Location = new Point(224, 409);
             txtScatterDiagPosY.Name = "txtScatterDiagPosY";
             txtScatterDiagPosY.Size = new Size(100, 23);
             txtScatterDiagPosY.TabIndex = 54;
@@ -751,7 +751,7 @@
             // 
             // txtScatterDiagPosX
             // 
-            txtScatterDiagPosX.Location = new Point(224, 256);
+            txtScatterDiagPosX.Location = new Point(224, 380);
             txtScatterDiagPosX.Name = "txtScatterDiagPosX";
             txtScatterDiagPosX.Size = new Size(100, 23);
             txtScatterDiagPosX.TabIndex = 52;
@@ -768,7 +768,7 @@
             // lblScatterDiagPosX
             // 
             lblScatterDiagPosX.AutoSize = true;
-            lblScatterDiagPosX.Location = new Point(110, 260);
+            lblScatterDiagPosX.Location = new Point(110, 384);
             lblScatterDiagPosX.Name = "lblScatterDiagPosX";
             lblScatterDiagPosX.Size = new Size(111, 15);
             lblScatterDiagPosX.TabIndex = 53;
@@ -793,7 +793,7 @@
             // lblScatterAmount
             // 
             lblScatterAmount.AutoSize = true;
-            lblScatterAmount.Location = new Point(65, 463);
+            lblScatterAmount.Location = new Point(65, 264);
             lblScatterAmount.Name = "lblScatterAmount";
             lblScatterAmount.Size = new Size(156, 15);
             lblScatterAmount.TabIndex = 40;
@@ -809,7 +809,7 @@
             // 
             // txtScatterPoints
             // 
-            txtScatterPoints.Location = new Point(224, 459);
+            txtScatterPoints.Location = new Point(224, 260);
             txtScatterPoints.Name = "txtScatterPoints";
             txtScatterPoints.Size = new Size(100, 23);
             txtScatterPoints.TabIndex = 41;
@@ -823,14 +823,14 @@
             txtGainXLastModbusValue.Size = new Size(100, 23);
             txtGainXLastModbusValue.TabIndex = 35;
             // 
-            // lblLineDiagHeight
+            // lblDiagMaxPointSize
             // 
-            lblLineDiagHeight.AutoSize = true;
-            lblLineDiagHeight.Location = new Point(62, 231);
-            lblLineDiagHeight.Name = "lblLineDiagHeight";
-            lblLineDiagHeight.Size = new Size(159, 15);
-            lblLineDiagHeight.TabIndex = 51;
-            lblLineDiagHeight.Text = "Line Diag. Maximum Height:";
+            lblDiagMaxPointSize.AutoSize = true;
+            lblDiagMaxPointSize.Location = new Point(62, 231);
+            lblDiagMaxPointSize.Name = "lblDiagMaxPointSize";
+            lblDiagMaxPointSize.Size = new Size(151, 15);
+            lblDiagMaxPointSize.TabIndex = 51;
+            lblDiagMaxPointSize.Text = "Diagram Max. Point Height";
             // 
             // txtFrequencyLastModbusValue
             // 
@@ -849,13 +849,13 @@
             lblModbusServerIP.TabIndex = 42;
             lblModbusServerIP.Text = "Modbus Server IP: ";
             // 
-            // txtLineDiagHeight
+            // txtDiagMaxPointSize
             // 
-            txtLineDiagHeight.Location = new Point(224, 227);
-            txtLineDiagHeight.Name = "txtLineDiagHeight";
-            txtLineDiagHeight.Size = new Size(100, 23);
-            txtLineDiagHeight.TabIndex = 50;
-            txtLineDiagHeight.LostFocus += txtLineDiagHeight_LostFocus;
+            txtDiagMaxPointSize.Location = new Point(224, 227);
+            txtDiagMaxPointSize.Name = "txtDiagMaxPointSize";
+            txtDiagMaxPointSize.Size = new Size(100, 23);
+            txtDiagMaxPointSize.TabIndex = 50;
+            txtDiagMaxPointSize.LostFocus += txtLineDiagHeight_LostFocus;
             // 
             // lblModbusServerPort
             // 
@@ -941,7 +941,7 @@
             // 
             // txtCOMPort
             // 
-            txtCOMPort.Location = new Point(225, 550);
+            txtCOMPort.Location = new Point(225, 351);
             txtCOMPort.Name = "txtCOMPort";
             txtCOMPort.Size = new Size(100, 23);
             txtCOMPort.TabIndex = 47;
@@ -958,7 +958,7 @@
             // lblComport
             // 
             lblComport.AutoSize = true;
-            lblComport.Location = new Point(158, 554);
+            lblComport.Location = new Point(158, 355);
             lblComport.Name = "lblComport";
             lblComport.Size = new Size(65, 15);
             lblComport.TabIndex = 46;
@@ -982,7 +982,7 @@
             // 
             // txtAlarm2Value
             // 
-            txtAlarm2Value.Location = new Point(225, 521);
+            txtAlarm2Value.Location = new Point(225, 322);
             txtAlarm2Value.Name = "txtAlarm2Value";
             txtAlarm2Value.Size = new Size(100, 23);
             txtAlarm2Value.TabIndex = 24;
@@ -998,7 +998,7 @@
             // 
             // txtAlarm1Value
             // 
-            txtAlarm1Value.Location = new Point(225, 491);
+            txtAlarm1Value.Location = new Point(225, 292);
             txtAlarm1Value.Name = "txtAlarm1Value";
             txtAlarm1Value.Size = new Size(100, 23);
             txtAlarm1Value.TabIndex = 23;
@@ -1032,7 +1032,7 @@
             // lblAlarm1
             // 
             lblAlarm1.AutoSize = true;
-            lblAlarm1.Location = new Point(171, 495);
+            lblAlarm1.Location = new Point(171, 296);
             lblAlarm1.Name = "lblAlarm1";
             lblAlarm1.Size = new Size(51, 15);
             lblAlarm1.TabIndex = 21;
@@ -1068,7 +1068,7 @@
             // lblAlarm2
             // 
             lblAlarm2.AutoSize = true;
-            lblAlarm2.Location = new Point(171, 526);
+            lblAlarm2.Location = new Point(171, 327);
             lblAlarm2.Name = "lblAlarm2";
             lblAlarm2.Size = new Size(51, 15);
             lblAlarm2.TabIndex = 19;
@@ -1231,8 +1231,8 @@
         private Panel panel1;
         private TextBox txtScatterDiagPosX;
         private Label lblScatterDiagPosX;
-        private Label lblLineDiagHeight;
-        private TextBox txtLineDiagHeight;
+        private Label lblDiagMaxPointSize;
+        private TextBox txtDiagMaxPointSize;
         private Label lblLineDiagAmount;
         private TextBox txtLineDiagPoints;
         private Label lblScatterDiagPosY;
