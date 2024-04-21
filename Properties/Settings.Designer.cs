@@ -598,5 +598,29 @@ namespace EtHerG.Properties {
                 this["InfluxDBMachine"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowX {
+            get {
+                return ((bool)(this["ShowX"]));
+            }
+            set {
+                this["ShowX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowY {
+            get {
+                return ((bool)(this["ShowY"]));
+            }
+            set {
+                this["ShowY"] = value;
+            }
+        }
     }
 }

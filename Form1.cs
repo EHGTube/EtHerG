@@ -89,6 +89,10 @@ namespace EtHerG
         private readonly object dataLockScatter = new object();
 
         public bool AlarmReady = false;
+        List<string> EtherPropertiesSetToZeroOrNull = new List<string>();
+        List<string> ModbusPropertiesSetToZeroOrNull = new List<string>();
+        List<string> modbusLastSendAddressesSetToZeroOrNull = new List<string>();
+        List<string> influxDBPropertiesSetToNullOrEmpty = new List<string>();
 
         public Form1()
         {
@@ -207,16 +211,14 @@ namespace EtHerG
                 txtInfluxDBOrg.Text = EtHerG.Properties.Settings.Default.InfluxDBOrgID;
                 txtInfluxDBBucket.Text = EtHerG.Properties.Settings.Default.InfluxDBBucket;
                 txtInfluxDBMachine.Text = EtHerG.Properties.Settings.Default.InfluxDBMachine;
+                chkShowX.Checked = EtHerG.Properties.Settings.Default.ShowX;
+                chkShowY.Checked = EtHerG.Properties.Settings.Default.ShowY;
 
                 formLineDiag.Location = new Point(EtHerG.Properties.Settings.Default.LineDiagPosX, EtHerG.Properties.Settings.Default.LineDiagPosY);
                 formLineDiag.Size = new Size(EtHerG.Properties.Settings.Default.LineDiagSizeX, EtHerG.Properties.Settings.Default.LineDiagSizeY);
                 formScatter.Location = new Point(EtHerG.Properties.Settings.Default.ScatterDiagPosX, EtHerG.Properties.Settings.Default.ScatterDiagPosY);
                 formScatter.Size = new Size(EtHerG.Properties.Settings.Default.ScatterDiagSize, EtHerG.Properties.Settings.Default.ScatterDiagSize);
-
-
-
-                chkShowX.Checked = true;
-                chkShowY.Checked = true;
+                
                 FormatDiags();
 
                 formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
@@ -668,45 +670,155 @@ namespace EtHerG
 
         private void OpenModbusConnection()
         {
-            try
+            // Check if ModbusServerIP is set to 0 or null
+            if (string.IsNullOrEmpty(EtHerG.Properties.Settings.Default.ModbusServerIP))
             {
-                modbusClient = new TcpClient(EtHerG.Properties.Settings.Default.ModbusServerIP, EtHerG.Properties.Settings.Default.ModbusServerPort);
-                var factory = new ModbusFactory();
-                modbusMaster = factory.CreateMaster(modbusClient);
-                ModbusCon = true;
+                ModbusPropertiesSetToZeroOrNull.Add("ModbusServerIP");
             }
-            catch (Exception ex)
+
+            // Check if ModbusServerPort is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.ModbusServerPort == 0)
             {
-                // Log or display a warning that the connection failed
-                MessageBox.Show($"Failed to connect to Modbus server: {ex.Message}");
-                // Stop trying to connect
-                return;
+                ModbusPropertiesSetToZeroOrNull.Add("ModbusServerPort");
+            }
+
+            // Check if PlayModbusAddress is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.PlayModbusAddress == 0)
+            {
+                ModbusPropertiesSetToZeroOrNull.Add("PlayModbusAddress");
+            }
+
+            // Check if FrequencyModbusAddress is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.FrequencyModbusAddress == 0)
+            {
+                ModbusPropertiesSetToZeroOrNull.Add("FrequencyModbusAddress");
+            }
+
+            // Check other Modbus address properties similarly...
+
+            // If any Modbus property is set to 0 or null, display a single MessageBox with the list of properties
+            if (ModbusPropertiesSetToZeroOrNull.Any())
+            {
+                string message = "The following Modbus properties are still set to 0 or null:\n";
+
+                // Add each Modbus property to the message with a new line
+                foreach (string property in ModbusPropertiesSetToZeroOrNull)
+                {
+                    message += $"{property}\n";
+                }
+
+                MessageBox.Show(message);
+            }
+            else
+            {
+                try
+                {
+                    modbusClient = new TcpClient(EtHerG.Properties.Settings.Default.ModbusServerIP, EtHerG.Properties.Settings.Default.ModbusServerPort);
+                    var factory = new ModbusFactory();
+                    modbusMaster = factory.CreateMaster(modbusClient);
+                    ModbusCon = true;
+                }
+                catch (Exception ex)
+                {
+                    // Log or display a warning that the connection failed
+                    MessageBox.Show($"Failed to connect to Modbus server: {ex.Message}");
+                    // Stop trying to connect
+                    return;
+                }
             }
         }
 
         private void OpenSerialConnection()
         {
-            //MessageBox.Show("Text here" + Environment.NewLine + "some other text");
-            bool result = ether.OpenSerialConnection(EtHerG.Properties.Settings.Default.ComPort);
-            if (result)
+            // Check if Frequency is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.Frequency == 0 || EtHerG.Properties.Settings.Default.Frequency == null)
             {
-                EtherConnected = true;
+                EtherPropertiesSetToZeroOrNull.Add("Frequency");
+            }
+
+            // Check if GainX is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.GainX == 0 || EtHerG.Properties.Settings.Default.GainX == null)
+            {
+                EtherPropertiesSetToZeroOrNull.Add("GainX");
+            }
+
+            // Check if GainY is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.GainY == 0 || EtHerG.Properties.Settings.Default.GainY == null)
+            {
+                EtherPropertiesSetToZeroOrNull.Add("GainY");
+            }
+
+            // Check if Phase is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.Phase == 0 || EtHerG.Properties.Settings.Default.Phase == null)
+            {
+                EtherPropertiesSetToZeroOrNull.Add("Phase");
+            }
+
+            // Check if FilterLP is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.FilterLP == 0 || EtHerG.Properties.Settings.Default.FilterLP == null)
+            {
+                EtherPropertiesSetToZeroOrNull.Add("FilterLP");
+            }
+
+            // Check if FilterHP is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.FilterHP == 0 || EtHerG.Properties.Settings.Default.FilterHP == null)
+            {
+                EtherPropertiesSetToZeroOrNull.Add("FilterHP");
+            }
+
+            // Check if ComPort is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.ComPort == 0 || EtHerG.Properties.Settings.Default.ComPort == null)
+            {
+                EtherPropertiesSetToZeroOrNull.Add("ComPort");
+            }
+
+            // Check if LineDiagPoints is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.LineDiagPoints == 0 || EtHerG.Properties.Settings.Default.LineDiagPoints == null)
+            {
+                EtherPropertiesSetToZeroOrNull.Add("LineDiagPoints");
+            }
+
+            // Check if ScatterPoints is set to 0 or null
+            if (EtHerG.Properties.Settings.Default.ScatterPoints == 0 || EtHerG.Properties.Settings.Default.ScatterPoints == null)
+            {
+                EtherPropertiesSetToZeroOrNull.Add("ScatterPoints");
+            }
+
+            // If any property is set to 0, display a single MessageBox with the list of properties
+            if (EtherPropertiesSetToZeroOrNull.Any())
+            {
+                string message = "The following properties are not set up:\n";
+
+                // Add each property to the message with a new line
+                foreach (string property in EtherPropertiesSetToZeroOrNull)
+                {
+                    message += $"{property}\n";
+                }
+
+                MessageBox.Show(message);
             }
             else
             {
-                MessageBox.Show("Verbindungsaufbau nicht möglich");
+                bool result = ether.OpenSerialConnection(EtHerG.Properties.Settings.Default.ComPort);
+                if (result)
+                {
+                    EtherConnected = true;
+                }
+                else
+                {
+                    MessageBox.Show("Verbindungsaufbau nicht möglich");
+                }
+                ether.WriteToInstrument(1, 0, "<USB_OUTPUT>0</USB_OUTPUT>");
+                System.Threading.Thread.Sleep(100);
+                ether.WriteToInstrument(1, 0, "<USB_OUTPUT>7</USB_OUTPUT>");
+
+                ether.WriteToInstrument(1, 0, "<FREQUENCY>" + EtHerG.Properties.Settings.Default.Frequency * 1000 + "</FREQUENCY>");
+                ether.WriteToInstrument(1, 0, "<GAIN_X>" + EtHerG.Properties.Settings.Default.GainX * 10 + "</GAIN_X>");
+                ether.WriteToInstrument(1, 0, "<GAIN_Y>" + EtHerG.Properties.Settings.Default.GainY * 10 + "</GAIN_Y>");
+                ether.WriteToInstrument(1, 0, "<PHASE>" + EtHerG.Properties.Settings.Default.Phase * 1000 + "</PHASE>");
+                ether.WriteToInstrument(1, 0, "<FILTER_LP>" + EtHerG.Properties.Settings.Default.FilterLP * 100 + "</FILTER_LP>");
+                ether.WriteToInstrument(1, 0, "<FILTER_HP>" + EtHerG.Properties.Settings.Default.FilterHP * 100 + "</FILTER_HP>");
             }
-            ether.WriteToInstrument(1, 0, "<USB_OUTPUT>0</USB_OUTPUT>");
-            System.Threading.Thread.Sleep(100);
-            ether.WriteToInstrument(1, 0, "<USB_OUTPUT>7</USB_OUTPUT>");
-
-            ether.WriteToInstrument(1, 0, "<FREQUENCY>" + EtHerG.Properties.Settings.Default.Frequency * 1000 + "</FREQUENCY>");
-            ether.WriteToInstrument(1, 0, "<GAIN_X>" + EtHerG.Properties.Settings.Default.GainX * 10 + "</GAIN_X>");
-            ether.WriteToInstrument(1, 0, "<GAIN_Y>" + EtHerG.Properties.Settings.Default.GainY * 10 + "</GAIN_Y>");
-            ether.WriteToInstrument(1, 0, "<PHASE>" + EtHerG.Properties.Settings.Default.Phase * 1000 + "</PHASE>");
-            ether.WriteToInstrument(1, 0, "<FILTER_LP>" + EtHerG.Properties.Settings.Default.FilterLP * 100 + "</FILTER_LP>");
-            ether.WriteToInstrument(1, 0, "<FILTER_HP>" + EtHerG.Properties.Settings.Default.FilterHP * 100 + "</FILTER_HP>");
-
         }
 
         private void btnEtherConnect_Click(object sender, EventArgs e)
@@ -814,6 +926,8 @@ namespace EtHerG
                 playX = false;
                 StreamX.Clear();
             }
+            EtHerG.Properties.Settings.Default.ShowX = chkShowX.Checked;
+            EtHerG.Properties.Settings.Default.Save();
         }
 
         private void chkShowY_CheckedChanged(object sender, EventArgs e)
@@ -827,6 +941,8 @@ namespace EtHerG
                 playY = false;
                 StreamY.Clear();
             }
+            EtHerG.Properties.Settings.Default.ShowY = chkShowY.Checked;
+            EtHerG.Properties.Settings.Default.Save();
         }
 
         private void chkEtherAutoconnect_CheckedChanged(object sender, EventArgs e)
@@ -1058,8 +1174,68 @@ namespace EtHerG
 
         private void chkModbusLastSentEnabled_CheckedChanged(object sender, EventArgs e)
         {
-            EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled = chkModbusLastSentAddressEnabled.Checked;
-            EtHerG.Properties.Settings.Default.Save();
+            if (chkModbusLastSentAddressEnabled.Checked)
+            {
+                // Check if FrequencyModbusLastSendAddress is set to 0 or null
+                if (EtHerG.Properties.Settings.Default.FrequencyModbusLastSendAddress == 0)
+                {
+                    modbusLastSendAddressesSetToZeroOrNull.Add("FrequencyModbusLastSendAddress");
+                }
+
+                // Check if GainYModbusLastSendAddress is set to 0 or null
+                if (EtHerG.Properties.Settings.Default.GainYModbusLastSendAddress == 0)
+                {
+                    modbusLastSendAddressesSetToZeroOrNull.Add("GainYModbusLastSendAddress");
+                }
+
+                // Check if GainXModbusLastSendAddress is set to 0 or null
+                if (EtHerG.Properties.Settings.Default.GainXModbusLastSendAddress == 0)
+                {
+                    modbusLastSendAddressesSetToZeroOrNull.Add("GainXModbusLastSendAddress");
+                }
+
+                // Check if PhaseModbusLastSendAddress is set to 0 or null
+                if (EtHerG.Properties.Settings.Default.PhaseModbusLastSendAddress == 0)
+                {
+                    modbusLastSendAddressesSetToZeroOrNull.Add("PhaseModbusLastSendAddress");
+                }
+
+                // Check if FilterHPModbusLastSendAddress is set to 0 or null
+                if (EtHerG.Properties.Settings.Default.FilterHPModbusLastSendAddress == 0)
+                {
+                    modbusLastSendAddressesSetToZeroOrNull.Add("FilterHPModbusLastSendAddress");
+                }
+
+                // Check if FilterLPModbusLastSendAddress is set to 0 or null
+                if (EtHerG.Properties.Settings.Default.FilterLPModbusLastSendAddress == 0)
+                {
+                    modbusLastSendAddressesSetToZeroOrNull.Add("FilterLPModbusLastSendAddress");
+                }
+
+                // If any Modbus last send address property is set to 0 or null, display a single MessageBox with the list of properties
+                if (modbusLastSendAddressesSetToZeroOrNull.Any())
+                {
+                    string message = "The following Modbus last send address properties are still set to 0 or null:\n";
+
+                    // Add each Modbus last send address property to the message with a new line
+                    foreach (string property in modbusLastSendAddressesSetToZeroOrNull)
+                    {
+                        message += $"{property}\n";
+                    }
+
+                    MessageBox.Show(message);
+                }
+                else
+                {
+                    EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled = chkModbusLastSentAddressEnabled.Checked;
+                    EtHerG.Properties.Settings.Default.Save();
+                }
+            }
+            else
+            {
+                EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled = chkModbusLastSentAddressEnabled.Checked;
+                EtHerG.Properties.Settings.Default.Save();
+            }
         }
 
         private void txtFrequencyModbusLastSentAddress_LostFocus(object sender, EventArgs e)
@@ -1252,8 +1428,62 @@ namespace EtHerG
 
         private void chkInfluxDBEnabled_CheckedChanged(object sender, EventArgs e)
         {
-            EtHerG.Properties.Settings.Default.InfluxDBEnabled = chkInfluxDBEnabled.Checked;
-            EtHerG.Properties.Settings.Default.Save();
+            if (chkInfluxDBEnabled.Checked)
+            {
+                // Check if InfluxDBServer is null or empty
+                if (string.IsNullOrEmpty(EtHerG.Properties.Settings.Default.InfluxDBServer))
+                {
+                    influxDBPropertiesSetToNullOrEmpty.Add("InfluxDBServer");
+                }
+
+                // Check if InfluxDBToken is null or empty
+                if (string.IsNullOrEmpty(EtHerG.Properties.Settings.Default.InfluxDBToken))
+                {
+                    influxDBPropertiesSetToNullOrEmpty.Add("InfluxDBToken");
+                }
+
+                // Check if InfluxDBBucket is null or empty
+                if (string.IsNullOrEmpty(EtHerG.Properties.Settings.Default.InfluxDBBucket))
+                {
+                    influxDBPropertiesSetToNullOrEmpty.Add("InfluxDBBucket");
+                }
+
+                // Check if InfluxDBMachine is null or empty
+                if (string.IsNullOrEmpty(EtHerG.Properties.Settings.Default.InfluxDBMachine))
+                {
+                    influxDBPropertiesSetToNullOrEmpty.Add("InfluxDBMachine");
+                }
+
+                // Check if InfluxDBOrgID is null or empty
+                if (string.IsNullOrEmpty(EtHerG.Properties.Settings.Default.InfluxDBOrgID))
+                {
+                    influxDBPropertiesSetToNullOrEmpty.Add("InfluxDBOrgID");
+                }
+
+                // If any InfluxDB property is null or empty, display a single MessageBox with the list of properties
+                if (influxDBPropertiesSetToNullOrEmpty.Any())
+                {
+                    string message = "The following InfluxDB properties are still null or empty:\n";
+
+                    // Add each InfluxDB property to the message with a new line
+                    foreach (string property in influxDBPropertiesSetToNullOrEmpty)
+                    {
+                        message += $"{property}\n";
+                    }
+
+                    MessageBox.Show(message);
+                }
+                else
+                {
+                    EtHerG.Properties.Settings.Default.InfluxDBEnabled = chkInfluxDBEnabled.Checked;
+                    EtHerG.Properties.Settings.Default.Save();
+                }
+            }
+            else
+            {
+                EtHerG.Properties.Settings.Default.InfluxDBEnabled = chkInfluxDBEnabled.Checked;
+                EtHerG.Properties.Settings.Default.Save();
+            }
         }
 
         private void txtInfluxDBServer_LostFocus(object sender, EventArgs e)

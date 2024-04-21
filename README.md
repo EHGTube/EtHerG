@@ -2,7 +2,6 @@
 
 To Do : 
 
-6. Add failure proofing on function startups (all params set for embed? all for Modbus? for influx? ) 
 7. Fix Login / Logout
 8. Maybe figure out why GainY only works up to ~73? Or why Gain doesnt work anymore after ~70? 
 9. Add Color Options for everything (LineDiagX, LineDiagY, Scatterlines, Alarm1, Alarm2)
