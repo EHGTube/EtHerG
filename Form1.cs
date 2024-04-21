@@ -10,12 +10,17 @@ using InfluxDB;
 using System.Collections.Concurrent;
 using Newtonsoft.Json.Linq;
 using NModbus.Extensions.Enron;
+using InfluxDB.Client.Api.Domain;
+using InfluxDB.Client.Writes;
+using InfluxDB.Client;
+using System.Drawing;
 
 namespace EtHerG
 {
     public partial class Form1 : Form
     {
         public ETherRealtimeClass ether = new ETherRealtimeClass(0, 0x70);
+
 
         public ScottPlot.Plottables.DataStreamer StreamX;
         public ScottPlot.Plottables.DataStreamer StreamY;
@@ -47,6 +52,8 @@ namespace EtHerG
         public List<double> ScatterY = new List<double>();
         public List<double> lastSpecifiedXValues = new List<double>();
         public List<double> lastSpecifiedYValues = new List<double>();
+        public List<double> Alarm1dataX = new List<double>();
+        public List<double> Alarm2dataY = new List<double>();
 
         public int counter = 0;
         public bool firstCon = false;
@@ -57,6 +64,7 @@ namespace EtHerG
         private System.Timers.Timer Alarm1Timer;
         private System.Timers.Timer Alarm2Timer;
         private System.Timers.Timer initTimer;
+        private System.Timers.Timer AlarmStartupBlock;
 
         public long SumX1;
         public long SumY1;
@@ -75,10 +83,12 @@ namespace EtHerG
         public bool EtherConnected = false;
         public int LineDiagPosY = 0;
         public bool login = false;
-
+        public InfluxDBClient influxDBClient;
         private readonly object dataLockX = new object();
         private readonly object dataLockY = new object();
         private readonly object dataLockScatter = new object();
+
+        public bool AlarmReady = false;
 
         public Form1()
         {
@@ -107,8 +117,7 @@ namespace EtHerG
 
             if (EtHerG.Properties.Settings.Default.InfluxDBEnabled == true)
             {
-                //using (var influxDBClient = InfluxDBClientFactory.Create("http://localhost:8086", "my-token".ToCharArray())) ;
-                //var influxDBClient = new InfluxDB.Client.InfluxDBClient.Create()
+                influxDBClient = new InfluxDBClient(EtHerG.Properties.Settings.Default.InfluxDBServer, EtHerG.Properties.Settings.Default.InfluxDBToken);
             }
 
             StreamX = formLineDiag.Plot.Add.DataStreamer(EtHerG.Properties.Settings.Default.LineDiagPoints);
@@ -135,6 +144,10 @@ namespace EtHerG
 
             Alarm2Timer = new System.Timers.Timer(1000);
             Alarm2Timer.Elapsed += Alarm2Timer_Elapsed;
+
+            AlarmStartupBlock = new System.Timers.Timer(3000);
+            AlarmStartupBlock.Elapsed += AlarmStartupBlock_Elapsed;
+            AlarmStartupBlock.Start();
 
             firstCon = true;
         }
@@ -179,7 +192,21 @@ namespace EtHerG
                 txtAlarm1Value.Text = EtHerG.Properties.Settings.Default.Alarm1Value.ToString();
                 txtAlarm2Value.Text = EtHerG.Properties.Settings.Default.Alarm2Value.ToString();
                 chkDisableUserInput.Checked = EtHerG.Properties.Settings.Default.DisableUserInput;
+                txtAlarm1ModbusAddress.Text = EtHerG.Properties.Settings.Default.Alarm1ModbusAddress.ToString();
+                txtAlarm2ModbusAddress.Text = EtHerG.Properties.Settings.Default.Alarm2ModbusAddress.ToString();
+                txtFrequencyModbusLastSentAddress.Text = EtHerG.Properties.Settings.Default.FrequencyModbusLastSendAddress.ToString();
+                txtGainXModbusLastSentAddress.Text = EtHerG.Properties.Settings.Default.GainXModbusLastSendAddress.ToString();
+                txtGainYModbusLastSentAddress.Text = EtHerG.Properties.Settings.Default.GainYModbusLastSendAddress.ToString();
+                txtPhaseModbusLastSentAddress.Text = EtHerG.Properties.Settings.Default.PhaseModbusLastSendAddress.ToString();
+                txtFilterLPModbusLastSentAddress.Text = EtHerG.Properties.Settings.Default.FilterLPModbusLastSendAddress.ToString();
+                txtFilterHPModbusLastSentAddress.Text = EtHerG.Properties.Settings.Default.FilterHPModbusLastSendAddress.ToString();
                 chkModbusLastSentAddressEnabled.Checked = EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled;
+                chkInfluxDBEnabled.Checked = EtHerG.Properties.Settings.Default.InfluxDBEnabled;
+                txtInfluxDBServer.Text = EtHerG.Properties.Settings.Default.InfluxDBServer;
+                txtInfluxDBToken.Text = EtHerG.Properties.Settings.Default.InfluxDBToken;
+                txtInfluxDBOrg.Text = EtHerG.Properties.Settings.Default.InfluxDBOrgID;
+                txtInfluxDBBucket.Text = EtHerG.Properties.Settings.Default.InfluxDBBucket;
+                txtInfluxDBMachine.Text = EtHerG.Properties.Settings.Default.InfluxDBMachine;
 
                 formLineDiag.Location = new Point(EtHerG.Properties.Settings.Default.LineDiagPosX, EtHerG.Properties.Settings.Default.LineDiagPosY);
                 formLineDiag.Size = new Size(EtHerG.Properties.Settings.Default.LineDiagSizeX, EtHerG.Properties.Settings.Default.LineDiagSizeY);
@@ -270,6 +297,11 @@ namespace EtHerG
             Alarm2SingleWrite = false;
         }
 
+        private void AlarmStartupBlock_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+            AlarmReady = true;
+        }
+
         private void FormatDiags()
         {
             Invoke(new Action(() =>
@@ -347,7 +379,7 @@ namespace EtHerG
                 }
             }
 
-            if (ModbusCon)
+            if (ModbusCon && AlarmReady)
             {
                 if (DisplayX1 > EtHerG.Properties.Settings.Default.Alarm1Value || DisplayX1 < -EtHerG.Properties.Settings.Default.Alarm1Value || DisplayY1 > EtHerG.Properties.Settings.Default.Alarm1Value || DisplayY1 < -EtHerG.Properties.Settings.Default.Alarm1Value)
                 {
@@ -357,6 +389,16 @@ namespace EtHerG
                     {
                         Alarm1SingleWrite = true;
                         modbusMaster.WriteSingleCoil(1, EtHerG.Properties.Settings.Default.Alarm1ModbusAddress, true);
+
+                        if (EtHerG.Properties.Settings.Default.InfluxDBEnabled)
+                        {
+                            var Alarm1 = PointData.Measurement("Alarms")
+                                .Tag("device", EtHerG.Properties.Settings.Default.InfluxDBMachine)
+                                .Field("Alarm1", true)
+                                .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
+
+                            influxDBClient.GetWriteApi().WritePoint(Alarm1, EtHerG.Properties.Settings.Default.InfluxDBBucket, EtHerG.Properties.Settings.Default.InfluxDBOrgID);
+                        }
                     }
                 }
 
@@ -368,6 +410,16 @@ namespace EtHerG
                     {
                         Alarm2SingleWrite = true;
                         modbusMaster.WriteSingleCoil(1, EtHerG.Properties.Settings.Default.Alarm2ModbusAddress, true);
+
+                        if (EtHerG.Properties.Settings.Default.InfluxDBEnabled)
+                        {
+                            var Alarm2 = PointData.Measurement("Alarms")
+                                .Tag("device", EtHerG.Properties.Settings.Default.InfluxDBMachine)
+                                .Field("Alarm2", true)
+                                .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
+
+                            influxDBClient.GetWriteApi().WritePoint(Alarm2, EtHerG.Properties.Settings.Default.InfluxDBBucket, EtHerG.Properties.Settings.Default.InfluxDBOrgID);
+                        }
                     }
                 }
             }
@@ -390,7 +442,6 @@ namespace EtHerG
                 txtX.Text = DisplayX1.ToString(); // Update textBox1 with X1 value
                 txtY.Text = DisplayY1.ToString();
             }));
-
         }
 
         private void UpdateLineDiag()
@@ -978,18 +1029,6 @@ namespace EtHerG
             txtFilterHPUserInput.Visible = false;
         }
 
-        private void InfluxDBParameterSave()
-        {
-            //EtHerG.Properties.Settings.Default.GainX;
-            //EtHerG.Properties.Settings.Default.GainY;
-            //EtHerG.Properties.Settings.Default.Frequency;
-            //EtHerG.Properties.Settings.Default.Phase;
-            //EtHerG.Properties.Settings.Default.FilterLP;
-            //EtHerG.Properties.Settings.Default.FilterHP;
-            //EtHerG.Properties.Settings.Default.Alarm1Value;
-            //EtHerG.Properties.Settings.Default.Alarm2Value;
-        }
-
         private void txtAlarm1ModbusAddress_LostFocus(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(txtAlarm1ModbusAddress.Text))
@@ -1121,7 +1160,7 @@ namespace EtHerG
                             }
                         }
                     }));
-                    
+
                     break;
 
                 case "Phase":
@@ -1138,7 +1177,7 @@ namespace EtHerG
                             }
                         }
                     }));
-                    
+
                     break;
 
                 case "FilterLP":
@@ -1154,7 +1193,7 @@ namespace EtHerG
                                 modbusMaster.WriteSingleRegister(1, EtHerG.Properties.Settings.Default.FilterLPModbusLastSendAddress, Convert.ToUInt16(EtHerG.Properties.Settings.Default.FilterLP));
                             }
                         }
-                        
+
                     }));
                     break;
 
@@ -1174,6 +1213,70 @@ namespace EtHerG
                     }));
                     break;
             }
+
+            if (EtHerG.Properties.Settings.Default.InfluxDBEnabled)
+            {
+                // Create a point with the desired fields and tags
+                var point = PointData.Measurement("parameters")
+                    .Tag("device", EtHerG.Properties.Settings.Default.InfluxDBMachine)
+                    .Field("GainX", EtHerG.Properties.Settings.Default.GainX)
+                    .Field("GainY", EtHerG.Properties.Settings.Default.GainY)
+                    .Field("Frequency", EtHerG.Properties.Settings.Default.Frequency)
+                    .Field("Phase", EtHerG.Properties.Settings.Default.Phase)
+                    .Field("FilterLP", EtHerG.Properties.Settings.Default.FilterLP)
+                    .Field("FilterHP", EtHerG.Properties.Settings.Default.FilterHP)
+                    .Field("Alarm1Value", EtHerG.Properties.Settings.Default.Alarm1Value)
+                    .Field("Alarm2Value", EtHerG.Properties.Settings.Default.Alarm2Value)
+                    .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
+
+                if (influxDBClient == null)
+                {
+                    influxDBClient = new InfluxDBClient(EtHerG.Properties.Settings.Default.InfluxDBServer, EtHerG.Properties.Settings.Default.InfluxDBToken);
+                }
+
+                // Write the point into the InfluxDB bucket
+                influxDBClient.GetWriteApi().WritePoint(point, EtHerG.Properties.Settings.Default.InfluxDBBucket, EtHerG.Properties.Settings.Default.InfluxDBOrgID);
+            }
+
+            AlarmStartupBlock.Start();
+            AlarmReady = false;
+        }
+
+        private void chkInfluxDBEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.InfluxDBEnabled = chkInfluxDBEnabled.Checked;
+            EtHerG.Properties.Settings.Default.Save();
+        }
+
+        private void txtInfluxDBServer_LostFocus(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.InfluxDBServer = txtInfluxDBServer.Text;
+            EtHerG.Properties.Settings.Default.Save();
+
+        }
+
+        private void txtInfluxDBToken_LostFocus(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.InfluxDBToken = txtInfluxDBToken.Text;
+            EtHerG.Properties.Settings.Default.Save();
+        }
+
+        private void txtInfluxDBBucket_LostFocus(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.InfluxDBBucket = txtInfluxDBBucket.Text;
+            EtHerG.Properties.Settings.Default.Save();
+        }
+
+        private void txtInfluxDBOrg_LostFocus(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.InfluxDBOrgID = txtInfluxDBOrg.Text;
+            EtHerG.Properties.Settings.Default.Save();
+        }
+
+        private void txtInfluxDBMachine_LostFocus(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.InfluxDBMachine = txtInfluxDBMachine.Text;
+            EtHerG.Properties.Settings.Default.Save();
         }
     }
 }

@@ -66,10 +66,29 @@
             formScatter = new ScottPlot.WinForms.FormsPlot();
             tabPage2 = new TabPage();
             panel1 = new Panel();
+            lblInfluxDBMachineName = new Label();
+            txtInfluxDBMachine = new TextBox();
+            txtInfluxDBOrg = new TextBox();
+            txtInfluxDBBucket = new TextBox();
+            txtInfluxDBToken = new TextBox();
+            txtInfluxDBServer = new TextBox();
+            chkInfluxDBEnabled = new CheckBox();
+            lblInfluxDBORGID = new Label();
+            lblInfluxDBBucket = new Label();
+            lblInfluxDBToken = new Label();
+            lblInfluxDBServer = new Label();
+            chkModbusLastSentAddressEnabled = new CheckBox();
+            txtFilterHPModbusLastSentAddress = new TextBox();
+            txtFilterLPModbusLastSentAddress = new TextBox();
+            txtPhaseModbusLastSentAddress = new TextBox();
+            txtGainYModbusLastSentAddress = new TextBox();
+            txtGainXModbusLastSentAddress = new TextBox();
+            txtFrequencyModbusLastSentAddress = new TextBox();
+            lblModbusLastSentValueAdress = new Label();
             txtAlarm2ModbusAddress = new TextBox();
             txtAlarm1ModbusAddress = new TextBox();
-            label1 = new Label();
-            label2 = new Label();
+            lblAlarm1ModbusSendAddress = new Label();
+            lblAlarm2ModbusSendAddress = new Label();
             chkDisableUserInput = new CheckBox();
             lblModbusReadValue = new Label();
             lblModbusReadAdresses = new Label();
@@ -135,14 +154,6 @@
             lblPhase1 = new Label();
             DiagWorker = new System.ComponentModel.BackgroundWorker();
             ModbusWorker = new System.ComponentModel.BackgroundWorker();
-            lblModbusLastSentValueAdress = new Label();
-            txtFrequencyModbusLastSentAddress = new TextBox();
-            txtGainXModbusLastSentAddress = new TextBox();
-            txtGainYModbusLastSentAddress = new TextBox();
-            txtPhaseModbusLastSentAddress = new TextBox();
-            txtFilterLPModbusLastSentAddress = new TextBox();
-            txtFilterHPModbusLastSentAddress = new TextBox();
-            chkModbusLastSentAddressEnabled = new CheckBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panelSettings.SuspendLayout();
@@ -524,6 +535,17 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(lblInfluxDBMachineName);
+            panel1.Controls.Add(txtInfluxDBMachine);
+            panel1.Controls.Add(txtInfluxDBOrg);
+            panel1.Controls.Add(txtInfluxDBBucket);
+            panel1.Controls.Add(txtInfluxDBToken);
+            panel1.Controls.Add(txtInfluxDBServer);
+            panel1.Controls.Add(chkInfluxDBEnabled);
+            panel1.Controls.Add(lblInfluxDBORGID);
+            panel1.Controls.Add(lblInfluxDBBucket);
+            panel1.Controls.Add(lblInfluxDBToken);
+            panel1.Controls.Add(lblInfluxDBServer);
             panel1.Controls.Add(chkModbusLastSentAddressEnabled);
             panel1.Controls.Add(txtFilterHPModbusLastSentAddress);
             panel1.Controls.Add(txtFilterLPModbusLastSentAddress);
@@ -534,8 +556,8 @@
             panel1.Controls.Add(lblModbusLastSentValueAdress);
             panel1.Controls.Add(txtAlarm2ModbusAddress);
             panel1.Controls.Add(txtAlarm1ModbusAddress);
-            panel1.Controls.Add(label1);
-            panel1.Controls.Add(label2);
+            panel1.Controls.Add(lblAlarm1ModbusSendAddress);
+            panel1.Controls.Add(lblAlarm2ModbusSendAddress);
             panel1.Controls.Add(chkDisableUserInput);
             panel1.Controls.Add(lblModbusReadValue);
             panel1.Controls.Add(lblModbusReadAdresses);
@@ -605,6 +627,170 @@
             panel1.Size = new Size(1890, 1007);
             panel1.TabIndex = 54;
             // 
+            // lblInfluxDBMachineName
+            // 
+            lblInfluxDBMachineName.AutoSize = true;
+            lblInfluxDBMachineName.Location = new Point(348, 645);
+            lblInfluxDBMachineName.Name = "lblInfluxDBMachineName";
+            lblInfluxDBMachineName.Size = new Size(130, 15);
+            lblInfluxDBMachineName.TabIndex = 95;
+            lblInfluxDBMachineName.Text = "InfluxDBMachineName";
+            // 
+            // txtInfluxDBMachine
+            // 
+            txtInfluxDBMachine.Location = new Point(484, 642);
+            txtInfluxDBMachine.Name = "txtInfluxDBMachine";
+            txtInfluxDBMachine.Size = new Size(100, 23);
+            txtInfluxDBMachine.TabIndex = 94;
+            txtInfluxDBMachine.LostFocus += txtInfluxDBMachine_LostFocus;
+            // 
+            // txtInfluxDBOrg
+            // 
+            txtInfluxDBOrg.Location = new Point(484, 613);
+            txtInfluxDBOrg.Name = "txtInfluxDBOrg";
+            txtInfluxDBOrg.Size = new Size(100, 23);
+            txtInfluxDBOrg.TabIndex = 93;
+            txtInfluxDBOrg.LostFocus += txtInfluxDBOrg_LostFocus;
+            // 
+            // txtInfluxDBBucket
+            // 
+            txtInfluxDBBucket.Location = new Point(484, 583);
+            txtInfluxDBBucket.Name = "txtInfluxDBBucket";
+            txtInfluxDBBucket.Size = new Size(100, 23);
+            txtInfluxDBBucket.TabIndex = 92;
+            txtInfluxDBBucket.LostFocus += txtInfluxDBBucket_LostFocus;
+            // 
+            // txtInfluxDBToken
+            // 
+            txtInfluxDBToken.Location = new Point(484, 548);
+            txtInfluxDBToken.Name = "txtInfluxDBToken";
+            txtInfluxDBToken.Size = new Size(100, 23);
+            txtInfluxDBToken.TabIndex = 91;
+            txtInfluxDBToken.LostFocus += txtInfluxDBToken_LostFocus;
+            // 
+            // txtInfluxDBServer
+            // 
+            txtInfluxDBServer.Location = new Point(484, 520);
+            txtInfluxDBServer.Name = "txtInfluxDBServer";
+            txtInfluxDBServer.Size = new Size(100, 23);
+            txtInfluxDBServer.TabIndex = 90;
+            txtInfluxDBServer.LostFocus += txtInfluxDBServer_LostFocus;
+            // 
+            // chkInfluxDBEnabled
+            // 
+            chkInfluxDBEnabled.AutoSize = true;
+            chkInfluxDBEnabled.Location = new Point(390, 496);
+            chkInfluxDBEnabled.Name = "chkInfluxDBEnabled";
+            chkInfluxDBEnabled.Size = new Size(116, 19);
+            chkInfluxDBEnabled.TabIndex = 89;
+            chkInfluxDBEnabled.Text = "InfluxDB Enabled";
+            chkInfluxDBEnabled.UseVisualStyleBackColor = true;
+            chkInfluxDBEnabled.CheckedChanged += chkInfluxDBEnabled_CheckedChanged;
+            // 
+            // lblInfluxDBORGID
+            // 
+            lblInfluxDBORGID.AutoSize = true;
+            lblInfluxDBORGID.Location = new Point(385, 613);
+            lblInfluxDBORGID.Name = "lblInfluxDBORGID";
+            lblInfluxDBORGID.Size = new Size(91, 15);
+            lblInfluxDBORGID.TabIndex = 88;
+            lblInfluxDBORGID.Text = "InfluxDB Org-ID";
+            // 
+            // lblInfluxDBBucket
+            // 
+            lblInfluxDBBucket.AutoSize = true;
+            lblInfluxDBBucket.Location = new Point(382, 586);
+            lblInfluxDBBucket.Name = "lblInfluxDBBucket";
+            lblInfluxDBBucket.Size = new Size(91, 15);
+            lblInfluxDBBucket.TabIndex = 87;
+            lblInfluxDBBucket.Text = "InfluxDB Bucket";
+            // 
+            // lblInfluxDBToken
+            // 
+            lblInfluxDBToken.AutoSize = true;
+            lblInfluxDBToken.Location = new Point(394, 556);
+            lblInfluxDBToken.Name = "lblInfluxDBToken";
+            lblInfluxDBToken.Size = new Size(82, 15);
+            lblInfluxDBToken.TabIndex = 86;
+            lblInfluxDBToken.Text = "InfluxDBToken";
+            // 
+            // lblInfluxDBServer
+            // 
+            lblInfluxDBServer.AutoSize = true;
+            lblInfluxDBServer.Location = new Point(394, 528);
+            lblInfluxDBServer.Name = "lblInfluxDBServer";
+            lblInfluxDBServer.Size = new Size(84, 15);
+            lblInfluxDBServer.TabIndex = 85;
+            lblInfluxDBServer.Text = "InfluxDBServer";
+            // 
+            // chkModbusLastSentAddressEnabled
+            // 
+            chkModbusLastSentAddressEnabled.AutoSize = true;
+            chkModbusLastSentAddressEnabled.Location = new Point(654, 227);
+            chkModbusLastSentAddressEnabled.Name = "chkModbusLastSentAddressEnabled";
+            chkModbusLastSentAddressEnabled.Size = new Size(201, 19);
+            chkModbusLastSentAddressEnabled.TabIndex = 84;
+            chkModbusLastSentAddressEnabled.Text = "Modbus Last Sent Value Enabled?";
+            chkModbusLastSentAddressEnabled.UseVisualStyleBackColor = true;
+            chkModbusLastSentAddressEnabled.CheckedChanged += chkModbusLastSentEnabled_CheckedChanged;
+            // 
+            // txtFilterHPModbusLastSentAddress
+            // 
+            txtFilterHPModbusLastSentAddress.Location = new Point(654, 402);
+            txtFilterHPModbusLastSentAddress.Name = "txtFilterHPModbusLastSentAddress";
+            txtFilterHPModbusLastSentAddress.Size = new Size(100, 23);
+            txtFilterHPModbusLastSentAddress.TabIndex = 83;
+            txtFilterHPModbusLastSentAddress.LostFocus += txtFilterHPModbusLastSentAddress_LostFocus;
+            // 
+            // txtFilterLPModbusLastSentAddress
+            // 
+            txtFilterLPModbusLastSentAddress.Location = new Point(654, 373);
+            txtFilterLPModbusLastSentAddress.Name = "txtFilterLPModbusLastSentAddress";
+            txtFilterLPModbusLastSentAddress.Size = new Size(100, 23);
+            txtFilterLPModbusLastSentAddress.TabIndex = 82;
+            txtFilterLPModbusLastSentAddress.LostFocus += txtFilterLPModbusLastSentAddress_LostFocus;
+            // 
+            // txtPhaseModbusLastSentAddress
+            // 
+            txtPhaseModbusLastSentAddress.Location = new Point(654, 344);
+            txtPhaseModbusLastSentAddress.Name = "txtPhaseModbusLastSentAddress";
+            txtPhaseModbusLastSentAddress.Size = new Size(100, 23);
+            txtPhaseModbusLastSentAddress.TabIndex = 81;
+            txtPhaseModbusLastSentAddress.LostFocus += txtPhaseModbusLastSentAddress_LostFocus;
+            // 
+            // txtGainYModbusLastSentAddress
+            // 
+            txtGainYModbusLastSentAddress.Location = new Point(654, 318);
+            txtGainYModbusLastSentAddress.Name = "txtGainYModbusLastSentAddress";
+            txtGainYModbusLastSentAddress.Size = new Size(100, 23);
+            txtGainYModbusLastSentAddress.TabIndex = 80;
+            txtGainYModbusLastSentAddress.LostFocus += txtGainYModbusLastSentAddress_LostFocus;
+            // 
+            // txtGainXModbusLastSentAddress
+            // 
+            txtGainXModbusLastSentAddress.Location = new Point(654, 288);
+            txtGainXModbusLastSentAddress.Name = "txtGainXModbusLastSentAddress";
+            txtGainXModbusLastSentAddress.Size = new Size(100, 23);
+            txtGainXModbusLastSentAddress.TabIndex = 79;
+            txtGainXModbusLastSentAddress.LostFocus += txtGainXModbusLastSentAddress_LostFocus;
+            // 
+            // txtFrequencyModbusLastSentAddress
+            // 
+            txtFrequencyModbusLastSentAddress.Location = new Point(654, 256);
+            txtFrequencyModbusLastSentAddress.Name = "txtFrequencyModbusLastSentAddress";
+            txtFrequencyModbusLastSentAddress.Size = new Size(100, 23);
+            txtFrequencyModbusLastSentAddress.TabIndex = 78;
+            txtFrequencyModbusLastSentAddress.LostFocus += txtFrequencyModbusLastSentAddress_LostFocus;
+            // 
+            // lblModbusLastSentValueAdress
+            // 
+            lblModbusLastSentValueAdress.AutoSize = true;
+            lblModbusLastSentValueAdress.Location = new Point(654, 205);
+            lblModbusLastSentValueAdress.Name = "lblModbusLastSentValueAdress";
+            lblModbusLastSentValueAdress.Size = new Size(133, 15);
+            lblModbusLastSentValueAdress.TabIndex = 77;
+            lblModbusLastSentValueAdress.Text = "Last Sent Value Address:";
+            // 
             // txtAlarm2ModbusAddress
             // 
             txtAlarm2ModbusAddress.Location = new Point(424, 467);
@@ -621,23 +807,23 @@
             txtAlarm1ModbusAddress.TabIndex = 75;
             txtAlarm1ModbusAddress.LostFocus += txtAlarm1ModbusAddress_LostFocus;
             // 
-            // label1
+            // lblAlarm1ModbusSendAddress
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(367, 436);
-            label1.Name = "label1";
-            label1.Size = new Size(51, 15);
-            label1.TabIndex = 74;
-            label1.Text = "Alarm 1:";
+            lblAlarm1ModbusSendAddress.AutoSize = true;
+            lblAlarm1ModbusSendAddress.Location = new Point(367, 436);
+            lblAlarm1ModbusSendAddress.Name = "lblAlarm1ModbusSendAddress";
+            lblAlarm1ModbusSendAddress.Size = new Size(51, 15);
+            lblAlarm1ModbusSendAddress.TabIndex = 74;
+            lblAlarm1ModbusSendAddress.Text = "Alarm 1:";
             // 
-            // label2
+            // lblAlarm2ModbusSendAddress
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(367, 467);
-            label2.Name = "label2";
-            label2.Size = new Size(51, 15);
-            label2.TabIndex = 73;
-            label2.Text = "Alarm 2:";
+            lblAlarm2ModbusSendAddress.AutoSize = true;
+            lblAlarm2ModbusSendAddress.Location = new Point(367, 467);
+            lblAlarm2ModbusSendAddress.Name = "lblAlarm2ModbusSendAddress";
+            lblAlarm2ModbusSendAddress.Size = new Size(51, 15);
+            lblAlarm2ModbusSendAddress.TabIndex = 73;
+            lblAlarm2ModbusSendAddress.Text = "Alarm 2:";
             // 
             // chkDisableUserInput
             // 
@@ -1175,74 +1361,6 @@
             lblPhase1.TabIndex = 16;
             lblPhase1.Text = "Phase:";
             // 
-            // lblModbusLastSentValueAdress
-            // 
-            lblModbusLastSentValueAdress.AutoSize = true;
-            lblModbusLastSentValueAdress.Location = new Point(654, 205);
-            lblModbusLastSentValueAdress.Name = "lblModbusLastSentValueAdress";
-            lblModbusLastSentValueAdress.Size = new Size(133, 15);
-            lblModbusLastSentValueAdress.TabIndex = 77;
-            lblModbusLastSentValueAdress.Text = "Last Sent Value Address:";
-            // 
-            // txtFrequencyModbusLastSentAddress
-            // 
-            txtFrequencyModbusLastSentAddress.Location = new Point(654, 256);
-            txtFrequencyModbusLastSentAddress.Name = "txtFrequencyModbusLastSentAddress";
-            txtFrequencyModbusLastSentAddress.Size = new Size(100, 23);
-            txtFrequencyModbusLastSentAddress.TabIndex = 78;
-            txtFrequencyModbusLastSentAddress.LostFocus += txtFrequencyModbusLastSentAddress_LostFocus;
-            // 
-            // txtGainXModbusLastSentAddress
-            // 
-            txtGainXModbusLastSentAddress.Location = new Point(654, 288);
-            txtGainXModbusLastSentAddress.Name = "txtGainXModbusLastSentAddress";
-            txtGainXModbusLastSentAddress.Size = new Size(100, 23);
-            txtGainXModbusLastSentAddress.TabIndex = 79;
-            txtGainXModbusLastSentAddress.LostFocus += txtGainXModbusLastSentAddress_LostFocus;
-            // 
-            // txtGainYModbusLastSentAddress
-            // 
-            txtGainYModbusLastSentAddress.Location = new Point(654, 318);
-            txtGainYModbusLastSentAddress.Name = "txtGainYModbusLastSentAddress";
-            txtGainYModbusLastSentAddress.Size = new Size(100, 23);
-            txtGainYModbusLastSentAddress.TabIndex = 80;
-            txtGainYModbusLastSentAddress.LostFocus += txtGainYModbusLastSentAddress_LostFocus;
-            // 
-            // txtPhaseModbusLastSentAddress
-            // 
-            txtPhaseModbusLastSentAddress.Location = new Point(654, 344);
-            txtPhaseModbusLastSentAddress.Name = "txtPhaseModbusLastSentAddress";
-            txtPhaseModbusLastSentAddress.Size = new Size(100, 23);
-            txtPhaseModbusLastSentAddress.TabIndex = 81;
-            txtPhaseModbusLastSentAddress.LostFocus += txtPhaseModbusLastSentAddress_LostFocus;
-            // 
-            // txtFilterLPModbusLastSentAddress
-            // 
-            txtFilterLPModbusLastSentAddress.Location = new Point(654, 373);
-            txtFilterLPModbusLastSentAddress.Name = "txtFilterLPModbusLastSentAddress";
-            txtFilterLPModbusLastSentAddress.Size = new Size(100, 23);
-            txtFilterLPModbusLastSentAddress.TabIndex = 82;
-            txtFilterLPModbusLastSentAddress.LostFocus += txtFilterLPModbusLastSentAddress_LostFocus;
-            // 
-            // txtFilterHPModbusLastSentAddress
-            // 
-            txtFilterHPModbusLastSentAddress.Location = new Point(654, 402);
-            txtFilterHPModbusLastSentAddress.Name = "txtFilterHPModbusLastSentAddress";
-            txtFilterHPModbusLastSentAddress.Size = new Size(100, 23);
-            txtFilterHPModbusLastSentAddress.TabIndex = 83;
-            txtFilterHPModbusLastSentAddress.LostFocus += txtFilterHPModbusLastSentAddress_LostFocus;
-            // 
-            // chkModbusLastSentAddressEnabled
-            // 
-            chkModbusLastSentAddressEnabled.AutoSize = true;
-            chkModbusLastSentAddressEnabled.Location = new Point(654, 227);
-            chkModbusLastSentAddressEnabled.Name = "chkModbusLastSentAddressEnabled";
-            chkModbusLastSentAddressEnabled.Size = new Size(201, 19);
-            chkModbusLastSentAddressEnabled.TabIndex = 84;
-            chkModbusLastSentAddressEnabled.Text = "Modbus Last Sent Value Enabled?";
-            chkModbusLastSentAddressEnabled.UseVisualStyleBackColor = true;
-            chkModbusLastSentAddressEnabled.CheckedChanged += chkModbusLastSentEnabled_CheckedChanged;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1370,8 +1488,8 @@
         private CheckBox chkDisableUserInput;
         private TextBox txtAlarm2ModbusAddress;
         private TextBox txtAlarm1ModbusAddress;
-        private Label label1;
-        private Label label2;
+        private Label lblAlarm1ModbusSendAddress;
+        private Label lblAlarm2ModbusSendAddress;
         private Label lblModbusLastSentValueAdress;
         private TextBox txtFilterLPModbusLastSentAddress;
         private TextBox txtPhaseModbusLastSentAddress;
@@ -1380,5 +1498,16 @@
         private TextBox txtFrequencyModbusLastSentAddress;
         private CheckBox chkModbusLastSentAddressEnabled;
         private TextBox txtFilterHPModbusLastSentAddress;
+        private Label lblInfluxDBServer;
+        private Label lblInfluxDBToken;
+        private TextBox txtInfluxDBOrg;
+        private TextBox txtInfluxDBBucket;
+        private TextBox txtInfluxDBToken;
+        private TextBox txtInfluxDBServer;
+        private CheckBox chkInfluxDBEnabled;
+        private Label lblInfluxDBORGID;
+        private Label lblInfluxDBBucket;
+        private Label lblInfluxDBMachineName;
+        private TextBox txtInfluxDBMachine;
     }
 }

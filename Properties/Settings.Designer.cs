@@ -538,5 +538,65 @@ namespace EtHerG.Properties {
                 this["FilterHPModbusLastSendAddress"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InfluxDBServer {
+            get {
+                return ((string)(this["InfluxDBServer"]));
+            }
+            set {
+                this["InfluxDBServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InfluxDBToken {
+            get {
+                return ((string)(this["InfluxDBToken"]));
+            }
+            set {
+                this["InfluxDBToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InfluxDBOrgID {
+            get {
+                return ((string)(this["InfluxDBOrgID"]));
+            }
+            set {
+                this["InfluxDBOrgID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InfluxDBBucket {
+            get {
+                return ((string)(this["InfluxDBBucket"]));
+            }
+            set {
+                this["InfluxDBBucket"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InfluxDBMachine {
+            get {
+                return ((string)(this["InfluxDBMachine"]));
+            }
+            set {
+                this["InfluxDBMachine"] = value;
+            }
+        }
     }
 }
