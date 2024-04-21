@@ -454,5 +454,89 @@ namespace EtHerG.Properties {
                 this["InfluxDBEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ModbusLastSentAddressEnabled {
+            get {
+                return ((bool)(this["ModbusLastSentAddressEnabled"]));
+            }
+            set {
+                this["ModbusLastSentAddressEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort FrequencyModbusLastSendAddress {
+            get {
+                return ((ushort)(this["FrequencyModbusLastSendAddress"]));
+            }
+            set {
+                this["FrequencyModbusLastSendAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort GainXModbusLastSendAddress {
+            get {
+                return ((ushort)(this["GainXModbusLastSendAddress"]));
+            }
+            set {
+                this["GainXModbusLastSendAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort GainYModbusLastSendAddress {
+            get {
+                return ((ushort)(this["GainYModbusLastSendAddress"]));
+            }
+            set {
+                this["GainYModbusLastSendAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort PhaseModbusLastSendAddress {
+            get {
+                return ((ushort)(this["PhaseModbusLastSendAddress"]));
+            }
+            set {
+                this["PhaseModbusLastSendAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort FilterLPModbusLastSendAddress {
+            get {
+                return ((ushort)(this["FilterLPModbusLastSendAddress"]));
+            }
+            set {
+                this["FilterLPModbusLastSendAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort FilterHPModbusLastSendAddress {
+            get {
+                return ((ushort)(this["FilterHPModbusLastSendAddress"]));
+            }
+            set {
+                this["FilterHPModbusLastSendAddress"] = value;
+            }
+        }
     }
 }

@@ -66,6 +66,10 @@
             formScatter = new ScottPlot.WinForms.FormsPlot();
             tabPage2 = new TabPage();
             panel1 = new Panel();
+            txtAlarm2ModbusAddress = new TextBox();
+            txtAlarm1ModbusAddress = new TextBox();
+            label1 = new Label();
+            label2 = new Label();
             chkDisableUserInput = new CheckBox();
             lblModbusReadValue = new Label();
             lblModbusReadAdresses = new Label();
@@ -131,10 +135,14 @@
             lblPhase1 = new Label();
             DiagWorker = new System.ComponentModel.BackgroundWorker();
             ModbusWorker = new System.ComponentModel.BackgroundWorker();
-            label1 = new Label();
-            label2 = new Label();
-            txtAlarm1ModbusAddress = new TextBox();
-            txtAlarm2ModbusAddress = new TextBox();
+            lblModbusLastSentValueAdress = new Label();
+            txtFrequencyModbusLastSentAddress = new TextBox();
+            txtGainXModbusLastSentAddress = new TextBox();
+            txtGainYModbusLastSentAddress = new TextBox();
+            txtPhaseModbusLastSentAddress = new TextBox();
+            txtFilterLPModbusLastSentAddress = new TextBox();
+            txtFilterHPModbusLastSentAddress = new TextBox();
+            chkModbusLastSentAddressEnabled = new CheckBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panelSettings.SuspendLayout();
@@ -516,6 +524,14 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(chkModbusLastSentAddressEnabled);
+            panel1.Controls.Add(txtFilterHPModbusLastSentAddress);
+            panel1.Controls.Add(txtFilterLPModbusLastSentAddress);
+            panel1.Controls.Add(txtPhaseModbusLastSentAddress);
+            panel1.Controls.Add(txtGainYModbusLastSentAddress);
+            panel1.Controls.Add(txtGainXModbusLastSentAddress);
+            panel1.Controls.Add(txtFrequencyModbusLastSentAddress);
+            panel1.Controls.Add(lblModbusLastSentValueAdress);
             panel1.Controls.Add(txtAlarm2ModbusAddress);
             panel1.Controls.Add(txtAlarm1ModbusAddress);
             panel1.Controls.Add(label1);
@@ -588,6 +604,40 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1890, 1007);
             panel1.TabIndex = 54;
+            // 
+            // txtAlarm2ModbusAddress
+            // 
+            txtAlarm2ModbusAddress.Location = new Point(424, 467);
+            txtAlarm2ModbusAddress.Name = "txtAlarm2ModbusAddress";
+            txtAlarm2ModbusAddress.Size = new Size(100, 23);
+            txtAlarm2ModbusAddress.TabIndex = 76;
+            txtAlarm2ModbusAddress.LostFocus += txtAlarm2ModbusAddress_LostFocus;
+            // 
+            // txtAlarm1ModbusAddress
+            // 
+            txtAlarm1ModbusAddress.Location = new Point(423, 433);
+            txtAlarm1ModbusAddress.Name = "txtAlarm1ModbusAddress";
+            txtAlarm1ModbusAddress.Size = new Size(100, 23);
+            txtAlarm1ModbusAddress.TabIndex = 75;
+            txtAlarm1ModbusAddress.LostFocus += txtAlarm1ModbusAddress_LostFocus;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(367, 436);
+            label1.Name = "label1";
+            label1.Size = new Size(51, 15);
+            label1.TabIndex = 74;
+            label1.Text = "Alarm 1:";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(367, 467);
+            label2.Name = "label2";
+            label2.Size = new Size(51, 15);
+            label2.TabIndex = 73;
+            label2.Text = "Alarm 2:";
             // 
             // chkDisableUserInput
             // 
@@ -1125,39 +1175,73 @@
             lblPhase1.TabIndex = 16;
             lblPhase1.Text = "Phase:";
             // 
-            // label1
+            // lblModbusLastSentValueAdress
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(367, 436);
-            label1.Name = "label1";
-            label1.Size = new Size(51, 15);
-            label1.TabIndex = 74;
-            label1.Text = "Alarm 1:";
+            lblModbusLastSentValueAdress.AutoSize = true;
+            lblModbusLastSentValueAdress.Location = new Point(654, 205);
+            lblModbusLastSentValueAdress.Name = "lblModbusLastSentValueAdress";
+            lblModbusLastSentValueAdress.Size = new Size(133, 15);
+            lblModbusLastSentValueAdress.TabIndex = 77;
+            lblModbusLastSentValueAdress.Text = "Last Sent Value Address:";
             // 
-            // label2
+            // txtFrequencyModbusLastSentAddress
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(367, 467);
-            label2.Name = "label2";
-            label2.Size = new Size(51, 15);
-            label2.TabIndex = 73;
-            label2.Text = "Alarm 2:";
+            txtFrequencyModbusLastSentAddress.Location = new Point(654, 256);
+            txtFrequencyModbusLastSentAddress.Name = "txtFrequencyModbusLastSentAddress";
+            txtFrequencyModbusLastSentAddress.Size = new Size(100, 23);
+            txtFrequencyModbusLastSentAddress.TabIndex = 78;
+            txtFrequencyModbusLastSentAddress.LostFocus += txtFrequencyModbusLastSentAddress_LostFocus;
             // 
-            // txtAlarm1ModbusAddress
+            // txtGainXModbusLastSentAddress
             // 
-            txtAlarm1ModbusAddress.Location = new Point(423, 433);
-            txtAlarm1ModbusAddress.Name = "txtAlarm1ModbusAddress";
-            txtAlarm1ModbusAddress.Size = new Size(100, 23);
-            txtAlarm1ModbusAddress.TabIndex = 75;
-            txtAlarm1ModbusAddress.LostFocus += txtAlarm1ModbusAddress_LostFocus;
+            txtGainXModbusLastSentAddress.Location = new Point(654, 288);
+            txtGainXModbusLastSentAddress.Name = "txtGainXModbusLastSentAddress";
+            txtGainXModbusLastSentAddress.Size = new Size(100, 23);
+            txtGainXModbusLastSentAddress.TabIndex = 79;
+            txtGainXModbusLastSentAddress.LostFocus += txtGainXModbusLastSentAddress_LostFocus;
             // 
-            // txtAlarm2ModbusAddress
+            // txtGainYModbusLastSentAddress
             // 
-            txtAlarm2ModbusAddress.Location = new Point(424, 467);
-            txtAlarm2ModbusAddress.Name = "txtAlarm2ModbusAddress";
-            txtAlarm2ModbusAddress.Size = new Size(100, 23);
-            txtAlarm2ModbusAddress.TabIndex = 76;
-            txtAlarm2ModbusAddress.LostFocus += txtAlarm2ModbusAddress_LostFocus;
+            txtGainYModbusLastSentAddress.Location = new Point(654, 318);
+            txtGainYModbusLastSentAddress.Name = "txtGainYModbusLastSentAddress";
+            txtGainYModbusLastSentAddress.Size = new Size(100, 23);
+            txtGainYModbusLastSentAddress.TabIndex = 80;
+            txtGainYModbusLastSentAddress.LostFocus += txtGainYModbusLastSentAddress_LostFocus;
+            // 
+            // txtPhaseModbusLastSentAddress
+            // 
+            txtPhaseModbusLastSentAddress.Location = new Point(654, 344);
+            txtPhaseModbusLastSentAddress.Name = "txtPhaseModbusLastSentAddress";
+            txtPhaseModbusLastSentAddress.Size = new Size(100, 23);
+            txtPhaseModbusLastSentAddress.TabIndex = 81;
+            txtPhaseModbusLastSentAddress.LostFocus += txtPhaseModbusLastSentAddress_LostFocus;
+            // 
+            // txtFilterLPModbusLastSentAddress
+            // 
+            txtFilterLPModbusLastSentAddress.Location = new Point(654, 373);
+            txtFilterLPModbusLastSentAddress.Name = "txtFilterLPModbusLastSentAddress";
+            txtFilterLPModbusLastSentAddress.Size = new Size(100, 23);
+            txtFilterLPModbusLastSentAddress.TabIndex = 82;
+            txtFilterLPModbusLastSentAddress.LostFocus += txtFilterLPModbusLastSentAddress_LostFocus;
+            // 
+            // txtFilterHPModbusLastSentAddress
+            // 
+            txtFilterHPModbusLastSentAddress.Location = new Point(654, 402);
+            txtFilterHPModbusLastSentAddress.Name = "txtFilterHPModbusLastSentAddress";
+            txtFilterHPModbusLastSentAddress.Size = new Size(100, 23);
+            txtFilterHPModbusLastSentAddress.TabIndex = 83;
+            txtFilterHPModbusLastSentAddress.LostFocus += txtFilterHPModbusLastSentAddress_LostFocus;
+            // 
+            // chkModbusLastSentAddressEnabled
+            // 
+            chkModbusLastSentAddressEnabled.AutoSize = true;
+            chkModbusLastSentAddressEnabled.Location = new Point(654, 227);
+            chkModbusLastSentAddressEnabled.Name = "chkModbusLastSentAddressEnabled";
+            chkModbusLastSentAddressEnabled.Size = new Size(201, 19);
+            chkModbusLastSentAddressEnabled.TabIndex = 84;
+            chkModbusLastSentAddressEnabled.Text = "Modbus Last Sent Value Enabled?";
+            chkModbusLastSentAddressEnabled.UseVisualStyleBackColor = true;
+            chkModbusLastSentAddressEnabled.CheckedChanged += chkModbusLastSentEnabled_CheckedChanged;
             // 
             // Form1
             // 
@@ -1288,5 +1372,13 @@
         private TextBox txtAlarm1ModbusAddress;
         private Label label1;
         private Label label2;
+        private Label lblModbusLastSentValueAdress;
+        private TextBox txtFilterLPModbusLastSentAddress;
+        private TextBox txtPhaseModbusLastSentAddress;
+        private TextBox txtGainYModbusLastSentAddress;
+        private TextBox txtGainXModbusLastSentAddress;
+        private TextBox txtFrequencyModbusLastSentAddress;
+        private CheckBox chkModbusLastSentAddressEnabled;
+        private TextBox txtFilterHPModbusLastSentAddress;
     }
 }
