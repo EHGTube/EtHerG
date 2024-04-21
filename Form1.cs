@@ -14,6 +14,9 @@ using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 using InfluxDB.Client;
 using System.Drawing;
+using System;
+using System.Management;
+using System.Threading;
 
 namespace EtHerG
 {
@@ -218,7 +221,7 @@ namespace EtHerG
                 formLineDiag.Size = new Size(EtHerG.Properties.Settings.Default.LineDiagSizeX, EtHerG.Properties.Settings.Default.LineDiagSizeY);
                 formScatter.Location = new Point(EtHerG.Properties.Settings.Default.ScatterDiagPosX, EtHerG.Properties.Settings.Default.ScatterDiagPosY);
                 formScatter.Size = new Size(EtHerG.Properties.Settings.Default.ScatterDiagSize, EtHerG.Properties.Settings.Default.ScatterDiagSize);
-                
+
                 FormatDiags();
 
                 formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
@@ -228,15 +231,6 @@ namespace EtHerG
                 if (EtHerG.Properties.Settings.Default.ModbusAutoconnect == true) { OpenModbusConnection(); }
 
                 if (EtHerG.Properties.Settings.Default.Autologin == true)
-                {
-                    LoggedIn();
-                }
-                else
-                {
-                    LoggedOut();
-                }
-
-                if (chkAutologin.Checked == true)
                 {
                     LoggedIn();
                 }
@@ -717,12 +711,14 @@ namespace EtHerG
                     var factory = new ModbusFactory();
                     modbusMaster = factory.CreateMaster(modbusClient);
                     ModbusCon = true;
+                    txtModbusStatus.BackColor = System.Drawing.Color.Green;
                 }
                 catch (Exception ex)
                 {
                     // Log or display a warning that the connection failed
                     MessageBox.Show($"Failed to connect to Modbus server: {ex.Message}");
                     // Stop trying to connect
+                    txtModbusStatus.BackColor = System.Drawing.Color.Red;
                     return;
                 }
             }
@@ -799,25 +795,31 @@ namespace EtHerG
             }
             else
             {
-                bool result = ether.OpenSerialConnection(EtHerG.Properties.Settings.Default.ComPort);
-                if (result)
+                if (!EtherConnected)
                 {
-                    EtherConnected = true;
-                }
-                else
-                {
-                    MessageBox.Show("Verbindungsaufbau nicht möglich");
-                }
-                ether.WriteToInstrument(1, 0, "<USB_OUTPUT>0</USB_OUTPUT>");
-                System.Threading.Thread.Sleep(100);
-                ether.WriteToInstrument(1, 0, "<USB_OUTPUT>7</USB_OUTPUT>");
+                    bool result = ether.OpenSerialConnection(EtHerG.Properties.Settings.Default.ComPort);
+                    if (result)
+                    {
+                        EtherConnected = true;
+                        txtEtherStatus.BackColor = System.Drawing.Color.Green;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Verbindungsaufbau nicht möglich");
+                        txtEtherStatus.BackColor = System.Drawing.Color.Red;
+                    }
+                    System.Threading.Thread.Sleep(100);
+                    ether.WriteToInstrument(1, 0, "<USB_OUTPUT>0</USB_OUTPUT>");
+                    System.Threading.Thread.Sleep(100);
+                    ether.WriteToInstrument(1, 0, "<USB_OUTPUT>7</USB_OUTPUT>");
 
-                ether.WriteToInstrument(1, 0, "<FREQUENCY>" + EtHerG.Properties.Settings.Default.Frequency * 1000 + "</FREQUENCY>");
-                ether.WriteToInstrument(1, 0, "<GAIN_X>" + EtHerG.Properties.Settings.Default.GainX * 10 + "</GAIN_X>");
-                ether.WriteToInstrument(1, 0, "<GAIN_Y>" + EtHerG.Properties.Settings.Default.GainY * 10 + "</GAIN_Y>");
-                ether.WriteToInstrument(1, 0, "<PHASE>" + EtHerG.Properties.Settings.Default.Phase * 1000 + "</PHASE>");
-                ether.WriteToInstrument(1, 0, "<FILTER_LP>" + EtHerG.Properties.Settings.Default.FilterLP * 100 + "</FILTER_LP>");
-                ether.WriteToInstrument(1, 0, "<FILTER_HP>" + EtHerG.Properties.Settings.Default.FilterHP * 100 + "</FILTER_HP>");
+                    ether.WriteToInstrument(1, 0, "<FREQUENCY>" + EtHerG.Properties.Settings.Default.Frequency * 1000 + "</FREQUENCY>");
+                    ether.WriteToInstrument(1, 0, "<GAIN_X>" + EtHerG.Properties.Settings.Default.GainX * 10 + "</GAIN_X>");
+                    ether.WriteToInstrument(1, 0, "<GAIN_Y>" + EtHerG.Properties.Settings.Default.GainY * 10 + "</GAIN_Y>");
+                    ether.WriteToInstrument(1, 0, "<PHASE>" + EtHerG.Properties.Settings.Default.Phase * 1000 + "</PHASE>");
+                    ether.WriteToInstrument(1, 0, "<FILTER_LP>" + EtHerG.Properties.Settings.Default.FilterLP * 100 + "</FILTER_LP>");
+                    ether.WriteToInstrument(1, 0, "<FILTER_HP>" + EtHerG.Properties.Settings.Default.FilterHP * 100 + "</FILTER_HP>");
+                }
             }
         }
 
@@ -828,7 +830,7 @@ namespace EtHerG
 
         private void btnEtherDisconnect_Click(object sender, EventArgs e)
         {
-            if (EtherConnected == true) { ether.CloseSerialConnection(); }
+            if (EtherConnected == true) { ether.CloseSerialConnection(); EtherConnected = false; }
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -838,12 +840,120 @@ namespace EtHerG
 
         private void LoggedIn()
         {
-
+            btnSetPassword.Visible = true;
+            chkAutologin.Visible = true;
+            txtSetPassword.Visible = true;
+            chkDisableUserInput.Visible = true;
+            txtModbusServerIP.Visible = true;
+            txtModbusServerPort.Visible = true;
+            lblModbusServerIP.Visible = true;
+            lblModbusServerPort.Visible = true;
+            lblModbusReadAdresses.Visible = true;
+            lblModbusReadValue.Visible = true;
+            lblModbusLastSentValueAdress.Visible = true;
+            chkModbusLastSentAddressEnabled.Visible = true;
+            lblPlay.Visible = true;
+            lblFrequency1.Visible = true;
+            lblGainX1.Visible = true;
+            lblGainY1.Visible = true;
+            lblPhase1.Visible = true;
+            lblFilterHP1.Visible = true;
+            lblFilterLP1.Visible = true;
+            lblAlarm1ModbusSendAddress.Visible = true;
+            lblAlarm2ModbusSendAddress.Visible = true;
+            chkInfluxDBEnabled.Visible = true;
+            lblInfluxDBBucket.Visible = true;
+            lblInfluxDBMachineName.Visible = true;
+            lblInfluxDBORGID.Visible = true;
+            lblInfluxDBServer.Visible = true;
+            lblInfluxDBToken.Visible = true;
+            txtPlayLastModbusValue.Visible = true;
+            txtPlayModbusAddress.Visible = true;
+            txtFrequencyModbusAddress.Visible = true;
+            txtFrequencyLastModbusValue.Visible = true;
+            txtFrequencyModbusLastSentAddress.Visible = true;
+            txtGainXLastModbusValue.Visible = true;
+            txtGainXModbusAddress.Visible = true;
+            txtGainXModbusLastSentAddress.Visible = true;
+            txtGainYLastModbusValue.Visible = true;
+            txtGainYModbusAddress.Visible = true;
+            txtGainYModbusLastSentAddress.Visible = true;
+            txtPhaseLastModbusValue.Visible = true;
+            txtPhaseModbusAddress.Visible = true;
+            txtPhaseModbusLastSentAddress.Visible = true;
+            txtFilterLPLastModbusValue.Visible = true;
+            txtFilterLPModbusAddress.Visible = true;
+            txtFilterLPModbusLastSentAddress.Visible = true;
+            txtFilterHPLastModbusValue.Visible = true;
+            txtFilterHPModbusAddress.Visible = true;
+            txtFilterHPModbusLastSentAddress.Visible = true;
+            txtAlarm1ModbusAddress.Visible = true;
+            txtAlarm2ModbusAddress.Visible = true;
+            txtInfluxDBBucket.Visible = true;
+            txtInfluxDBMachine.Visible = true;
+            txtInfluxDBOrg.Visible = true;
+            txtInfluxDBServer.Visible = true;
+            txtInfluxDBToken.Visible = true;
+            txtInfluxDBStatus.Visible = true;
         }
 
         private void LoggedOut()
         {
-
+            btnSetPassword.Visible = false;
+            chkAutologin.Visible = false;
+            txtSetPassword.Visible = false;
+            chkDisableUserInput.Visible = false;
+            txtModbusServerIP.Visible = false;
+            txtModbusServerPort.Visible = false;
+            lblModbusServerIP.Visible = false;
+            lblModbusServerPort.Visible = false;
+            lblModbusReadAdresses.Visible = false;
+            lblModbusReadValue.Visible = false;
+            lblModbusLastSentValueAdress.Visible = false;
+            chkModbusLastSentAddressEnabled.Visible = false;
+            lblPlay.Visible = false;
+            lblFrequency1.Visible = false;
+            lblGainX1.Visible = false;
+            lblGainY1.Visible = false;
+            lblPhase1.Visible = false;
+            lblFilterHP1.Visible = false;
+            lblFilterLP1.Visible = false;
+            lblAlarm1ModbusSendAddress.Visible = false;
+            lblAlarm2ModbusSendAddress.Visible = false;
+            chkInfluxDBEnabled.Visible = false;
+            lblInfluxDBBucket.Visible = false;
+            lblInfluxDBMachineName.Visible = false;
+            lblInfluxDBORGID.Visible = false;
+            lblInfluxDBServer.Visible = false;
+            lblInfluxDBToken.Visible = false;
+            txtPlayLastModbusValue.Visible = false;
+            txtPlayModbusAddress.Visible = false;
+            txtFrequencyModbusAddress.Visible = false;
+            txtFrequencyLastModbusValue.Visible = false;
+            txtFrequencyModbusLastSentAddress.Visible = false;
+            txtGainXLastModbusValue.Visible = false;
+            txtGainXModbusAddress.Visible = false;
+            txtGainXModbusLastSentAddress.Visible = false;
+            txtGainYLastModbusValue.Visible = false;
+            txtGainYModbusAddress.Visible = false;
+            txtGainYModbusLastSentAddress.Visible = false;
+            txtPhaseLastModbusValue.Visible = false;
+            txtPhaseModbusAddress.Visible = false;
+            txtPhaseModbusLastSentAddress.Visible = false;
+            txtFilterLPLastModbusValue.Visible = false;
+            txtFilterLPModbusAddress.Visible = false;
+            txtFilterLPModbusLastSentAddress.Visible = false;
+            txtFilterHPLastModbusValue.Visible = false;
+            txtFilterHPModbusAddress.Visible = false;
+            txtFilterHPModbusLastSentAddress.Visible = false;
+            txtAlarm1ModbusAddress.Visible = false;
+            txtAlarm2ModbusAddress.Visible = false;
+            txtInfluxDBBucket.Visible = false;
+            txtInfluxDBMachine.Visible = false;
+            txtInfluxDBOrg.Visible = false;
+            txtInfluxDBServer.Visible = false;
+            txtInfluxDBToken.Visible = false;
+            txtInfluxDBStatus.Visible = false;
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
@@ -1418,7 +1528,6 @@ namespace EtHerG
                     influxDBClient = new InfluxDBClient(EtHerG.Properties.Settings.Default.InfluxDBServer, EtHerG.Properties.Settings.Default.InfluxDBToken);
                 }
 
-                // Write the point into the InfluxDB bucket
                 influxDBClient.GetWriteApi().WritePoint(point, EtHerG.Properties.Settings.Default.InfluxDBBucket, EtHerG.Properties.Settings.Default.InfluxDBOrgID);
             }
 
@@ -1514,6 +1623,12 @@ namespace EtHerG
         private void txtInfluxDBMachine_LostFocus(object sender, EventArgs e)
         {
             EtHerG.Properties.Settings.Default.InfluxDBMachine = txtInfluxDBMachine.Text;
+            EtHerG.Properties.Settings.Default.Save();
+        }
+
+        private void btnSetPassword_Click(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.Password = txtSetPassword.Text;
             EtHerG.Properties.Settings.Default.Save();
         }
     }
