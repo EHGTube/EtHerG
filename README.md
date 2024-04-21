@@ -2,7 +2,6 @@
 
 To Do : 
 
-5. Automatically send last Values to Embed on startup
 6. Add failure proofing on function startups (all params set for embed? all for Modbus? for influx? ) 
 7. Fix Login / Logout
 8. Maybe figure out why GainY only works up to ~73? Or why Gain doesnt work anymore after ~70? 

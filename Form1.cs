@@ -699,6 +699,14 @@ namespace EtHerG
             ether.WriteToInstrument(1, 0, "<USB_OUTPUT>0</USB_OUTPUT>");
             System.Threading.Thread.Sleep(100);
             ether.WriteToInstrument(1, 0, "<USB_OUTPUT>7</USB_OUTPUT>");
+
+            ether.WriteToInstrument(1, 0, "<FREQUENCY>" + EtHerG.Properties.Settings.Default.Frequency * 1000 + "</FREQUENCY>");
+            ether.WriteToInstrument(1, 0, "<GAIN_X>" + EtHerG.Properties.Settings.Default.GainX * 10 + "</GAIN_X>");
+            ether.WriteToInstrument(1, 0, "<GAIN_Y>" + EtHerG.Properties.Settings.Default.GainY * 10 + "</GAIN_Y>");
+            ether.WriteToInstrument(1, 0, "<PHASE>" + EtHerG.Properties.Settings.Default.Phase * 1000 + "</PHASE>");
+            ether.WriteToInstrument(1, 0, "<FILTER_LP>" + EtHerG.Properties.Settings.Default.FilterLP * 100 + "</FILTER_LP>");
+            ether.WriteToInstrument(1, 0, "<FILTER_HP>" + EtHerG.Properties.Settings.Default.FilterHP * 100 + "</FILTER_HP>");
+
         }
 
         private void btnEtherConnect_Click(object sender, EventArgs e)
