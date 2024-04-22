@@ -19,6 +19,7 @@ using System.Management;
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Windows.Forms;
 
 namespace EtHerG
 {
@@ -231,6 +232,8 @@ namespace EtHerG
                 formScatter.Location = new Point(EtHerG.Properties.Settings.Default.ScatterDiagPosX, EtHerG.Properties.Settings.Default.ScatterDiagPosY);
                 formScatter.Size = new Size(EtHerG.Properties.Settings.Default.ScatterDiagSize, EtHerG.Properties.Settings.Default.ScatterDiagSize);
 
+                Internationalization();
+
                 FormatDiags();
 
                 formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
@@ -249,17 +252,6 @@ namespace EtHerG
                 }
 
                 if (EtHerG.Properties.Settings.Default.DisableUserInput == true) { DisableUserInput(); }
-
-                //if (EtHerG.Properties.Settings.Default.UKLanguage == true)
-                //{
-                //    UKLanguage();
-                //    pctrLanguage.Image = EtHerG.Properties.Resources.germany_flag_icon;
-                //}
-                //else
-                //{
-                //    DELanguage();
-                //    pctrLanguage.Image = EtHerG.Properties.Resources.united_kingdom_flag_icon;
-                //}
             }));
         }
 
@@ -513,7 +505,7 @@ namespace EtHerG
                 var ScatterLine = formScatter.Plot.Add.ScatterLine(lastSpecifiedXValues, lastSpecifiedYValues);
                 ScatterLine.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.ScatterDiagColor);
             }
-            
+
             formScatter.Plot.Axes.SetLimits(-EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
             formScatter.Interaction.Disable();
             formScatter.Refresh();
@@ -689,6 +681,7 @@ namespace EtHerG
 
         private void OpenModbusConnection()
         {
+            ModbusPropertiesSetToZeroOrNull.Clear();
             // Check if ModbusServerIP is set to 0 or null
             if (string.IsNullOrEmpty(EtHerG.Properties.Settings.Default.ModbusServerIP))
             {
@@ -751,6 +744,8 @@ namespace EtHerG
 
         private void OpenSerialConnection()
         {
+            EtherPropertiesSetToZeroOrNull.Clear();
+
             // Check if Frequency is set to 0 or null
             if (EtHerG.Properties.Settings.Default.Frequency == 0 || EtHerG.Properties.Settings.Default.Frequency == null)
             {
@@ -1309,6 +1304,7 @@ namespace EtHerG
         {
             if (chkModbusLastSentAddressEnabled.Checked)
             {
+                modbusLastSendAddressesSetToZeroOrNull.Clear();
                 // Check if FrequencyModbusLastSendAddress is set to 0 or null
                 if (EtHerG.Properties.Settings.Default.FrequencyModbusLastSendAddress == 0)
                 {
@@ -1562,6 +1558,7 @@ namespace EtHerG
         {
             if (chkInfluxDBEnabled.Checked)
             {
+                influxDBPropertiesSetToNullOrEmpty.Clear();
                 // Check if InfluxDBServer is null or empty
                 if (string.IsNullOrEmpty(EtHerG.Properties.Settings.Default.InfluxDBServer))
                 {
@@ -1738,10 +1735,153 @@ namespace EtHerG
             EtHerG.Properties.Settings.Default.ScatterDiagDrawPoints = chkScatterDrawPoints.Checked;
             EtHerG.Properties.Settings.Default.Save();
         }
+
+        private void pctrInternationalization_Click(object sender, EventArgs e)
+        {
+            if (EtHerG.Properties.Settings.Default.Language == 3)
+            {
+                EtHerG.Properties.Settings.Default.Language = 1;
+            }
+            else
+            {
+                EtHerG.Properties.Settings.Default.Language = EtHerG.Properties.Settings.Default.Language + 1;
+            }
+
+            EtHerG.Properties.Settings.Default.Save();
+            Internationalization();
+        }
+
+        private void Internationalization()
+        {
+            switch (EtHerG.Properties.Settings.Default.Language)
+            {
+                case 1:
+                    //UK
+                    pctrInternationalization.Image = EtHerG.Properties.Resources.UK1;
+                    btnEtherConnect.Text = "Ether Connect";
+                    btnEtherDisconnect.Text = "Ether Disconnect";
+                    btnModbusConnect.Text = "Modbus Connect";
+                    btnModbusDisconnect.Text = "Modbus Disconnect";
+                    chkShowX.Text = "X-Values";
+                    chkShowY.Text = "Y-Values";
+                    chkEtherAutoconnect.Text = "Ether Autoconnect";
+                    chkModbusAutoconnect.Text = "Modbus Autoconnect";
+                    lblFrequency.Text = "Frequency";
+                    lblGainX.Text = "Gain X";
+                    lblGainY.Text = "Gain Y";
+                    lblPhase.Text = "Phase";
+                    lblFilterLP.Text = "Filter LP.";
+                    lblFilterHP.Text = "Filter HP.";
+                    tabPage1.Text = "Main";
+                    tabPage2.Text = "Settings";
+                    lblXVal.Text = "X-Values";
+                    lblYVal.Text = "Y-Values";
+                    lblLineDiagAmount.Text = "Amount of Points in Line Diag.:";
+                    lblDiagMaxPointSize.Text = "Max. Pointheight";
+                    lblScatterAmount.Text = "Amount of Points in Scatter:";
+                    lblAlarm1.Text = "Alarm 1:";
+                    lblAlarm2.Text = "Alarm 2:";
+                    lblScatterDiagPosX.Text = "Scatter Pos. X:";
+                    lblScatterDiagPosY.Text = "Scatter Pos. Y:";
+                    lblScatterDiagSize.Text = "Scatter Size:";
+                    lblLineDiagPosX.Text = "Line Diagram Pos. X:";
+                    lblLineDiagPosY.Text = "Line Diagram Pos. Y:";
+                    lblLineDiagSizeX.Text = "Line Diagram Größe X:";
+                    lblLineDiagSizeY.Text = "Line Diagram Größe Y:";
+                    lblAlarm1Color.Text = "Alarm 1 Color:";
+                    lblAlarm2Color.Text = "Alarm 2 Color:";
+                    lblColorX.Text = "Color X:";
+                    lblColorY.Text = "Color Y:";
+                    lblScatterColor.Text = "Color Scatter:";
+                    chkScatterDrawPoints.Text = "Scatter Diagram Draw Points?";
+                    break;
+                case 2:
+                    //DE
+                    pctrInternationalization.Image = EtHerG.Properties.Resources.DE1;
+                    btnEtherConnect.Text = "Ether Verbinden";
+                    btnEtherDisconnect.Text = "Ether Trennen";
+                    btnModbusConnect.Text = "Modbus Verbinden";
+                    btnModbusDisconnect.Text = "Modbus Trennen";
+                    chkShowX.Text = "X-Werte";
+                    chkShowY.Text = "Y-Werte";
+                    chkEtherAutoconnect.Text = "Ether Autom. Verbinden";
+                    chkModbusAutoconnect.Text = "Modbus Autom. Verbinden";
+                    lblFrequency.Text = "Frequenz";
+                    lblGainX.Text = "Empf. X";
+                    lblGainY.Text = "Empf. Y";
+                    lblPhase.Text = "Phase";
+                    lblFilterLP.Text = "Filter TP.";
+                    lblFilterHP.Text = "Filter HP.";
+                    tabPage1.Text = "Haupt";
+                    tabPage2.Text = "Einstellungen";
+                    lblXVal.Text = "X-Werte";
+                    lblYVal.Text = "Y-Werte";
+                    lblLineDiagAmount.Text = "Punktanzahl in Liniendiagram:";
+                    lblDiagMaxPointSize.Text = "Max. Punkthöhe";
+                    lblScatterAmount.Text = "Punktanzahl in Punktwolke:";
+                    lblAlarm1.Text = "Alarm 1:";
+                    lblAlarm2.Text = "Alarm 2:";
+                    lblScatterDiagPosX.Text = "Punktwolke Pos. X:";
+                    lblScatterDiagPosY.Text = "Punktwolke Pos. Y:";
+                    lblScatterDiagSize.Text = "Punktwolke Größe:";
+                    lblLineDiagPosX.Text = "Liniendiagram Pos. X:";
+                    lblLineDiagPosY.Text = "Liniendiagram Pos. Y:";
+                    lblLineDiagSizeX.Text = "Liniendiagram Größe X:";
+                    lblLineDiagSizeY.Text = "Liniendiagram Größe Y:";
+                    lblAlarm1Color.Text = "Alarm 1 Farbe:";
+                    lblAlarm2Color.Text = "Alarm 2 Farbe:";
+                    lblColorX.Text = "Farbe X:";
+                    lblColorY.Text = "Farbe Y:";
+                    lblScatterColor.Text = "Farbe Punktwolke:";
+                    chkScatterDrawPoints.Text = "Punktwolke Punkte Malen?";
+                    break;
+                case 3:
+                    //PL
+                    pctrInternationalization.Image = EtHerG.Properties.Resources.PL;
+                    btnEtherConnect.Text = "Po\u0142\u0105cz z Ether";
+                    btnEtherDisconnect.Text = "Roz\u0142\u0105cz Ether";
+                    btnModbusConnect.Text = "Po\u0142\u0105cz z Modbus";
+                    btnModbusDisconnect.Text = "Roz\u0142\u0105cz Modbus";
+                    chkShowX.Text = "Warto\u015Bci X";
+                    chkShowY.Text = "Warto\u015Bci Y";
+                    chkEtherAutoconnect.Text = "Automatyczne po\u0142\u0105czenie z Ether";
+                    chkModbusAutoconnect.Text = "Automatyczne po\u0142\u0105czenie z Modbus";
+                    lblFrequency.Location = new Point(3, 15);
+                    lblFrequency.Text = "Cz\u0119stotliwo\u015B\u0107";
+                    lblGainX.Location = new Point(3, 44);
+                    lblGainX.Text = "Wzmocnienie X";
+                    lblGainY.Location = new Point(3, 73);
+                    lblGainY.Text = "Wzmocnienie Y";
+                    lblPhase.Text = "Faza";
+                    lblFilterLP.Text = "Filtr DP.";
+                    lblFilterHP.Text = "Filtr GP.";
+                    tabPage1.Text = "G\u0142\u00F3wna";
+                    tabPage2.Text = "Ustawienia";
+                    lblXVal.Text = "Warto\u015Bci X";
+                    lblYVal.Text = "Warto\u015Bci Y";
+                    lblLineDiagAmount.Text = "Liczba punkt\u00F3w w wykresie liniowym:";
+                    lblDiagMaxPointSize.Text = "Maks. wysoko\u015B\u0107 punktu";
+                    lblScatterAmount.Text = "Liczba punkt\u00F3w w chmurze punkt\u00F3w:";
+                    lblAlarm1.Text = "Alarm 1:";
+                    lblAlarm2.Text = "Alarm 2:";
+                    lblScatterDiagPosX.Text = "Pozycja X chmury punkt\u00F3w:";
+                    lblScatterDiagPosY.Text = "Pozycja Y chmury punkt\u00F3w:";
+                    lblScatterDiagSize.Text = "Rozmiar chmury punkt\u00F3w:";
+                    lblLineDiagPosX.Text = "Pozycja X wykresu liniowego:";
+                    lblLineDiagPosY.Text = "Pozycja Y wykresu liniowego:";
+                    lblLineDiagSizeX.Text = "Rozmiar X wykresu liniowego:";
+                    lblLineDiagSizeY.Text = "Rozmiar Y wykresu liniowego:";
+                    lblAlarm1Color.Text = "Kolor Alarmu 1:";
+                    lblAlarm2Color.Text = "Kolor Alarmu 2:";
+                    lblColorX.Text = "Kolor X:";
+                    lblColorY.Text = "Kolor Y:";
+                    lblScatterColor.Text = "Kolor chmury punkt\u00F3w:";
+                    chkScatterDrawPoints.Text = "Rysowa\u0107 punkty chmury punkt\u00F3w?";
+                    break;
+            }
+
+
+        }
     }
 }
 
-//btnEtherConnect.Text = "Ether Verbinden";
-//btnEtherDisconnect.Text = "Ether Trennen";
-//btnModbusConnect.Text = "Modbus Verbinden";
-//btnModbusDisconnect.Text = "Modbus Trennen";

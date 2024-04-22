@@ -1,10 +1,11 @@
 # EtHerG
 
 To Do : 
-11. Add Internationalization
+11. Add Internationalization 
 12. Fix Sending InfluxDB Alarm2 ?
 13. Maybe try figuring out how to see if the influxdb connection is established. 
-14. Do all formatting when everything is done
+14. Do all formatting when everything is done (TAB USAGE!)
+
 
 
 Regarding InfluxDB:
