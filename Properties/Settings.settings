@@ -152,5 +152,20 @@
     <Setting Name="ShowY" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="Alarm1Color" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#D22B2B</Value>
+    </Setting>
+    <Setting Name="Alarm2Color" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#388e3c</Value>
+    </Setting>
+    <Setting Name="LineDiagColorX" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#0000FF</Value>
+    </Setting>
+    <Setting Name="LineDiagColorY" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#00CED1</Value>
+    </Setting>
+    <Setting Name="ScatterDiagColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#0067E8</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

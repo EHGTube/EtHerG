@@ -17,6 +17,8 @@ using System.Drawing;
 using System;
 using System.Management;
 using System.Threading;
+using System.Text.RegularExpressions;
+using System.IO;
 
 namespace EtHerG
 {
@@ -216,6 +218,13 @@ namespace EtHerG
                 txtInfluxDBMachine.Text = EtHerG.Properties.Settings.Default.InfluxDBMachine;
                 chkShowX.Checked = EtHerG.Properties.Settings.Default.ShowX;
                 chkShowY.Checked = EtHerG.Properties.Settings.Default.ShowY;
+                txtAlarm1Color.Text = EtHerG.Properties.Settings.Default.Alarm1Color;
+                txtAlarm2Color.Text = EtHerG.Properties.Settings.Default.Alarm2Color;
+                txtLineDiagColorX.Text = EtHerG.Properties.Settings.Default.LineDiagColorX;
+                txtLineDiagColorY.Text = EtHerG.Properties.Settings.Default.LineDiagColorY;
+                txtScatterDiagColor.Text = EtHerG.Properties.Settings.Default.ScatterDiagColor;
+
+
 
                 formLineDiag.Location = new Point(EtHerG.Properties.Settings.Default.LineDiagPosX, EtHerG.Properties.Settings.Default.LineDiagPosY);
                 formLineDiag.Size = new Size(EtHerG.Properties.Settings.Default.LineDiagSizeX, EtHerG.Properties.Settings.Default.LineDiagSizeY);
@@ -307,8 +316,8 @@ namespace EtHerG
                 StreamY.Clear();
                 StreamX = formLineDiag.Plot.Add.DataStreamer(EtHerG.Properties.Settings.Default.LineDiagPoints);
                 StreamY = formLineDiag.Plot.Add.DataStreamer(EtHerG.Properties.Settings.Default.LineDiagPoints);
-                StreamX.LineStyle.Color = ScottPlot.Color.FromHex("#0000FF");
-                StreamY.LineStyle.Color = ScottPlot.Color.FromHex("#00CED1");
+                StreamX.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.LineDiagColorX);
+                StreamY.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.LineDiagColorY);
                 StreamY.ViewScrollLeft();
                 StreamX.ViewScrollLeft();
                 StreamX.ManageAxisLimits = false;
@@ -316,13 +325,19 @@ namespace EtHerG
 
                 HorizontalLine Alarm1 = formLineDiag.Plot.Add.HorizontalLine(EtHerG.Properties.Settings.Default.Alarm1Value);
                 HorizontalLine Alarm2 = formLineDiag.Plot.Add.HorizontalLine(-EtHerG.Properties.Settings.Default.Alarm1Value);
-                Alarm1.LineStyle.Color = ScottPlot.Color.FromHex("#D22B2B");
-                Alarm2.LineStyle.Color = ScottPlot.Color.FromHex("#D22B2B");
+                Alarm1.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm1Color);
+                Alarm2.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm1Color);
 
                 HorizontalLine Alarm3 = formLineDiag.Plot.Add.HorizontalLine(EtHerG.Properties.Settings.Default.Alarm2Value);
                 HorizontalLine Alarm4 = formLineDiag.Plot.Add.HorizontalLine(-EtHerG.Properties.Settings.Default.Alarm2Value);
-                Alarm3.LineStyle.Color = ScottPlot.Color.FromHex("#388e3c");
-                Alarm4.LineStyle.Color = ScottPlot.Color.FromHex("#388e3c");
+                Alarm3.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm2Color);
+                Alarm4.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm2Color);
+
+                txtColorX.BackColor = System.Drawing.ColorTranslator.FromHtml(EtHerG.Properties.Settings.Default.LineDiagColorX);
+                txtColorY.BackColor = System.Drawing.ColorTranslator.FromHtml(EtHerG.Properties.Settings.Default.LineDiagColorY);
+                txtColorY.Enabled = false;
+                txtColorX.Enabled = false;
+
 
                 formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
                 formLineDiag.Interaction.Disable();
@@ -483,12 +498,12 @@ namespace EtHerG
             var Alarm6 = formScatter.Plot.Add.Rectangle(-EtHerG.Properties.Settings.Default.Alarm2Value, EtHerG.Properties.Settings.Default.Alarm2Value, -EtHerG.Properties.Settings.Default.Alarm2Value, EtHerG.Properties.Settings.Default.Alarm2Value);
             Alarm5.FillStyle.Color = ScottPlot.Color.FromHex("#D22B2B").WithAlpha(0);
             Alarm6.FillStyle.Color = ScottPlot.Color.FromHex("#388e3c").WithAlpha(0);
-            Alarm5.LineStyle.Color = ScottPlot.Color.FromHex("#D22B2B");
-            Alarm6.LineStyle.Color = ScottPlot.Color.FromHex("#388e3c");
+            Alarm5.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm1Color); // Alarm 1
+            Alarm6.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm2Color); // Alarm 2
             Alarm5.LineStyle.Width = 3;
             Alarm6.LineStyle.Width = 3;
             var ScatterLine = formScatter.Plot.Add.ScatterLine(lastSpecifiedXValues, lastSpecifiedYValues);
-            ScatterLine.Color = ScottPlot.Color.FromHex("#0067E8");
+            ScatterLine.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.ScatterDiagColor);
             formScatter.Plot.Axes.SetLimits(-EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
             formScatter.Interaction.Disable();
             formScatter.Refresh();
@@ -894,7 +909,6 @@ namespace EtHerG
             txtInfluxDBOrg.Visible = true;
             txtInfluxDBServer.Visible = true;
             txtInfluxDBToken.Visible = true;
-            txtInfluxDBStatus.Visible = true;
         }
 
         private void LoggedOut()
@@ -953,7 +967,6 @@ namespace EtHerG
             txtInfluxDBOrg.Visible = false;
             txtInfluxDBServer.Visible = false;
             txtInfluxDBToken.Visible = false;
-            txtInfluxDBStatus.Visible = false;
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
@@ -1630,6 +1643,79 @@ namespace EtHerG
         {
             EtHerG.Properties.Settings.Default.Password = txtSetPassword.Text;
             EtHerG.Properties.Settings.Default.Save();
+        }
+
+        private bool IsValidHexColor(string input)
+        {
+            // Define the regular expression pattern for a hexadecimal color code
+            string hexColorPattern = @"^#(?:[0-9a-fA-F]{3}){1,2}$";
+
+            // Check if the input string matches the pattern
+            return Regex.IsMatch(input, hexColorPattern);
+        }
+
+        private void txtAlarm1Color_LostFocus(object sender, EventArgs e)
+        {
+            if (IsValidHexColor(txtAlarm1Color.Text))
+            {
+                EtHerG.Properties.Settings.Default.Alarm1Color = txtAlarm1Color.Text;
+                FormatDiags();
+            }
+            else
+            {
+                MessageBox.Show("Please enter Valid Color!");
+            }
+        }
+
+        private void txtAlarm2Color_LostFocus(object sender, EventArgs e)
+        {
+            if (IsValidHexColor(txtAlarm2Color.Text))
+            {
+                EtHerG.Properties.Settings.Default.Alarm2Color = txtAlarm2Color.Text;
+                FormatDiags();
+            }
+            else
+            {
+                MessageBox.Show("Please enter Valid Color!");
+            }
+        }
+
+        private void txtLineDiagColorX_LostFocus(object sender, EventArgs e)
+        {
+            if (IsValidHexColor(txtLineDiagColorX.Text))
+            {
+                EtHerG.Properties.Settings.Default.LineDiagColorX = txtLineDiagColorX.Text;
+                FormatDiags();
+            }
+            else
+            {
+                MessageBox.Show("Please enter Valid Color!");
+            }
+        }
+
+        private void txtLineDiagYColor_LostFocus(object sender, EventArgs e)
+        {
+            if (IsValidHexColor(txtLineDiagColorY.Text))
+            {
+                EtHerG.Properties.Settings.Default.LineDiagColorY = txtLineDiagColorY.Text;
+                FormatDiags();
+            }
+            else
+            {
+                MessageBox.Show("Please enter Valid Color!");
+            }
+        }
+
+        private void txtScatterDiagColor_LostFocus(object sender, EventArgs e)
+        {
+            if (IsValidHexColor(txtScatterDiagColor.Text))
+            {
+                EtHerG.Properties.Settings.Default.ScatterDiagColor = txtScatterDiagColor.Text;
+            }
+            else
+            {
+                MessageBox.Show("Please enter Valid Color!");
+            }
         }
     }
 }

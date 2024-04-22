@@ -622,5 +622,65 @@ namespace EtHerG.Properties {
                 this["ShowY"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#D22B2B")]
+        public string Alarm1Color {
+            get {
+                return ((string)(this["Alarm1Color"]));
+            }
+            set {
+                this["Alarm1Color"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#388e3c")]
+        public string Alarm2Color {
+            get {
+                return ((string)(this["Alarm2Color"]));
+            }
+            set {
+                this["Alarm2Color"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#0000FF")]
+        public string LineDiagColorX {
+            get {
+                return ((string)(this["LineDiagColorX"]));
+            }
+            set {
+                this["LineDiagColorX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#00CED1")]
+        public string LineDiagColorY {
+            get {
+                return ((string)(this["LineDiagColorY"]));
+            }
+            set {
+                this["LineDiagColorY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#0067E8")]
+        public string ScatterDiagColor {
+            get {
+                return ((string)(this["ScatterDiagColor"]));
+            }
+            set {
+                this["ScatterDiagColor"] = value;
+            }
+        }
     }
 }

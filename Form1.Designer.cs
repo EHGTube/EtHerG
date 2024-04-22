@@ -68,6 +68,16 @@
             formScatter = new ScottPlot.WinForms.FormsPlot();
             tabPage2 = new TabPage();
             panel1 = new Panel();
+            txtScatterDiagColor = new TextBox();
+            txtLineDiagColorY = new TextBox();
+            txtLineDiagColorX = new TextBox();
+            txtAlarm2Color = new TextBox();
+            txtAlarm1Color = new TextBox();
+            lblScatterColor = new Label();
+            lblColorY = new Label();
+            lblAlarm2Color = new Label();
+            lblColorX = new Label();
+            lblAlarm1Color = new Label();
             lblInfluxDBMachineName = new Label();
             txtInfluxDBMachine = new TextBox();
             txtInfluxDBOrg = new TextBox();
@@ -156,10 +166,8 @@
             lblPhase1 = new Label();
             DiagWorker = new System.ComponentModel.BackgroundWorker();
             ModbusWorker = new System.ComponentModel.BackgroundWorker();
-            lblAlarm1Color = new Label();
-            lblColorX = new Label();
-            lblAlarm2Color = new Label();
-            lblColorY = new Label();
+            txtColorX = new TextBox();
+            txtColorY = new TextBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panelSettings.SuspendLayout();
@@ -371,6 +379,8 @@
             // 
             // panelMain
             // 
+            panelMain.Controls.Add(txtColorY);
+            panelMain.Controls.Add(txtColorX);
             panelMain.Controls.Add(txtModbusStatus);
             panelMain.Controls.Add(txtEtherStatus);
             panelMain.Controls.Add(chkModbusAutoconnect);
@@ -395,7 +405,7 @@
             // 
             txtModbusStatus.BackColor = Color.Red;
             txtModbusStatus.ForeColor = Color.Black;
-            txtModbusStatus.Location = new Point(904, 35);
+            txtModbusStatus.Location = new Point(944, 35);
             txtModbusStatus.Name = "txtModbusStatus";
             txtModbusStatus.ReadOnly = true;
             txtModbusStatus.Size = new Size(100, 23);
@@ -406,7 +416,7 @@
             // txtEtherStatus
             // 
             txtEtherStatus.BackColor = Color.Red;
-            txtEtherStatus.Location = new Point(904, 11);
+            txtEtherStatus.Location = new Point(944, 11);
             txtEtherStatus.Name = "txtEtherStatus";
             txtEtherStatus.ReadOnly = true;
             txtEtherStatus.Size = new Size(100, 23);
@@ -417,7 +427,7 @@
             // chkModbusAutoconnect
             // 
             chkModbusAutoconnect.AutoSize = true;
-            chkModbusAutoconnect.Location = new Point(756, 37);
+            chkModbusAutoconnect.Location = new Point(796, 37);
             chkModbusAutoconnect.Name = "chkModbusAutoconnect";
             chkModbusAutoconnect.Size = new Size(142, 19);
             chkModbusAutoconnect.TabIndex = 10;
@@ -428,7 +438,7 @@
             // chkEtherAutoconnect
             // 
             chkEtherAutoconnect.AutoSize = true;
-            chkEtherAutoconnect.Location = new Point(756, 15);
+            chkEtherAutoconnect.Location = new Point(796, 15);
             chkEtherAutoconnect.Name = "chkEtherAutoconnect";
             chkEtherAutoconnect.Size = new Size(125, 19);
             chkEtherAutoconnect.TabIndex = 9;
@@ -439,7 +449,7 @@
             // chkShowY
             // 
             chkShowY.AutoSize = true;
-            chkShowY.Location = new Point(679, 37);
+            chkShowY.Location = new Point(719, 37);
             chkShowY.Name = "chkShowY";
             chkShowY.Size = new Size(71, 19);
             chkShowY.TabIndex = 8;
@@ -450,12 +460,13 @@
             // chkShowX
             // 
             chkShowX.AutoSize = true;
-            chkShowX.Location = new Point(679, 15);
+            chkShowX.BackColor = Color.Transparent;
+            chkShowX.Location = new Point(719, 15);
             chkShowX.Name = "chkShowX";
             chkShowX.Size = new Size(71, 19);
             chkShowX.TabIndex = 7;
             chkShowX.Text = "X-Values";
-            chkShowX.UseVisualStyleBackColor = true;
+            chkShowX.UseVisualStyleBackColor = false;
             chkShowX.CheckedChanged += chkShowX_CheckedChanged;
             // 
             // btnLogout
@@ -566,6 +577,12 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(txtScatterDiagColor);
+            panel1.Controls.Add(txtLineDiagColorY);
+            panel1.Controls.Add(txtLineDiagColorX);
+            panel1.Controls.Add(txtAlarm2Color);
+            panel1.Controls.Add(txtAlarm1Color);
+            panel1.Controls.Add(lblScatterColor);
             panel1.Controls.Add(lblColorY);
             panel1.Controls.Add(lblAlarm2Color);
             panel1.Controls.Add(lblColorX);
@@ -661,6 +678,91 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1890, 1007);
             panel1.TabIndex = 54;
+            // 
+            // txtScatterDiagColor
+            // 
+            txtScatterDiagColor.Location = new Point(225, 699);
+            txtScatterDiagColor.Name = "txtScatterDiagColor";
+            txtScatterDiagColor.Size = new Size(100, 23);
+            txtScatterDiagColor.TabIndex = 105;
+            txtScatterDiagColor.LostFocus += txtScatterDiagColor_LostFocus;
+            // 
+            // txtLineDiagColorY
+            // 
+            txtLineDiagColorY.Location = new Point(225, 670);
+            txtLineDiagColorY.Name = "txtLineDiagColorY";
+            txtLineDiagColorY.Size = new Size(100, 23);
+            txtLineDiagColorY.TabIndex = 104;
+            txtLineDiagColorY.LostFocus += txtLineDiagYColor_LostFocus;
+            // 
+            // txtLineDiagColorX
+            // 
+            txtLineDiagColorX.Location = new Point(225, 645);
+            txtLineDiagColorX.Name = "txtLineDiagColorX";
+            txtLineDiagColorX.Size = new Size(100, 23);
+            txtLineDiagColorX.TabIndex = 103;
+            txtLineDiagColorX.LostFocus += txtLineDiagColorX_LostFocus;
+            // 
+            // txtAlarm2Color
+            // 
+            txtAlarm2Color.Location = new Point(224, 613);
+            txtAlarm2Color.Name = "txtAlarm2Color";
+            txtAlarm2Color.Size = new Size(100, 23);
+            txtAlarm2Color.TabIndex = 102;
+            txtAlarm2Color.LostFocus += txtAlarm2Color_LostFocus;
+            // 
+            // txtAlarm1Color
+            // 
+            txtAlarm1Color.Location = new Point(224, 584);
+            txtAlarm1Color.Name = "txtAlarm1Color";
+            txtAlarm1Color.Size = new Size(100, 23);
+            txtAlarm1Color.TabIndex = 101;
+            txtAlarm1Color.LostFocus += txtAlarm1Color_LostFocus;
+            // 
+            // lblScatterColor
+            // 
+            lblScatterColor.AutoSize = true;
+            lblScatterColor.Location = new Point(139, 697);
+            lblScatterColor.Name = "lblScatterColor";
+            lblScatterColor.Size = new Size(78, 15);
+            lblScatterColor.TabIndex = 100;
+            lblScatterColor.Text = "Scatter Color:";
+            // 
+            // lblColorY
+            // 
+            lblColorY.AutoSize = true;
+            lblColorY.Location = new Point(164, 672);
+            lblColorY.Name = "lblColorY";
+            lblColorY.Size = new Size(49, 15);
+            lblColorY.TabIndex = 98;
+            lblColorY.Text = "Y Color:";
+            // 
+            // lblAlarm2Color
+            // 
+            lblAlarm2Color.AutoSize = true;
+            lblAlarm2Color.Location = new Point(136, 616);
+            lblAlarm2Color.Name = "lblAlarm2Color";
+            lblAlarm2Color.Size = new Size(83, 15);
+            lblAlarm2Color.TabIndex = 97;
+            lblAlarm2Color.Text = "Alarm 2 Color:";
+            // 
+            // lblColorX
+            // 
+            lblColorX.AutoSize = true;
+            lblColorX.Location = new Point(164, 648);
+            lblColorX.Name = "lblColorX";
+            lblColorX.Size = new Size(49, 15);
+            lblColorX.TabIndex = 96;
+            lblColorX.Text = "X Color:";
+            // 
+            // lblAlarm1Color
+            // 
+            lblAlarm1Color.AutoSize = true;
+            lblAlarm1Color.Location = new Point(139, 592);
+            lblAlarm1Color.Name = "lblAlarm1Color";
+            lblAlarm1Color.Size = new Size(83, 15);
+            lblAlarm1Color.TabIndex = 96;
+            lblAlarm1Color.Text = "Alarm 1 Color:";
             // 
             // lblInfluxDBMachineName
             // 
@@ -1397,41 +1499,21 @@
             lblPhase1.TabIndex = 16;
             lblPhase1.Text = "Phase:";
             // 
-            // lblAlarm1Color
+            // txtColorX
             // 
-            lblAlarm1Color.AutoSize = true;
-            lblAlarm1Color.Location = new Point(139, 592);
-            lblAlarm1Color.Name = "lblAlarm1Color";
-            lblAlarm1Color.Size = new Size(83, 15);
-            lblAlarm1Color.TabIndex = 96;
-            lblAlarm1Color.Text = "Alarm 1 Color:";
+            txtColorX.Location = new Point(691, 11);
+            txtColorX.Name = "txtColorX";
+            txtColorX.ReadOnly = true;
+            txtColorX.Size = new Size(22, 23);
+            txtColorX.TabIndex = 6;
             // 
-            // lblColorX
+            // txtColorY
             // 
-            lblColorX.AutoSize = true;
-            lblColorX.Location = new Point(164, 648);
-            lblColorX.Name = "lblColorX";
-            lblColorX.Size = new Size(49, 15);
-            lblColorX.TabIndex = 96;
-            lblColorX.Text = "X Color:";
-            // 
-            // lblAlarm2Color
-            // 
-            lblAlarm2Color.AutoSize = true;
-            lblAlarm2Color.Location = new Point(136, 616);
-            lblAlarm2Color.Name = "lblAlarm2Color";
-            lblAlarm2Color.Size = new Size(83, 15);
-            lblAlarm2Color.TabIndex = 97;
-            lblAlarm2Color.Text = "Alarm 2 Color:";
-            // 
-            // lblColorY
-            // 
-            lblColorY.AutoSize = true;
-            lblColorY.Location = new Point(164, 672);
-            lblColorY.Name = "lblColorY";
-            lblColorY.Size = new Size(49, 15);
-            lblColorY.TabIndex = 98;
-            lblColorY.Text = "Y Color:";
+            txtColorY.Location = new Point(691, 35);
+            txtColorY.Name = "txtColorY";
+            txtColorY.ReadOnly = true;
+            txtColorY.Size = new Size(22, 23);
+            txtColorY.TabIndex = 13;
             // 
             // Form1
             // 
@@ -1587,5 +1669,13 @@
         private Label lblAlarm2Color;
         private Label lblColorX;
         private Label lblAlarm1Color;
+        private TextBox txtScatterDiagColor;
+        private TextBox txtLineDiagColorY;
+        private TextBox txtLineDiagColorX;
+        private TextBox txtAlarm2Color;
+        private TextBox txtAlarm1Color;
+        private Label lblScatterColor;
+        private TextBox txtColorY;
+        private TextBox txtColorX;
     }
 }
