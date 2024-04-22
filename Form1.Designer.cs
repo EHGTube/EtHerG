@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             panelSettings = new Panel();
@@ -50,6 +51,8 @@
             txtFrequencyUserInput = new TextBox();
             lblFrequency = new Label();
             panelMain = new Panel();
+            txtColorY = new TextBox();
+            txtColorX = new TextBox();
             txtModbusStatus = new TextBox();
             txtEtherStatus = new TextBox();
             chkModbusAutoconnect = new CheckBox();
@@ -166,8 +169,7 @@
             lblPhase1 = new Label();
             DiagWorker = new System.ComponentModel.BackgroundWorker();
             ModbusWorker = new System.ComponentModel.BackgroundWorker();
-            txtColorX = new TextBox();
-            txtColorY = new TextBox();
+            chkScatterDrawPoints = new CheckBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panelSettings.SuspendLayout();
@@ -199,7 +201,7 @@
             tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(1896, 1013);
             tabPage1.TabIndex = 0;
-            tabPage1.Text = "tabPage1";
+            tabPage1.Text = "Main";
             tabPage1.UseVisualStyleBackColor = true;
             // 
             // panelSettings
@@ -401,6 +403,22 @@
             panelMain.Size = new Size(1890, 71);
             panelMain.TabIndex = 2;
             // 
+            // txtColorY
+            // 
+            txtColorY.Location = new Point(691, 35);
+            txtColorY.Name = "txtColorY";
+            txtColorY.ReadOnly = true;
+            txtColorY.Size = new Size(22, 23);
+            txtColorY.TabIndex = 13;
+            // 
+            // txtColorX
+            // 
+            txtColorX.Location = new Point(691, 11);
+            txtColorX.Name = "txtColorX";
+            txtColorX.ReadOnly = true;
+            txtColorX.Size = new Size(22, 23);
+            txtColorX.TabIndex = 6;
+            // 
             // txtModbusStatus
             // 
             txtModbusStatus.BackColor = Color.Red;
@@ -572,11 +590,12 @@
             tabPage2.Padding = new Padding(3);
             tabPage2.Size = new Size(1896, 1013);
             tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
+            tabPage2.Text = "Settings";
             tabPage2.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
+            panel1.Controls.Add(chkScatterDrawPoints);
             panel1.Controls.Add(txtScatterDiagColor);
             panel1.Controls.Add(txtLineDiagColorY);
             panel1.Controls.Add(txtLineDiagColorX);
@@ -1499,21 +1518,16 @@
             lblPhase1.TabIndex = 16;
             lblPhase1.Text = "Phase:";
             // 
-            // txtColorX
+            // chkScatterDrawPoints
             // 
-            txtColorX.Location = new Point(691, 11);
-            txtColorX.Name = "txtColorX";
-            txtColorX.ReadOnly = true;
-            txtColorX.Size = new Size(22, 23);
-            txtColorX.TabIndex = 6;
-            // 
-            // txtColorY
-            // 
-            txtColorY.Location = new Point(691, 35);
-            txtColorY.Name = "txtColorY";
-            txtColorY.ReadOnly = true;
-            txtColorY.Size = new Size(22, 23);
-            txtColorY.TabIndex = 13;
+            chkScatterDrawPoints.AutoSize = true;
+            chkScatterDrawPoints.Location = new Point(191, 728);
+            chkScatterDrawPoints.Name = "chkScatterDrawPoints";
+            chkScatterDrawPoints.Size = new Size(133, 19);
+            chkScatterDrawPoints.TabIndex = 106;
+            chkScatterDrawPoints.Text = "Scatter Draw Points?";
+            chkScatterDrawPoints.UseVisualStyleBackColor = true;
+            chkScatterDrawPoints.CheckedChanged += chkScatterDrawPoints_CheckedChanged;
             // 
             // Form1
             // 
@@ -1521,8 +1535,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1904, 1041);
             Controls.Add(tabControl1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
-            Text = "Form1";
+            Text = "EtHerG";
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             panelSettings.ResumeLayout(false);
@@ -1677,5 +1692,6 @@
         private Label lblScatterColor;
         private TextBox txtColorY;
         private TextBox txtColorX;
+        private CheckBox chkScatterDrawPoints;
     }
 }

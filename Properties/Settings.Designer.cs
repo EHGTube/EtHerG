@@ -682,5 +682,17 @@ namespace EtHerG.Properties {
                 this["ScatterDiagColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ScatterDiagDrawPoints {
+            get {
+                return ((bool)(this["ScatterDiagDrawPoints"]));
+            }
+            set {
+                this["ScatterDiagDrawPoints"] = value;
+            }
+        }
     }
 }

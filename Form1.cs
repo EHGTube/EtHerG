@@ -223,7 +223,7 @@ namespace EtHerG
                 txtLineDiagColorX.Text = EtHerG.Properties.Settings.Default.LineDiagColorX;
                 txtLineDiagColorY.Text = EtHerG.Properties.Settings.Default.LineDiagColorY;
                 txtScatterDiagColor.Text = EtHerG.Properties.Settings.Default.ScatterDiagColor;
-
+                chkScatterDrawPoints.Checked = EtHerG.Properties.Settings.Default.ScatterDiagDrawPoints;
 
 
                 formLineDiag.Location = new Point(EtHerG.Properties.Settings.Default.LineDiagPosX, EtHerG.Properties.Settings.Default.LineDiagPosY);
@@ -502,8 +502,18 @@ namespace EtHerG
             Alarm6.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm2Color); // Alarm 2
             Alarm5.LineStyle.Width = 3;
             Alarm6.LineStyle.Width = 3;
-            var ScatterLine = formScatter.Plot.Add.ScatterLine(lastSpecifiedXValues, lastSpecifiedYValues);
-            ScatterLine.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.ScatterDiagColor);
+            if (EtHerG.Properties.Settings.Default.ScatterDiagDrawPoints)
+            {
+                var ScatterPoints = formScatter.Plot.Add.ScatterPoints(lastSpecifiedXValues, lastSpecifiedYValues);
+                ScatterPoints.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.ScatterDiagColor);
+                ScatterPoints.MarkerSize = 1;
+            }
+            else
+            {
+                var ScatterLine = formScatter.Plot.Add.ScatterLine(lastSpecifiedXValues, lastSpecifiedYValues);
+                ScatterLine.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.ScatterDiagColor);
+            }
+            
             formScatter.Plot.Axes.SetLimits(-EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
             formScatter.Interaction.Disable();
             formScatter.Refresh();
@@ -1659,6 +1669,7 @@ namespace EtHerG
             if (IsValidHexColor(txtAlarm1Color.Text))
             {
                 EtHerG.Properties.Settings.Default.Alarm1Color = txtAlarm1Color.Text;
+                EtHerG.Properties.Settings.Default.Save();
                 FormatDiags();
             }
             else
@@ -1672,6 +1683,7 @@ namespace EtHerG
             if (IsValidHexColor(txtAlarm2Color.Text))
             {
                 EtHerG.Properties.Settings.Default.Alarm2Color = txtAlarm2Color.Text;
+                EtHerG.Properties.Settings.Default.Save();
                 FormatDiags();
             }
             else
@@ -1685,6 +1697,7 @@ namespace EtHerG
             if (IsValidHexColor(txtLineDiagColorX.Text))
             {
                 EtHerG.Properties.Settings.Default.LineDiagColorX = txtLineDiagColorX.Text;
+                EtHerG.Properties.Settings.Default.Save();
                 FormatDiags();
             }
             else
@@ -1698,6 +1711,7 @@ namespace EtHerG
             if (IsValidHexColor(txtLineDiagColorY.Text))
             {
                 EtHerG.Properties.Settings.Default.LineDiagColorY = txtLineDiagColorY.Text;
+                EtHerG.Properties.Settings.Default.Save();
                 FormatDiags();
             }
             else
@@ -1711,11 +1725,18 @@ namespace EtHerG
             if (IsValidHexColor(txtScatterDiagColor.Text))
             {
                 EtHerG.Properties.Settings.Default.ScatterDiagColor = txtScatterDiagColor.Text;
+                EtHerG.Properties.Settings.Default.Save();
             }
             else
             {
                 MessageBox.Show("Please enter Valid Color!");
             }
+        }
+
+        private void chkScatterDrawPoints_CheckedChanged(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.ScatterDiagDrawPoints = chkScatterDrawPoints.Checked;
+            EtHerG.Properties.Settings.Default.Save();
         }
     }
 }
