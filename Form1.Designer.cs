@@ -71,6 +71,7 @@
             formScatter = new ScottPlot.WinForms.FormsPlot();
             tabPage2 = new TabPage();
             panel1 = new Panel();
+            lblInstructions = new Label();
             pictureBox1 = new PictureBox();
             pctrInternationalization = new PictureBox();
             chkScatterDrawPoints = new CheckBox();
@@ -283,50 +284,45 @@
             // 
             // lblFilterHP
             // 
-            lblFilterHP.AutoSize = true;
-            lblFilterHP.Location = new Point(40, 160);
+            lblFilterHP.Location = new Point(8, 165);
             lblFilterHP.Name = "lblFilterHP";
-            lblFilterHP.Size = new Size(55, 15);
+            lblFilterHP.Size = new Size(95, 15);
             lblFilterHP.TabIndex = 12;
             lblFilterHP.Text = "Filter HP:";
             lblFilterHP.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblFilterLP
             // 
-            lblFilterLP.AutoSize = true;
-            lblFilterLP.Location = new Point(40, 131);
+            lblFilterLP.Location = new Point(8, 136);
             lblFilterLP.Name = "lblFilterLP";
-            lblFilterLP.Size = new Size(52, 15);
+            lblFilterLP.Size = new Size(95, 15);
             lblFilterLP.TabIndex = 11;
             lblFilterLP.Text = "Filter LP:";
             lblFilterLP.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblPhase
             // 
-            lblPhase.AutoSize = true;
-            lblPhase.Location = new Point(54, 102);
+            lblPhase.Location = new Point(8, 107);
             lblPhase.Name = "lblPhase";
-            lblPhase.Size = new Size(41, 15);
+            lblPhase.Size = new Size(95, 15);
             lblPhase.TabIndex = 9;
             lblPhase.Text = "Phase:";
             lblPhase.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblGainY
             // 
-            lblGainY.AutoSize = true;
-            lblGainY.Location = new Point(48, 73);
+            lblGainY.Location = new Point(8, 76);
             lblGainY.Name = "lblGainY";
-            lblGainY.Size = new Size(44, 15);
+            lblGainY.Size = new Size(95, 15);
             lblGainY.TabIndex = 8;
             lblGainY.Text = "Gain Y:";
             lblGainY.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblGainX
             // 
-            lblGainX.AutoSize = true;
-            lblGainX.Location = new Point(48, 44);
+            lblGainX.Location = new Point(8, 47);
             lblGainX.Name = "lblGainX";
-            lblGainX.Size = new Size(44, 15);
+            lblGainX.Size = new Size(95, 15);
             lblGainX.TabIndex = 7;
             lblGainX.Text = "Gain X:";
             lblGainX.TextAlign = ContentAlignment.MiddleRight;
@@ -335,41 +331,46 @@
             // 
             txtFilterHPUserInput.Location = new Point(101, 157);
             txtFilterHPUserInput.Name = "txtFilterHPUserInput";
-            txtFilterHPUserInput.Size = new Size(100, 23);
+            txtFilterHPUserInput.Size = new Size(101, 23);
             txtFilterHPUserInput.TabIndex = 6;
             txtFilterHPUserInput.LostFocus += txtFilterHPUserInput_LostFocus;
+            txtFilterHPUserInput.MouseWheel += txtFilterHPUserInput_MouseWheel;
             // 
             // txtFilterLPUserInput
             // 
             txtFilterLPUserInput.Location = new Point(101, 128);
             txtFilterLPUserInput.Name = "txtFilterLPUserInput";
-            txtFilterLPUserInput.Size = new Size(100, 23);
+            txtFilterLPUserInput.Size = new Size(101, 23);
             txtFilterLPUserInput.TabIndex = 5;
             txtFilterLPUserInput.LostFocus += txtFilterLPUserInput_LostFocus;
+            txtFilterLPUserInput.MouseWheel += txtFilterLPUserInput_MouseWheel;
             // 
             // txtPhaseUserInput
             // 
             txtPhaseUserInput.Location = new Point(101, 99);
             txtPhaseUserInput.Name = "txtPhaseUserInput";
-            txtPhaseUserInput.Size = new Size(100, 23);
+            txtPhaseUserInput.Size = new Size(101, 23);
             txtPhaseUserInput.TabIndex = 4;
             txtPhaseUserInput.LostFocus += txtPhaseUserInput_LostFocus;
+            txtPhaseUserInput.MouseWheel += txtPhaseUserInput_MouseWheel;
             // 
             // txtGainYUserInput
             // 
             txtGainYUserInput.Location = new Point(101, 70);
             txtGainYUserInput.Name = "txtGainYUserInput";
-            txtGainYUserInput.Size = new Size(100, 23);
+            txtGainYUserInput.Size = new Size(101, 23);
             txtGainYUserInput.TabIndex = 3;
             txtGainYUserInput.LostFocus += txtGainYUserInput_LostFocus;
+            txtGainYUserInput.MouseWheel += txtGainYUserInput_MouseWheel;
             // 
             // txtGainXUserInput
             // 
             txtGainXUserInput.Location = new Point(101, 41);
             txtGainXUserInput.Name = "txtGainXUserInput";
-            txtGainXUserInput.Size = new Size(100, 23);
+            txtGainXUserInput.Size = new Size(101, 23);
             txtGainXUserInput.TabIndex = 2;
             txtGainXUserInput.LostFocus += txtGainXUserInput_LostFocus;
+            txtGainXUserInput.MouseWheel += txtGainXUserInput_MouseWheel;
             // 
             // txtFrequencyUserInput
             // 
@@ -378,13 +379,13 @@
             txtFrequencyUserInput.Size = new Size(100, 23);
             txtFrequencyUserInput.TabIndex = 1;
             txtFrequencyUserInput.LostFocus += txtFrequencyUserInput_LostFocus;
+            txtFrequencyUserInput.MouseWheel += txtFrequencyUserInput_MouseWheel;
             // 
             // lblFrequency
             // 
-            lblFrequency.AutoSize = true;
-            lblFrequency.Location = new Point(30, 15);
+            lblFrequency.Location = new Point(8, 15);
             lblFrequency.Name = "lblFrequency";
-            lblFrequency.Size = new Size(65, 15);
+            lblFrequency.Size = new Size(95, 15);
             lblFrequency.TabIndex = 0;
             lblFrequency.Text = "Frequency:";
             lblFrequency.TextAlign = ContentAlignment.MiddleRight;
@@ -606,6 +607,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(lblInstructions);
             panel1.Controls.Add(pictureBox1);
             panel1.Controls.Add(pctrInternationalization);
             panel1.Controls.Add(chkScatterDrawPoints);
@@ -711,6 +713,15 @@
             panel1.Size = new Size(1890, 1007);
             panel1.TabIndex = 54;
             // 
+            // lblInstructions
+            // 
+            lblInstructions.AutoSize = true;
+            lblInstructions.Location = new Point(363, 653);
+            lblInstructions.Name = "lblInstructions";
+            lblInstructions.Size = new Size(423, 45);
+            lblInstructions.TabIndex = 109;
+            lblInstructions.Text = "1. Connect Ether and Modbus\r\n2. Set Values for all parameters (perhaps excluding influx and modbus last sent)\r\n3. Set the Play Coil in the PLC to True (atleast for testing)\r\n";
+            // 
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.Kartes_;
@@ -785,48 +796,48 @@
             // 
             // lblScatterColor
             // 
-            lblScatterColor.AutoSize = true;
-            lblScatterColor.Location = new Point(139, 697);
+            lblScatterColor.Location = new Point(23, 702);
             lblScatterColor.Name = "lblScatterColor";
-            lblScatterColor.Size = new Size(78, 15);
+            lblScatterColor.Size = new Size(200, 15);
             lblScatterColor.TabIndex = 100;
             lblScatterColor.Text = "Scatter Color:";
+            lblScatterColor.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblColorY
             // 
-            lblColorY.AutoSize = true;
-            lblColorY.Location = new Point(164, 672);
+            lblColorY.Location = new Point(19, 673);
             lblColorY.Name = "lblColorY";
-            lblColorY.Size = new Size(49, 15);
+            lblColorY.Size = new Size(200, 15);
             lblColorY.TabIndex = 98;
             lblColorY.Text = "Y Color:";
+            lblColorY.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblAlarm2Color
             // 
-            lblAlarm2Color.AutoSize = true;
-            lblAlarm2Color.Location = new Point(136, 616);
+            lblAlarm2Color.Location = new Point(19, 616);
             lblAlarm2Color.Name = "lblAlarm2Color";
-            lblAlarm2Color.Size = new Size(83, 15);
+            lblAlarm2Color.Size = new Size(200, 15);
             lblAlarm2Color.TabIndex = 97;
             lblAlarm2Color.Text = "Alarm 2 Color:";
+            lblAlarm2Color.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblColorX
             // 
-            lblColorX.AutoSize = true;
-            lblColorX.Location = new Point(164, 648);
+            lblColorX.Location = new Point(21, 648);
             lblColorX.Name = "lblColorX";
-            lblColorX.Size = new Size(49, 15);
+            lblColorX.Size = new Size(200, 15);
             lblColorX.TabIndex = 96;
             lblColorX.Text = "X Color:";
+            lblColorX.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblAlarm1Color
             // 
-            lblAlarm1Color.AutoSize = true;
-            lblAlarm1Color.Location = new Point(139, 592);
+            lblAlarm1Color.Location = new Point(19, 587);
             lblAlarm1Color.Name = "lblAlarm1Color";
-            lblAlarm1Color.Size = new Size(83, 15);
+            lblAlarm1Color.Size = new Size(200, 15);
             lblAlarm1Color.TabIndex = 96;
             lblAlarm1Color.Text = "Alarm 1 Color:";
+            lblAlarm1Color.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblInfluxDBMachineName
             // 
@@ -1084,39 +1095,39 @@
             // 
             // lblLineDiagSizeY
             // 
-            lblLineDiagSizeY.AutoSize = true;
-            lblLineDiagSizeY.Location = new Point(126, 558);
+            lblLineDiagSizeY.Location = new Point(23, 557);
             lblLineDiagSizeY.Name = "lblLineDiagSizeY";
-            lblLineDiagSizeY.Size = new Size(95, 15);
+            lblLineDiagSizeY.Size = new Size(200, 15);
             lblLineDiagSizeY.TabIndex = 65;
             lblLineDiagSizeY.Text = "Line Diag. Size Y:";
+            lblLineDiagSizeY.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblLineDiagSizeX
             // 
-            lblLineDiagSizeX.AutoSize = true;
-            lblLineDiagSizeX.Location = new Point(126, 529);
+            lblLineDiagSizeX.Location = new Point(23, 528);
             lblLineDiagSizeX.Name = "lblLineDiagSizeX";
-            lblLineDiagSizeX.Size = new Size(95, 15);
+            lblLineDiagSizeX.Size = new Size(200, 15);
             lblLineDiagSizeX.TabIndex = 64;
             lblLineDiagSizeX.Text = "Line Diag. Size X:";
+            lblLineDiagSizeX.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblLineDiagPosY
             // 
-            lblLineDiagPosY.AutoSize = true;
-            lblLineDiagPosY.Location = new Point(124, 500);
+            lblLineDiagPosY.Location = new Point(23, 504);
             lblLineDiagPosY.Name = "lblLineDiagPosY";
-            lblLineDiagPosY.Size = new Size(97, 15);
+            lblLineDiagPosY.Size = new Size(200, 15);
             lblLineDiagPosY.TabIndex = 63;
             lblLineDiagPosY.Text = "Line Diag. Pos. Y:";
+            lblLineDiagPosY.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblLineDiagPosX
             // 
-            lblLineDiagPosX.AutoSize = true;
-            lblLineDiagPosX.Location = new Point(124, 471);
+            lblLineDiagPosX.Location = new Point(23, 475);
             lblLineDiagPosX.Name = "lblLineDiagPosX";
-            lblLineDiagPosX.Size = new Size(97, 15);
+            lblLineDiagPosX.Size = new Size(200, 15);
             lblLineDiagPosX.TabIndex = 62;
             lblLineDiagPosX.Text = "Line Diag. Pos. X:";
+            lblLineDiagPosX.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtLineDiagSizeY
             // 
@@ -1152,21 +1163,21 @@
             // 
             // lblScatterDiagSize
             // 
-            lblScatterDiagSize.AutoSize = true;
-            lblScatterDiagSize.Location = new Point(122, 442);
+            lblScatterDiagSize.Location = new Point(23, 441);
             lblScatterDiagSize.Name = "lblScatterDiagSize";
-            lblScatterDiagSize.Size = new Size(99, 15);
+            lblScatterDiagSize.Size = new Size(200, 15);
             lblScatterDiagSize.TabIndex = 57;
             lblScatterDiagSize.Text = "Scatter Diag. Size:";
+            lblScatterDiagSize.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblScatterDiagPosY
             // 
-            lblScatterDiagPosY.AutoSize = true;
-            lblScatterDiagPosY.Location = new Point(110, 413);
+            lblScatterDiagPosY.Location = new Point(23, 417);
             lblScatterDiagPosY.Name = "lblScatterDiagPosY";
-            lblScatterDiagPosY.Size = new Size(111, 15);
+            lblScatterDiagPosY.Size = new Size(200, 15);
             lblScatterDiagPosY.TabIndex = 56;
             lblScatterDiagPosY.Text = "Scatter Diag. Pos. Y:";
+            lblScatterDiagPosY.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtScatterDiagSize
             // 
@@ -1202,12 +1213,12 @@
             // 
             // lblScatterDiagPosX
             // 
-            lblScatterDiagPosX.AutoSize = true;
-            lblScatterDiagPosX.Location = new Point(110, 384);
+            lblScatterDiagPosX.Location = new Point(21, 388);
             lblScatterDiagPosX.Name = "lblScatterDiagPosX";
-            lblScatterDiagPosX.Size = new Size(111, 15);
+            lblScatterDiagPosX.Size = new Size(200, 15);
             lblScatterDiagPosX.TabIndex = 53;
             lblScatterDiagPosX.Text = "Scatter Diag. Pos. X:";
+            lblScatterDiagPosX.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtFilterLPLastModbusValue
             // 
@@ -1227,12 +1238,12 @@
             // 
             // lblScatterAmount
             // 
-            lblScatterAmount.AutoSize = true;
-            lblScatterAmount.Location = new Point(65, 264);
+            lblScatterAmount.Location = new Point(21, 263);
             lblScatterAmount.Name = "lblScatterAmount";
-            lblScatterAmount.Size = new Size(156, 15);
+            lblScatterAmount.Size = new Size(200, 15);
             lblScatterAmount.TabIndex = 40;
             lblScatterAmount.Text = "Amount of Points in Scatter:";
+            lblScatterAmount.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtGainYLastModbusValue
             // 
@@ -1260,12 +1271,12 @@
             // 
             // lblDiagMaxPointSize
             // 
-            lblDiagMaxPointSize.AutoSize = true;
-            lblDiagMaxPointSize.Location = new Point(62, 231);
+            lblDiagMaxPointSize.Location = new Point(23, 234);
             lblDiagMaxPointSize.Name = "lblDiagMaxPointSize";
-            lblDiagMaxPointSize.Size = new Size(151, 15);
+            lblDiagMaxPointSize.Size = new Size(200, 15);
             lblDiagMaxPointSize.TabIndex = 51;
             lblDiagMaxPointSize.Text = "Diagram Max. Point Height";
+            lblDiagMaxPointSize.TextAlign = ContentAlignment.BottomRight;
             // 
             // txtFrequencyLastModbusValue
             // 
@@ -1311,12 +1322,12 @@
             // 
             // lblLineDiagAmount
             // 
-            lblLineDiagAmount.AutoSize = true;
-            lblLineDiagAmount.Location = new Point(55, 202);
+            lblLineDiagAmount.Location = new Point(23, 202);
             lblLineDiagAmount.Name = "lblLineDiagAmount";
-            lblLineDiagAmount.Size = new Size(166, 15);
+            lblLineDiagAmount.Size = new Size(200, 15);
             lblLineDiagAmount.TabIndex = 49;
             lblLineDiagAmount.Text = "Amount of Points in LineDiag:";
+            lblLineDiagAmount.TextAlign = ContentAlignment.BottomRight;
             // 
             // txtFilterHPModbusAddress
             // 
@@ -1392,12 +1403,12 @@
             // 
             // lblComport
             // 
-            lblComport.AutoSize = true;
-            lblComport.Location = new Point(158, 355);
+            lblComport.Location = new Point(19, 354);
             lblComport.Name = "lblComport";
-            lblComport.Size = new Size(65, 15);
+            lblComport.Size = new Size(200, 15);
             lblComport.TabIndex = 46;
             lblComport.Text = "COM-Port:";
+            lblComport.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtFrequencyModbusAddress
             // 
@@ -1457,30 +1468,30 @@
             // 
             // lblPS
             // 
-            lblPS.AutoSize = true;
-            lblPS.Location = new Point(196, 173);
+            lblPS.Location = new Point(21, 169);
             lblPS.Name = "lblPS";
-            lblPS.Size = new Size(25, 15);
+            lblPS.Size = new Size(200, 15);
             lblPS.TabIndex = 3;
             lblPS.Text = "P/S";
+            lblPS.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblAlarm1
             // 
-            lblAlarm1.AutoSize = true;
-            lblAlarm1.Location = new Point(171, 296);
+            lblAlarm1.Location = new Point(23, 297);
             lblAlarm1.Name = "lblAlarm1";
-            lblAlarm1.Size = new Size(51, 15);
+            lblAlarm1.Size = new Size(200, 15);
             lblAlarm1.TabIndex = 21;
             lblAlarm1.Text = "Alarm 1:";
+            lblAlarm1.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblYVal
             // 
-            lblYVal.AutoSize = true;
-            lblYVal.Location = new Point(169, 144);
+            lblYVal.Location = new Point(23, 143);
             lblYVal.Name = "lblYVal";
-            lblYVal.Size = new Size(52, 15);
+            lblYVal.Size = new Size(200, 15);
             lblYVal.TabIndex = 4;
             lblYVal.Text = "Y-Values";
+            lblYVal.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblPlay
             // 
@@ -1493,21 +1504,21 @@
             // 
             // lblXVal
             // 
-            lblXVal.AutoSize = true;
-            lblXVal.Location = new Point(169, 115);
+            lblXVal.Location = new Point(21, 114);
             lblXVal.Name = "lblXVal";
-            lblXVal.Size = new Size(52, 15);
+            lblXVal.Size = new Size(200, 15);
             lblXVal.TabIndex = 5;
             lblXVal.Text = "X-Values";
+            lblXVal.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblAlarm2
             // 
-            lblAlarm2.AutoSize = true;
-            lblAlarm2.Location = new Point(171, 327);
+            lblAlarm2.Location = new Point(21, 325);
             lblAlarm2.Name = "lblAlarm2";
-            lblAlarm2.Size = new Size(51, 15);
+            lblAlarm2.Size = new Size(200, 15);
             lblAlarm2.TabIndex = 19;
             lblAlarm2.Text = "Alarm 2:";
+            lblAlarm2.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblFrequency1
             // 
@@ -1731,5 +1742,6 @@
         private CheckBox chkScatterDrawPoints;
         private PictureBox pctrInternationalization;
         private PictureBox pictureBox1;
+        private Label lblInstructions;
     }
 }

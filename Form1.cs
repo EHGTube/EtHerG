@@ -144,7 +144,8 @@ namespace EtHerG
             initTimer.AutoReset = false;
             initTimer.Start();
 
-            ModbusTimer = new System.Timers.Timer(25);
+            ModbusTimer = new System.Timers.Timer(30);
+            //30ms is the update time for the EasyE4, other devices might feature a different update timme. 
             ModbusTimer.Elapsed += ModbusTimer_Elapsed;
             ModbusTimer.AutoReset = true;
             ModbusTimer.Start();
@@ -914,6 +915,7 @@ namespace EtHerG
             txtInfluxDBOrg.Visible = true;
             txtInfluxDBServer.Visible = true;
             txtInfluxDBToken.Visible = true;
+            lblInstructions.Visible = true;
         }
 
         private void LoggedOut()
@@ -972,6 +974,7 @@ namespace EtHerG
             txtInfluxDBOrg.Visible = false;
             txtInfluxDBServer.Visible = false;
             txtInfluxDBToken.Visible = false;
+            lblInstructions.Visible = false;
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
@@ -1766,18 +1769,18 @@ namespace EtHerG
                     chkShowY.Text = "Y-Values";
                     chkEtherAutoconnect.Text = "Ether Autoconnect";
                     chkModbusAutoconnect.Text = "Modbus Autoconnect";
-                    lblFrequency.Text = "Frequency";
-                    lblGainX.Text = "Gain X";
-                    lblGainY.Text = "Gain Y";
-                    lblPhase.Text = "Phase";
-                    lblFilterLP.Text = "Filter LP.";
-                    lblFilterHP.Text = "Filter HP.";
+                    lblFrequency.Text = "Frequency:";
+                    lblGainX.Text = "Gain X:";
+                    lblGainY.Text = "Gain Y:";
+                    lblPhase.Text = "Phase:";
+                    lblFilterLP.Text = "Filter LP. :";
+                    lblFilterHP.Text = "Filter HP. :";
                     tabPage1.Text = "Main";
                     tabPage2.Text = "Settings";
-                    lblXVal.Text = "X-Values";
-                    lblYVal.Text = "Y-Values";
+                    lblXVal.Text = "X-Values:";
+                    lblYVal.Text = "Y-Values:";
                     lblLineDiagAmount.Text = "Amount of Points in Line Diag.:";
-                    lblDiagMaxPointSize.Text = "Max. Pointheight";
+                    lblDiagMaxPointSize.Text = "Max. Pointheight:";
                     lblScatterAmount.Text = "Amount of Points in Scatter:";
                     lblAlarm1.Text = "Alarm 1:";
                     lblAlarm2.Text = "Alarm 2:";
@@ -1806,18 +1809,18 @@ namespace EtHerG
                     chkShowY.Text = "Y-Werte";
                     chkEtherAutoconnect.Text = "Ether Autom. Verbinden";
                     chkModbusAutoconnect.Text = "Modbus Autom. Verbinden";
-                    lblFrequency.Text = "Frequenz";
-                    lblGainX.Text = "Empf. X";
-                    lblGainY.Text = "Empf. Y";
-                    lblPhase.Text = "Phase";
-                    lblFilterLP.Text = "Filter TP.";
-                    lblFilterHP.Text = "Filter HP.";
+                    lblFrequency.Text = "Frequenz:";
+                    lblGainX.Text = "Empf. X:";
+                    lblGainY.Text = "Empf. Y:";
+                    lblPhase.Text = "Phase:";
+                    lblFilterLP.Text = "Filter TP. :";
+                    lblFilterHP.Text = "Filter HP. :";
                     tabPage1.Text = "Haupt";
                     tabPage2.Text = "Einstellungen";
-                    lblXVal.Text = "X-Werte";
-                    lblYVal.Text = "Y-Werte";
+                    lblXVal.Text = "X-Werte:";
+                    lblYVal.Text = "Y-Werte:";
                     lblLineDiagAmount.Text = "Punktanzahl in Liniendiagram:";
-                    lblDiagMaxPointSize.Text = "Max. Punkthöhe";
+                    lblDiagMaxPointSize.Text = "Max. Punkthöhe:";
                     lblScatterAmount.Text = "Punktanzahl in Punktwolke:";
                     lblAlarm1.Text = "Alarm 1:";
                     lblAlarm2.Text = "Alarm 2:";
@@ -1846,21 +1849,18 @@ namespace EtHerG
                     chkShowY.Text = "Warto\u015Bci Y";
                     chkEtherAutoconnect.Text = "Automatyczne po\u0142\u0105czenie z Ether";
                     chkModbusAutoconnect.Text = "Automatyczne po\u0142\u0105czenie z Modbus";
-                    lblFrequency.Location = new Point(3, 15);
-                    lblFrequency.Text = "Cz\u0119stotliwo\u015B\u0107";
-                    lblGainX.Location = new Point(3, 44);
-                    lblGainX.Text = "Wzmocnienie X";
-                    lblGainY.Location = new Point(3, 73);
-                    lblGainY.Text = "Wzmocnienie Y";
-                    lblPhase.Text = "Faza";
-                    lblFilterLP.Text = "Filtr DP.";
-                    lblFilterHP.Text = "Filtr GP.";
+                    lblFrequency.Text = "Cz\u0119stotliwo\u015B\u0107:";
+                    lblGainX.Text = "Wzmocnienie X:";
+                    lblGainY.Text = "Wzmocnienie Y:";
+                    lblPhase.Text = "Faza:";
+                    lblFilterLP.Text = "Filtr DP. :";
+                    lblFilterHP.Text = "Filtr GP. :";
                     tabPage1.Text = "G\u0142\u00F3wna";
                     tabPage2.Text = "Ustawienia";
-                    lblXVal.Text = "Warto\u015Bci X";
-                    lblYVal.Text = "Warto\u015Bci Y";
+                    lblXVal.Text = "Warto\u015Bci X:";
+                    lblYVal.Text = "Warto\u015Bci Y:";
                     lblLineDiagAmount.Text = "Liczba punkt\u00F3w w wykresie liniowym:";
-                    lblDiagMaxPointSize.Text = "Maks. wysoko\u015B\u0107 punktu";
+                    lblDiagMaxPointSize.Text = "Maks. wysoko\u015B\u0107 punktu:";
                     lblScatterAmount.Text = "Liczba punkt\u00F3w w chmurze punkt\u00F3w:";
                     lblAlarm1.Text = "Alarm 1:";
                     lblAlarm2.Text = "Alarm 2:";
@@ -1880,7 +1880,132 @@ namespace EtHerG
                     break;
             }
 
+        }
 
+        private void txtFrequencyUserInput_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Check if the TextBox has focus
+            if (txtFrequencyUserInput.Focused)
+            {
+                // If the mouse wheel is scrolled up, increment the value
+                if (e.Delta > 0)
+                {
+                    EtHerG.Properties.Settings.Default.Frequency++;
+                }
+                // If the mouse wheel is scrolled down, decrement the value
+                else if (e.Delta < 0)
+                {
+                    EtHerG.Properties.Settings.Default.Frequency--;
+                }
+                EtHerG.Properties.Settings.Default.Save();
+                // Update the TextBox text with the new value
+                txtFrequencyUserInput.Text = EtHerG.Properties.Settings.Default.Frequency.ToString();
+            }
+        }
+
+        private void txtGainXUserInput_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Check if the TextBox has focus
+            if (txtGainXUserInput.Focused)
+            {
+                // If the mouse wheel is scrolled up, increment the value
+                if (e.Delta > 0)
+                {
+                    EtHerG.Properties.Settings.Default.GainX++;
+                }
+                // If the mouse wheel is scrolled down, decrement the value
+                else if (e.Delta < 0)
+                {
+                    EtHerG.Properties.Settings.Default.GainX--;
+                }
+                EtHerG.Properties.Settings.Default.Save();
+                // Update the TextBox text with the new value
+                txtGainXUserInput.Text = EtHerG.Properties.Settings.Default.GainX.ToString();
+            }
+        }
+
+        private void txtGainYUserInput_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Check if the TextBox has focus
+            if (txtGainYUserInput.Focused)
+            {
+                // If the mouse wheel is scrolled up, increment the value
+                if (e.Delta > 0)
+                {
+                    EtHerG.Properties.Settings.Default.GainY++;
+                }
+                // If the mouse wheel is scrolled down, decrement the value
+                else if (e.Delta < 0)
+                {
+                    EtHerG.Properties.Settings.Default.GainY--;
+                }
+                EtHerG.Properties.Settings.Default.Save();
+                // Update the TextBox text with the new value
+                txtGainYUserInput.Text = EtHerG.Properties.Settings.Default.GainY.ToString();
+            }
+        }
+
+        private void txtPhaseUserInput_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Check if the TextBox has focus
+            if (txtPhaseUserInput.Focused)
+            {
+                // If the mouse wheel is scrolled up, increment the value
+                if (e.Delta > 0)
+                {
+                    EtHerG.Properties.Settings.Default.Phase++;
+                }
+                // If the mouse wheel is scrolled down, decrement the value
+                else if (e.Delta < 0)
+                {
+                    EtHerG.Properties.Settings.Default.Phase--;
+                }
+                EtHerG.Properties.Settings.Default.Save();
+                // Update the TextBox text with the new value
+                txtPhaseUserInput.Text = EtHerG.Properties.Settings.Default.Phase.ToString();
+            }
+        }
+
+        private void txtFilterLPUserInput_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Check if the TextBox has focus
+            if (txtFilterLPUserInput.Focused)
+            {
+                // If the mouse wheel is scrolled up, increment the value
+                if (e.Delta > 0)
+                {
+                    EtHerG.Properties.Settings.Default.FilterLP++;
+                }
+                // If the mouse wheel is scrolled down, decrement the value
+                else if (e.Delta < 0)
+                {
+                    EtHerG.Properties.Settings.Default.FilterLP--;
+                }
+                EtHerG.Properties.Settings.Default.Save();
+                // Update the TextBox text with the new value
+                txtFilterLPUserInput.Text = EtHerG.Properties.Settings.Default.FilterLP.ToString();
+            }
+        }
+
+        private void txtFilterHPUserInput_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Check if the TextBox has focus
+            if (txtFilterHPUserInput.Focused)
+            {
+                // If the mouse wheel is scrolled up, increment the value
+                if (e.Delta > 0)
+                {
+                    EtHerG.Properties.Settings.Default.FilterHP++;
+                }
+                // If the mouse wheel is scrolled down, decrement the value
+                else if (e.Delta < 0)
+                {
+                    EtHerG.Properties.Settings.Default.FilterHP--;
+                }
+                EtHerG.Properties.Settings.Default.Save();
+                // Update the TextBox text with the new value
+                txtFilterHPUserInput.Text = EtHerG.Properties.Settings.Default.FilterHP.ToString();
+            }
         }
     }
 }
