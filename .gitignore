@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/windowsdesktop-runtime-7.0.18-win-x64.exe
