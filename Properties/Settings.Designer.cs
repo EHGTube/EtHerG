@@ -706,5 +706,17 @@ namespace EtHerG.Properties {
                 this["Language"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100000000")]
+        public int MaxPoints {
+            get {
+                return ((int)(this["MaxPoints"]));
+            }
+            set {
+                this["MaxPoints"] = value;
+            }
+        }
     }
 }

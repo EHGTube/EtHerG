@@ -2,15 +2,9 @@
 
 To Do : 
 
-12. Fix Sending InfluxDB Alarm2 ?
-	1. 
-13. Maybe try figuring out how to see if the influxdb connection is established. 
-
 14. Do all formatting when everything is done (TAB USAGE!)
 
-15. Add Mouse Controls for Value Fields
-
-
+15. Fix Polish Translations
 
 
 Regarding InfluxDB:
