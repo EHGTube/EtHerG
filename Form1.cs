@@ -645,146 +645,117 @@ namespace EtHerG
                 }));
             }
 
-            //Try this and Delete Later 
-            ////Read Frequency
-            //if (EtHerG.Properties.Settings.Default.FrequencyModbusAddress != 0 && ModbusCon)
-            //{
-            //    FrequencyModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FrequencyModbusAddress, 1)[0];
-
-            //    if (FrequencyModbusLastVal == 0)
-            //    {
-            //        FrequencyModbusLastVal = FrequencyModbusVal;
-            //    }
-
-            //    if (FrequencyModbusLastVal != FrequencyModbusVal)
-            //    {
-            //        EtHerG.Properties.Settings.Default.Frequency = FrequencyModbusVal;
-            //        EtHerG.Properties.Settings.Default.Save();
-            //    }
-            //    FrequencyModbusLastVal = FrequencyModbusVal;
-            //}
-
-
-
-            ////Read GainX
-            //if (EtHerG.Properties.Settings.Default.GainXModbusAddress != 0 && ModbusCon)
-            //{
-            //    GainXModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.GainXModbusAddress, 1)[0];
-
-            //    if (GainXModbusLastVal == 0)
-            //    {
-            //        GainXModbusLastVal = GainXModbusVal;
-            //    }
-
-            //    if (GainXModbusLastVal != GainXModbusVal)
-            //    {
-            //        EtHerG.Properties.Settings.Default.GainX = GainXModbusVal;
-            //        EtHerG.Properties.Settings.Default.Save();
-            //    }
-            //    GainXModbusLastVal = GainXModbusVal;
-            //}
-
-            ////Read GainY
-            //if (EtHerG.Properties.Settings.Default.GainYModbusAddress != 0 && ModbusCon)
-            //{
-            //    GainYModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.GainYModbusAddress, 1)[0];
-
-            //    if (GainYModbusLastVal == 0)
-            //    {
-            //        GainYModbusLastVal = GainYModbusVal;
-            //    }
-
-            //    if (GainYModbusLastVal != GainYModbusVal)
-            //    {
-            //        EtHerG.Properties.Settings.Default.GainY = GainYModbusVal;
-            //        EtHerG.Properties.Settings.Default.Save();
-            //    }
-            //    GainYModbusLastVal = GainYModbusVal;
-            //}
-
-            ////Read Phase
-            //if (EtHerG.Properties.Settings.Default.PhaseModbusAddress != 0 && ModbusCon)
-            //{
-            //    PhaseModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.PhaseModbusAddress, 1)[0];
-
-            //    if (PhaseModbusLastVal == 0)
-            //    {
-            //        PhaseModbusLastVal = PhaseModbusVal;
-            //    }
-
-            //    if (PhaseModbusLastVal != PhaseModbusVal)
-            //    {
-            //        EtHerG.Properties.Settings.Default.Phase = PhaseModbusVal;
-            //        EtHerG.Properties.Settings.Default.Save();
-            //    }
-            //    PhaseModbusLastVal = PhaseModbusVal;
-            //}
-
-
-            ////Read FilterLP
-            //if (EtHerG.Properties.Settings.Default.FilterLPModbusAddress != 0 && ModbusCon)
-            //{
-            //    FilterLPModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FilterLPModbusAddress, 1)[0];
-
-            //    if (FilterLPModbusLastVal == 0)
-            //    {
-            //        FilterLPModbusLastVal = FilterLPModbusVal;
-            //    }
-
-            //    if (FilterLPModbusLastVal != FilterLPModbusVal)
-            //    {
-            //        EtHerG.Properties.Settings.Default.FilterLP = FilterLPModbusVal;
-            //        EtHerG.Properties.Settings.Default.Save();
-            //    }
-            //    FilterLPModbusLastVal = FilterLPModbusVal;
-            //}
-
-
-            ////Read FilterHP
-            //if (EtHerG.Properties.Settings.Default.FilterHPModbusAddress != 0 && ModbusCon)
-            //{
-            //    FilterHPModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FilterHPModbusAddress, 1)[0];
-
-            //    if (FilterHPModbusLastVal == 0)
-            //    {
-            //        FilterHPModbusLastVal = FilterHPModbusVal;
-            //    }
-
-            //    if (FilterHPModbusLastVal != FilterHPModbusVal)
-            //    {
-            //        EtHerG.Properties.Settings.Default.FilterHP = FilterHPModbusVal;
-            //        EtHerG.Properties.Settings.Default.Save();
-            //    }
-            //    FilterHPModbusLastVal = FilterHPModbusVal;
-            //}
-
-            ReadAndUpdateSettings(EtHerG.Properties.Settings.Default.FrequencyModbusAddress, ref FrequencyModbusLastVal, ref FrequencyModbusVal, "Frequency");
-            ReadAndUpdateSettings(EtHerG.Properties.Settings.Default.GainXModbusAddress, ref GainXModbusLastVal, ref GainXModbusVal, "GainX");
-            ReadAndUpdateSettings(EtHerG.Properties.Settings.Default.GainYModbusAddress, ref GainYModbusLastVal, ref GainYModbusVal, "GainY");
-            ReadAndUpdateSettings(EtHerG.Properties.Settings.Default.PhaseModbusAddress, ref PhaseModbusLastVal, ref PhaseModbusVal, "Phase");
-            ReadAndUpdateSettings(EtHerG.Properties.Settings.Default.FilterLPModbusAddress, ref FilterLPModbusLastVal, ref FilterLPModbusVal, "FilterLP");
-            ReadAndUpdateSettings(EtHerG.Properties.Settings.Default.FilterHPModbusAddress, ref FilterHPModbusLastVal, ref FilterHPModbusVal, "FilterHP");
-        }
-
-        private void ReadAndUpdateSettings(ushort modbusAddress, ref int lastValue, ref int currentValue, string settingProperty)
-        {
-            //If there is a Modbus Adress Specified and Modbus is connected, it will read the Value from the specified Adress and write it into the Settings property
-            //if its different than to the last value it has read. 
-            if (modbusAddress != 0 && ModbusCon)
+            //Try this and Delete Later
+            //Read Frequency
+            if (EtHerG.Properties.Settings.Default.FrequencyModbusAddress != 0 && ModbusCon)
             {
-                currentValue = modbusMaster.ReadHoldingRegisters(1, modbusAddress, 1)[0];
+                FrequencyModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FrequencyModbusAddress, 1)[0];
 
-                if (lastValue == 0)
+                if (FrequencyModbusLastVal == 0)
                 {
-                    lastValue = currentValue;
+                    FrequencyModbusLastVal = FrequencyModbusVal;
                 }
 
-                if (lastValue != currentValue)
+                if (FrequencyModbusLastVal != FrequencyModbusVal)
                 {
-                    EtHerG.Properties.Settings.Default[settingProperty] = currentValue;
+                    EtHerG.Properties.Settings.Default.Frequency = FrequencyModbusVal;
                     EtHerG.Properties.Settings.Default.Save();
                 }
-                lastValue = currentValue;
+                FrequencyModbusLastVal = FrequencyModbusVal;
+            }
+
+
+
+            //Read GainX
+            if (EtHerG.Properties.Settings.Default.GainXModbusAddress != 0 && ModbusCon)
+            {
+                GainXModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.GainXModbusAddress, 1)[0];
+
+                if (GainXModbusLastVal == 0)
+                {
+                    GainXModbusLastVal = GainXModbusVal;
+                }
+
+                if (GainXModbusLastVal != GainXModbusVal)
+                {
+                    EtHerG.Properties.Settings.Default.GainX = GainXModbusVal;
+                    EtHerG.Properties.Settings.Default.Save();
+                }
+                GainXModbusLastVal = GainXModbusVal;
+            }
+
+            //Read GainY
+            if (EtHerG.Properties.Settings.Default.GainYModbusAddress != 0 && ModbusCon)
+            {
+                GainYModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.GainYModbusAddress, 1)[0];
+
+                if (GainYModbusLastVal == 0)
+                {
+                    GainYModbusLastVal = GainYModbusVal;
+                }
+
+                if (GainYModbusLastVal != GainYModbusVal)
+                {
+                    EtHerG.Properties.Settings.Default.GainY = GainYModbusVal;
+                    EtHerG.Properties.Settings.Default.Save();
+                }
+                GainYModbusLastVal = GainYModbusVal;
+            }
+
+            //Read Phase
+            if (EtHerG.Properties.Settings.Default.PhaseModbusAddress != 0 && ModbusCon)
+            {
+                PhaseModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.PhaseModbusAddress, 1)[0];
+
+                if (PhaseModbusLastVal == 0)
+                {
+                    PhaseModbusLastVal = PhaseModbusVal;
+                }
+
+                if (PhaseModbusLastVal != PhaseModbusVal)
+                {
+                    EtHerG.Properties.Settings.Default.Phase = PhaseModbusVal;
+                    EtHerG.Properties.Settings.Default.Save();
+                }
+                PhaseModbusLastVal = PhaseModbusVal;
+            }
+
+
+            //Read FilterLP
+            if (EtHerG.Properties.Settings.Default.FilterLPModbusAddress != 0 && ModbusCon)
+            {
+                FilterLPModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FilterLPModbusAddress, 1)[0];
+
+                if (FilterLPModbusLastVal == 0)
+                {
+                    FilterLPModbusLastVal = FilterLPModbusVal;
+                }
+
+                if (FilterLPModbusLastVal != FilterLPModbusVal)
+                {
+                    EtHerG.Properties.Settings.Default.FilterLP = FilterLPModbusVal;
+                    EtHerG.Properties.Settings.Default.Save();
+                }
+                FilterLPModbusLastVal = FilterLPModbusVal;
+            }
+
+
+            //Read FilterHP
+            if (EtHerG.Properties.Settings.Default.FilterHPModbusAddress != 0 && ModbusCon)
+            {
+                FilterHPModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FilterHPModbusAddress, 1)[0];
+
+                if (FilterHPModbusLastVal == 0)
+                {
+                    FilterHPModbusLastVal = FilterHPModbusVal;
+                }
+
+                if (FilterHPModbusLastVal != FilterHPModbusVal)
+                {
+                    EtHerG.Properties.Settings.Default.FilterHP = FilterHPModbusVal;
+                    EtHerG.Properties.Settings.Default.Save();
+                }
+                FilterHPModbusLastVal = FilterHPModbusVal;
             }
         }
 
@@ -1012,6 +983,8 @@ namespace EtHerG
             panelInfluxDBSettings.Visible = true;
             lblMaxPointsSettable.Visible = true;
             txtMaxPoints.Visible = true;
+            btnLogin.Visible = false;
+            btnLogout.Visible = true;
         }
 
         private void LoggedOut()
@@ -1021,6 +994,8 @@ namespace EtHerG
             panelInfluxDBSettings.Visible = false;
             lblMaxPointsSettable.Visible = false;
             txtMaxPoints.Visible = false;
+            btnLogin.Visible = true;
+            btnLogout.Visible = false;
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
