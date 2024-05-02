@@ -66,7 +66,6 @@ namespace EtHerG
         private System.Timers.Timer ModbusTimer; //Cycle Timer to read from Modbus
         private System.Timers.Timer Alarm1Timer; //Alarm Debouncing function
         private System.Timers.Timer Alarm2Timer;
-        private System.Timers.Timer initTimer; //Timer after which it will run certain functions on startup
         private System.Timers.Timer AlarmStartupBlock; //Timer which will block alarms upon startup for some time
 
         public long SumX1; //Sum used to calculate the Average (it will sum the values and then divide them by the Change divider
@@ -137,19 +136,6 @@ namespace EtHerG
                 resetTimer.Start();
 
 
-
-                // Remove the initTimer after Testing!!!
-
-
-                //initTimer = new System.Timers.Timer(1000); 
-                //initTimer.Elapsed += initTimer_Elapsed;
-                //initTimer.AutoReset = false;
-                //initTimer.Start();
-
-
-                // Remove Above! !
-                
-
                 ModbusTimer = new System.Timers.Timer(30);
                 //30ms is the update time for the EasyE4, other devices might feature a different update timme. 
                 ModbusTimer.Elapsed += ModbusTimer_Elapsed;
@@ -158,7 +144,7 @@ namespace EtHerG
 
 
                 //Every Time Alarm1 or Alarm2 is activated, it will write the specified Modbus Coil to high for one second since the last time it has been activated
-                Alarm1Timer = new System.Timers.Timer(1000); 
+                Alarm1Timer = new System.Timers.Timer(1000);
                 Alarm1Timer.Elapsed += Alarm1Timer_Elapsed;
 
                 Alarm2Timer = new System.Timers.Timer(1000);
@@ -242,7 +228,7 @@ namespace EtHerG
                 txtScatterDiagColor.Text = EtHerG.Properties.Settings.Default.ScatterDiagColor;
                 chkScatterDrawPoints.Checked = EtHerG.Properties.Settings.Default.ScatterDiagDrawPoints;
                 txtMaxPoints.Text = EtHerG.Properties.Settings.Default.MaxPoints.ToString();
-
+                chkEqualGain.Checked = EtHerG.Properties.Settings.Default.EqualGain;
 
                 formLineDiag.Location = new Point(EtHerG.Properties.Settings.Default.LineDiagPosX, EtHerG.Properties.Settings.Default.LineDiagPosY);
                 formLineDiag.Size = new Size(EtHerG.Properties.Settings.Default.LineDiagSizeX, EtHerG.Properties.Settings.Default.LineDiagSizeY);
@@ -285,15 +271,6 @@ namespace EtHerG
             counter = 0;
         }
 
-        //REMOVE BELOW IF POSSIBLE!!!
-
-        //private void initTimer_Elapsed(object? sender, ElapsedEventArgs e)
-        //{
-        //    FormatDiags();
-        //}
-
-        // REMOVE ABOVE IF POSSIBLE !! 
-
         private void ModbusTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             //If the Modbusworker isnt busy right now (which would be fine) it will run the Background Worker every 30ms to check all the Modbus Values.
@@ -309,26 +286,44 @@ namespace EtHerG
         {
             //This will reset the specified Alarm1 Modbus Address Coil 
             Alarm1Timer.Stop();
-            modbusMaster.WriteSingleCoil(1, EtHerG.Properties.Settings.Default.Alarm1ModbusAddress, false);
             Alarm1SingleWrite = false;
+
+            if (ModbusCon) { modbusMaster.WriteSingleCoil(1, EtHerG.Properties.Settings.Default.Alarm1ModbusAddress, false); }
+
+            if (EtHerG.Properties.Settings.Default.InfluxDBEnabled)
+            {
+                var alarmData = PointData.Measurement("Alarms")
+                    .Tag("device", EtHerG.Properties.Settings.Default.InfluxDBMachine)
+                    .Field("Alarm1", false)
+                    .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
+
+                influxDBClient.GetWriteApi().WritePoint(alarmData, EtHerG.Properties.Settings.Default.InfluxDBBucket, EtHerG.Properties.Settings.Default.InfluxDBOrgID);
+            }
         }
 
         private void Alarm2Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             //This will reset the specified Alarm2 Modbus Address Coil 
             Alarm2Timer.Stop();
-            modbusMaster.WriteSingleCoil(1, EtHerG.Properties.Settings.Default.Alarm2ModbusAddress, false);
             Alarm2SingleWrite = false;
+
+            if (ModbusCon) { modbusMaster.WriteSingleCoil(1, EtHerG.Properties.Settings.Default.Alarm2ModbusAddress, false); }
+
+            if (EtHerG.Properties.Settings.Default.InfluxDBEnabled)
+            {
+                var alarmData = PointData.Measurement("Alarms")
+                    .Tag("device", EtHerG.Properties.Settings.Default.InfluxDBMachine)
+                    .Field("Alarm2", false)
+                    .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
+
+                influxDBClient.GetWriteApi().WritePoint(alarmData, EtHerG.Properties.Settings.Default.InfluxDBBucket, EtHerG.Properties.Settings.Default.InfluxDBOrgID);
+            }
         }
 
         private void AlarmStartupBlock_Elapsed(object? sender, ElapsedEventArgs e)
         {
             AlarmReady = true;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
 
         private void FormatDiags()
         {
@@ -411,7 +406,7 @@ namespace EtHerG
                 DisplayX1 = X1 - AverageX1; //Now Apply my Offset to the measured Values to create the functional Value it should Display. 
                 DisplayY1 = Y1 - AverageY1;
 
-                
+
                 //I have these Locked Down to limit access to the lists between my background worker and this method.
                 //Without the Lock there will be conflicts between reading and clearing the list 
                 //Here it will add the Offset X/Y Values to the lists for the Line and Scatter Diagrams 
@@ -506,7 +501,7 @@ namespace EtHerG
                 {
                     singleWriteFlag = true;
                     if (ModbusCon) { modbusMaster.WriteSingleCoil(1, alarmModbusAddress, true); }
-                    
+
                     if (EtHerG.Properties.Settings.Default.InfluxDBEnabled)
                     {
                         var alarmData = PointData.Measurement("Alarms")
@@ -608,7 +603,7 @@ namespace EtHerG
                 lastSpecifiedXValues.RemoveRange(0, (lastSpecifiedXValues.Count - EtHerG.Properties.Settings.Default.ScatterPoints));
                 lastSpecifiedYValues.RemoveRange(0, (lastSpecifiedYValues.Count - EtHerG.Properties.Settings.Default.ScatterPoints));
             }
-            
+
         }
 
         private void Form1_FormClosing(object? sender, FormClosingEventArgs e)
@@ -641,127 +636,127 @@ namespace EtHerG
 
         private void ModbusWorker_DoWork(object? sender, DoWorkEventArgs e)
         {
-                if (EtHerG.Properties.Settings.Default.PlayModbusAddress != 0 && ModbusCon)
+            if (EtHerG.Properties.Settings.Default.PlayModbusAddress != 0 && ModbusCon)
+            {
+                play = modbusMaster.ReadCoils(1, EtHerG.Properties.Settings.Default.PlayModbusAddress, 1)[0];
+                Invoke(new Action(() =>
                 {
-                    play = modbusMaster.ReadCoils(1, EtHerG.Properties.Settings.Default.PlayModbusAddress, 1)[0];
-                    Invoke(new Action(() =>
-                    {
-                        txtPlayLastModbusValue.Text = play.ToString();
-                    }));
-                }
+                    txtPlayLastModbusValue.Text = play.ToString();
+                }));
+            }
 
-                //Try this and Delete Later 
-                ////Read Frequency
-                //if (EtHerG.Properties.Settings.Default.FrequencyModbusAddress != 0 && ModbusCon)
-                //{
-                //    FrequencyModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FrequencyModbusAddress, 1)[0];
+            //Try this and Delete Later 
+            ////Read Frequency
+            //if (EtHerG.Properties.Settings.Default.FrequencyModbusAddress != 0 && ModbusCon)
+            //{
+            //    FrequencyModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FrequencyModbusAddress, 1)[0];
 
-                //    if (FrequencyModbusLastVal == 0)
-                //    {
-                //        FrequencyModbusLastVal = FrequencyModbusVal;
-                //    }
+            //    if (FrequencyModbusLastVal == 0)
+            //    {
+            //        FrequencyModbusLastVal = FrequencyModbusVal;
+            //    }
 
-                //    if (FrequencyModbusLastVal != FrequencyModbusVal)
-                //    {
-                //        EtHerG.Properties.Settings.Default.Frequency = FrequencyModbusVal;
-                //        EtHerG.Properties.Settings.Default.Save();
-                //    }
-                //    FrequencyModbusLastVal = FrequencyModbusVal;
-                //}
+            //    if (FrequencyModbusLastVal != FrequencyModbusVal)
+            //    {
+            //        EtHerG.Properties.Settings.Default.Frequency = FrequencyModbusVal;
+            //        EtHerG.Properties.Settings.Default.Save();
+            //    }
+            //    FrequencyModbusLastVal = FrequencyModbusVal;
+            //}
 
 
 
-                ////Read GainX
-                //if (EtHerG.Properties.Settings.Default.GainXModbusAddress != 0 && ModbusCon)
-                //{
-                //    GainXModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.GainXModbusAddress, 1)[0];
+            ////Read GainX
+            //if (EtHerG.Properties.Settings.Default.GainXModbusAddress != 0 && ModbusCon)
+            //{
+            //    GainXModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.GainXModbusAddress, 1)[0];
 
-                //    if (GainXModbusLastVal == 0)
-                //    {
-                //        GainXModbusLastVal = GainXModbusVal;
-                //    }
+            //    if (GainXModbusLastVal == 0)
+            //    {
+            //        GainXModbusLastVal = GainXModbusVal;
+            //    }
 
-                //    if (GainXModbusLastVal != GainXModbusVal)
-                //    {
-                //        EtHerG.Properties.Settings.Default.GainX = GainXModbusVal;
-                //        EtHerG.Properties.Settings.Default.Save();
-                //    }
-                //    GainXModbusLastVal = GainXModbusVal;
-                //}
+            //    if (GainXModbusLastVal != GainXModbusVal)
+            //    {
+            //        EtHerG.Properties.Settings.Default.GainX = GainXModbusVal;
+            //        EtHerG.Properties.Settings.Default.Save();
+            //    }
+            //    GainXModbusLastVal = GainXModbusVal;
+            //}
 
-                ////Read GainY
-                //if (EtHerG.Properties.Settings.Default.GainYModbusAddress != 0 && ModbusCon)
-                //{
-                //    GainYModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.GainYModbusAddress, 1)[0];
+            ////Read GainY
+            //if (EtHerG.Properties.Settings.Default.GainYModbusAddress != 0 && ModbusCon)
+            //{
+            //    GainYModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.GainYModbusAddress, 1)[0];
 
-                //    if (GainYModbusLastVal == 0)
-                //    {
-                //        GainYModbusLastVal = GainYModbusVal;
-                //    }
+            //    if (GainYModbusLastVal == 0)
+            //    {
+            //        GainYModbusLastVal = GainYModbusVal;
+            //    }
 
-                //    if (GainYModbusLastVal != GainYModbusVal)
-                //    {
-                //        EtHerG.Properties.Settings.Default.GainY = GainYModbusVal;
-                //        EtHerG.Properties.Settings.Default.Save();
-                //    }
-                //    GainYModbusLastVal = GainYModbusVal;
-                //}
+            //    if (GainYModbusLastVal != GainYModbusVal)
+            //    {
+            //        EtHerG.Properties.Settings.Default.GainY = GainYModbusVal;
+            //        EtHerG.Properties.Settings.Default.Save();
+            //    }
+            //    GainYModbusLastVal = GainYModbusVal;
+            //}
 
-                ////Read Phase
-                //if (EtHerG.Properties.Settings.Default.PhaseModbusAddress != 0 && ModbusCon)
-                //{
-                //    PhaseModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.PhaseModbusAddress, 1)[0];
+            ////Read Phase
+            //if (EtHerG.Properties.Settings.Default.PhaseModbusAddress != 0 && ModbusCon)
+            //{
+            //    PhaseModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.PhaseModbusAddress, 1)[0];
 
-                //    if (PhaseModbusLastVal == 0)
-                //    {
-                //        PhaseModbusLastVal = PhaseModbusVal;
-                //    }
+            //    if (PhaseModbusLastVal == 0)
+            //    {
+            //        PhaseModbusLastVal = PhaseModbusVal;
+            //    }
 
-                //    if (PhaseModbusLastVal != PhaseModbusVal)
-                //    {
-                //        EtHerG.Properties.Settings.Default.Phase = PhaseModbusVal;
-                //        EtHerG.Properties.Settings.Default.Save();
-                //    }
-                //    PhaseModbusLastVal = PhaseModbusVal;
-                //}
-
-
-                ////Read FilterLP
-                //if (EtHerG.Properties.Settings.Default.FilterLPModbusAddress != 0 && ModbusCon)
-                //{
-                //    FilterLPModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FilterLPModbusAddress, 1)[0];
-
-                //    if (FilterLPModbusLastVal == 0)
-                //    {
-                //        FilterLPModbusLastVal = FilterLPModbusVal;
-                //    }
-
-                //    if (FilterLPModbusLastVal != FilterLPModbusVal)
-                //    {
-                //        EtHerG.Properties.Settings.Default.FilterLP = FilterLPModbusVal;
-                //        EtHerG.Properties.Settings.Default.Save();
-                //    }
-                //    FilterLPModbusLastVal = FilterLPModbusVal;
-                //}
+            //    if (PhaseModbusLastVal != PhaseModbusVal)
+            //    {
+            //        EtHerG.Properties.Settings.Default.Phase = PhaseModbusVal;
+            //        EtHerG.Properties.Settings.Default.Save();
+            //    }
+            //    PhaseModbusLastVal = PhaseModbusVal;
+            //}
 
 
-                ////Read FilterHP
-                //if (EtHerG.Properties.Settings.Default.FilterHPModbusAddress != 0 && ModbusCon)
-                //{
-                //    FilterHPModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FilterHPModbusAddress, 1)[0];
+            ////Read FilterLP
+            //if (EtHerG.Properties.Settings.Default.FilterLPModbusAddress != 0 && ModbusCon)
+            //{
+            //    FilterLPModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FilterLPModbusAddress, 1)[0];
 
-                //    if (FilterHPModbusLastVal == 0)
-                //    {
-                //        FilterHPModbusLastVal = FilterHPModbusVal;
-                //    }
+            //    if (FilterLPModbusLastVal == 0)
+            //    {
+            //        FilterLPModbusLastVal = FilterLPModbusVal;
+            //    }
 
-                //    if (FilterHPModbusLastVal != FilterHPModbusVal)
-                //    {
-                //        EtHerG.Properties.Settings.Default.FilterHP = FilterHPModbusVal;
-                //        EtHerG.Properties.Settings.Default.Save();
-                //    }
-                //    FilterHPModbusLastVal = FilterHPModbusVal;
-                //}
+            //    if (FilterLPModbusLastVal != FilterLPModbusVal)
+            //    {
+            //        EtHerG.Properties.Settings.Default.FilterLP = FilterLPModbusVal;
+            //        EtHerG.Properties.Settings.Default.Save();
+            //    }
+            //    FilterLPModbusLastVal = FilterLPModbusVal;
+            //}
+
+
+            ////Read FilterHP
+            //if (EtHerG.Properties.Settings.Default.FilterHPModbusAddress != 0 && ModbusCon)
+            //{
+            //    FilterHPModbusVal = modbusMaster.ReadHoldingRegisters(1, EtHerG.Properties.Settings.Default.FilterHPModbusAddress, 1)[0];
+
+            //    if (FilterHPModbusLastVal == 0)
+            //    {
+            //        FilterHPModbusLastVal = FilterHPModbusVal;
+            //    }
+
+            //    if (FilterHPModbusLastVal != FilterHPModbusVal)
+            //    {
+            //        EtHerG.Properties.Settings.Default.FilterHP = FilterHPModbusVal;
+            //        EtHerG.Properties.Settings.Default.Save();
+            //    }
+            //    FilterHPModbusLastVal = FilterHPModbusVal;
+            //}
 
             ReadAndUpdateSettings(EtHerG.Properties.Settings.Default.FrequencyModbusAddress, ref FrequencyModbusLastVal, ref FrequencyModbusVal, "Frequency");
             ReadAndUpdateSettings(EtHerG.Properties.Settings.Default.GainXModbusAddress, ref GainXModbusLastVal, ref GainXModbusVal, "GainX");
@@ -1506,36 +1501,86 @@ namespace EtHerG
                     break;
 
                 case "GainX":
-                    ether.WriteToInstrument(1, 0, "<GAIN_X>" + EtHerG.Properties.Settings.Default.GainX * 10 + "</GAIN_X>");
-                    Invoke(new Action(() =>
+                    if (EtHerG.Properties.Settings.Default.EqualGain)
                     {
-                        txtGainXLast.Text = EtHerG.Properties.Settings.Default.GainX.ToString();
-                        if (ModbusCon)
+                        float EqualGain = EtHerG.Properties.Settings.Default.GainX;
+                        EtHerG.Properties.Settings.Default.GainY = EtHerG.Properties.Settings.Default.GainX;
+                        EtHerG.Properties.Settings.Default.Save();
+                        ether.WriteToInstrument(1, 0, "<GAIN_X>" + EqualGain * 10 + "</GAIN_X>");
+                        ether.WriteToInstrument(1, 0, "<GAIN_Y>" + EqualGain * 10 + "</GAIN_Y>");
+                        Invoke(new Action(() =>
                         {
-                            txtGainXLastModbusValue.Text = GainXModbusVal.ToString();
-                            if (EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled)
+                            txtGainXLast.Text = EqualGain.ToString();
+                            txtGainYLast.Text = EqualGain.ToString();
+                            if (ModbusCon)
                             {
-                                modbusMaster.WriteSingleRegister(1, EtHerG.Properties.Settings.Default.GainXModbusLastSendAddress, Convert.ToUInt16(EtHerG.Properties.Settings.Default.GainX));
+                                txtGainXLastModbusValue.Text = EqualGain.ToString();
+                                txtGainYLastModbusValue.Text = EqualGain.ToString();
+                                if (EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled)
+                                {
+                                    modbusMaster.WriteSingleRegister(1, EtHerG.Properties.Settings.Default.GainXModbusLastSendAddress, Convert.ToUInt16(EqualGain));
+                                    modbusMaster.WriteSingleRegister(1, EtHerG.Properties.Settings.Default.GainYModbusLastSendAddress, Convert.ToUInt16(EqualGain));
+                                }
                             }
-                        }
-                    }));
+                        }));
+                    }
+                    else
+                    {
+                        ether.WriteToInstrument(1, 0, "<GAIN_X>" + EtHerG.Properties.Settings.Default.GainX * 10 + "</GAIN_X>");
+                        Invoke(new Action(() =>
+                        {
+                            txtGainXLast.Text = EtHerG.Properties.Settings.Default.GainX.ToString();
+                            if (ModbusCon)
+                            {
+                                txtGainXLastModbusValue.Text = GainXModbusVal.ToString();
+                                if (EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled)
+                                {
+                                    modbusMaster.WriteSingleRegister(1, EtHerG.Properties.Settings.Default.GainXModbusLastSendAddress, Convert.ToUInt16(EtHerG.Properties.Settings.Default.GainX));
+                                }
+                            }
+                        }));
+                    }
                     break;
 
                 case "GainY":
-                    ether.WriteToInstrument(1, 0, "<GAIN_Y>" + EtHerG.Properties.Settings.Default.GainY * 10 + "</GAIN_Y>");
-                    Invoke(new Action(() =>
+                    if (EtHerG.Properties.Settings.Default.EqualGain)
                     {
-                        txtGainYLast.Text = EtHerG.Properties.Settings.Default.GainY.ToString();
-                        if (ModbusCon)
+                        float EqualGain = EtHerG.Properties.Settings.Default.GainY;
+                        ether.WriteToInstrument(1, 0, "<GAIN_X>" + EqualGain * 10 + "</GAIN_X>");
+                        ether.WriteToInstrument(1, 0, "<GAIN_Y>" + EqualGain * 10 + "</GAIN_Y>");
+                        Invoke(new Action(() =>
                         {
-                            txtGainYLastModbusValue.Text = GainYModbusVal.ToString();
-                            if (EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled)
+                            txtGainXLast.Text = EqualGain.ToString();
+                            txtGainYLast.Text = EqualGain.ToString();
+                            txtGainXUserInput.Text = EqualGain.ToString();
+                            if (ModbusCon)
                             {
-                                modbusMaster.WriteSingleRegister(1, EtHerG.Properties.Settings.Default.GainYModbusLastSendAddress, Convert.ToUInt16(EtHerG.Properties.Settings.Default.GainY));
+                                txtGainXLastModbusValue.Text = EqualGain.ToString();
+                                txtGainYLastModbusValue.Text = EqualGain.ToString();
+                                if (EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled)
+                                {
+                                    modbusMaster.WriteSingleRegister(1, EtHerG.Properties.Settings.Default.GainXModbusLastSendAddress, Convert.ToUInt16(EqualGain));
+                                    modbusMaster.WriteSingleRegister(1, EtHerG.Properties.Settings.Default.GainYModbusLastSendAddress, Convert.ToUInt16(EqualGain));
+                                }
                             }
-                        }
-                    }));
-
+                        }));
+                    }
+                    else
+                    {
+                        ether.WriteToInstrument(1, 0, "<GAIN_Y>" + EtHerG.Properties.Settings.Default.GainY * 10 + "</GAIN_Y>");
+                        Invoke(new Action(() =>
+                        {
+                            txtGainYLast.Text = EtHerG.Properties.Settings.Default.GainY.ToString();
+                            if (ModbusCon)
+                            {
+                                txtGainYLastModbusValue.Text = GainYModbusVal.ToString();
+                                if (EtHerG.Properties.Settings.Default.ModbusLastSentAddressEnabled)
+                                {
+                                    modbusMaster.WriteSingleRegister(1, EtHerG.Properties.Settings.Default.GainYModbusLastSendAddress, Convert.ToUInt16(EtHerG.Properties.Settings.Default.GainY));
+                                }
+                            }
+                        }));
+                    }
                     break;
 
                 case "Phase":
@@ -1654,6 +1699,8 @@ namespace EtHerG
                 // If any InfluxDB property is null or empty, display a single MessageBox with the list of properties
                 if (PropertiesSetToZeroOrNull.Any())
                 {
+                    chkInfluxDBEnabled.Checked = false;
+
                     string message = InternationalizationMissingProperties;
 
                     // Add each InfluxDB property to the message with a new line
@@ -1663,6 +1710,7 @@ namespace EtHerG
                     }
 
                     MessageBox.Show(message);
+
                 }
                 else
                 {
@@ -1836,6 +1884,7 @@ namespace EtHerG
                     InternationalizationMissingProperties = "The following properties are still set to 0 or null:\n";
                     InternationalizationModbusConnectionFailed = "Modbus Connection Failed";
                     InternationalizationFalseColor = "Please use a valid Hex Color Code";
+                    chkEqualGain.Text = "Gain X = Gain Y";
                     txtEtherStatus.Location = new Point(944, 11);
                     txtModbusStatus.Location = new Point(944, 33);
                     break;
@@ -1883,6 +1932,7 @@ namespace EtHerG
                     InternationalizationMissingProperties = "Die folgenden Eigenschaften sind immer noch auf 0 oder null gesetzt:\n";
                     InternationalizationModbusConnectionFailed = "Modbus Verbindung fehlgeschlagen!";
                     InternationalizationFalseColor = "Bitte verwenden Sie einen gültigen Hex-Farb-Code!";
+                    chkEqualGain.Text = "Empf. X = Empf. Y";
                     txtEtherStatus.Location = new Point(960, 11);
                     txtModbusStatus.Location = new Point(960, 33);
                     break;
@@ -1929,6 +1979,7 @@ namespace EtHerG
                     InternationalizationConnectionFailed = "Połączenie nie powiodło się";
                     InternationalizationMissingProperties = "Następujące właściwości są nadal ustawione na 0 lub null:\n";
                     InternationalizationFalseColor = "Proszę użyć prawidłowego kodu koloru w formacie szesnastkowym.";
+                    chkEqualGain.Text = "Wzmocnienie X = Wzmocnienie Y";
                     txtEtherStatus.Location = new Point(1030, 11);
                     txtModbusStatus.Location = new Point(1030, 33);
                     break;
@@ -2101,6 +2152,13 @@ namespace EtHerG
                     MouseWheelDebounce = now;
                 }
             }
+        }
+
+        private void chkEqualGain_CheckedChanged(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.EqualGain = chkEqualGain.Checked;
+            EtHerG.Properties.Settings.Default.Save();
+            txtGainYUserInput.Visible = !EtHerG.Properties.Settings.Default.EqualGain;
         }
     }
 }

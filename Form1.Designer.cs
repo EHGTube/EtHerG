@@ -71,6 +71,7 @@
             formScatter = new ScottPlot.WinForms.FormsPlot();
             tabPage2 = new TabPage();
             panel1 = new Panel();
+            chkEqualGain = new CheckBox();
             panelPassword = new Panel();
             txtSetPassword = new TextBox();
             chkAutologin = new CheckBox();
@@ -626,6 +627,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(chkEqualGain);
             panel1.Controls.Add(panelPassword);
             panel1.Controls.Add(panelInfluxDBSettings);
             panel1.Controls.Add(panelModbusSettings);
@@ -681,6 +683,17 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1890, 1007);
             panel1.TabIndex = 54;
+            // 
+            // chkEqualGain
+            // 
+            chkEqualGain.Location = new Point(106, 720);
+            chkEqualGain.Name = "chkEqualGain";
+            chkEqualGain.Size = new Size(220, 19);
+            chkEqualGain.TabIndex = 25;
+            chkEqualGain.Text = "GainX = GainY";
+            chkEqualGain.TextAlign = ContentAlignment.MiddleCenter;
+            chkEqualGain.UseVisualStyleBackColor = true;
+            chkEqualGain.CheckedChanged += chkEqualGain_CheckedChanged;
             // 
             // panelPassword
             // 
@@ -746,7 +759,7 @@
             chkInfluxDBEnabled.Location = new Point(224, 25);
             chkInfluxDBEnabled.Name = "chkInfluxDBEnabled";
             chkInfluxDBEnabled.Size = new Size(116, 19);
-            chkInfluxDBEnabled.TabIndex = 46;
+            chkInfluxDBEnabled.TabIndex = 100;
             chkInfluxDBEnabled.Text = "InfluxDB Enabled";
             chkInfluxDBEnabled.UseVisualStyleBackColor = true;
             chkInfluxDBEnabled.CheckedChanged += chkInfluxDBEnabled_CheckedChanged;
@@ -801,7 +814,7 @@
             txtInfluxDBServer.Location = new Point(223, 50);
             txtInfluxDBServer.Name = "txtInfluxDBServer";
             txtInfluxDBServer.Size = new Size(100, 23);
-            txtInfluxDBServer.TabIndex = 47;
+            txtInfluxDBServer.TabIndex = 101;
             txtInfluxDBServer.LostFocus += txtInfluxDBServer_LostFocus;
             // 
             // txtInfluxDBToken
@@ -809,7 +822,7 @@
             txtInfluxDBToken.Location = new Point(223, 79);
             txtInfluxDBToken.Name = "txtInfluxDBToken";
             txtInfluxDBToken.Size = new Size(100, 23);
-            txtInfluxDBToken.TabIndex = 48;
+            txtInfluxDBToken.TabIndex = 102;
             txtInfluxDBToken.LostFocus += txtInfluxDBToken_LostFocus;
             // 
             // txtInfluxDBBucket
@@ -817,7 +830,7 @@
             txtInfluxDBBucket.Location = new Point(223, 108);
             txtInfluxDBBucket.Name = "txtInfluxDBBucket";
             txtInfluxDBBucket.Size = new Size(100, 23);
-            txtInfluxDBBucket.TabIndex = 49;
+            txtInfluxDBBucket.TabIndex = 103;
             txtInfluxDBBucket.LostFocus += txtInfluxDBBucket_LostFocus;
             // 
             // txtInfluxDBOrg
@@ -825,7 +838,7 @@
             txtInfluxDBOrg.Location = new Point(223, 137);
             txtInfluxDBOrg.Name = "txtInfluxDBOrg";
             txtInfluxDBOrg.Size = new Size(100, 23);
-            txtInfluxDBOrg.TabIndex = 50;
+            txtInfluxDBOrg.TabIndex = 104;
             txtInfluxDBOrg.LostFocus += txtInfluxDBOrg_LostFocus;
             // 
             // txtInfluxDBMachine
@@ -833,7 +846,7 @@
             txtInfluxDBMachine.Location = new Point(223, 166);
             txtInfluxDBMachine.Name = "txtInfluxDBMachine";
             txtInfluxDBMachine.Size = new Size(100, 23);
-            txtInfluxDBMachine.TabIndex = 51;
+            txtInfluxDBMachine.TabIndex = 105;
             txtInfluxDBMachine.LostFocus += txtInfluxDBMachine_LostFocus;
             // 
             // lblInfluxDBMachineName
@@ -900,7 +913,7 @@
             lblModbusAlarmExpl.Location = new Point(197, 354);
             lblModbusAlarmExpl.Name = "lblModbusAlarmExpl";
             lblModbusAlarmExpl.Size = new Size(328, 45);
-            lblModbusAlarmExpl.TabIndex = 108;
+            lblModbusAlarmExpl.TabIndex = 1000;
             lblModbusAlarmExpl.Text = "Play is the Coil Address to Start/Stop the Measurement\r\nAlarm 1 and Alarm 2 Addresses will be the \r\nCoil Addresses which will be written when the Alarm is active";
             // 
             // txtPlayModbusAddress
@@ -908,7 +921,7 @@
             txtPlayModbusAddress.Location = new Point(79, 147);
             txtPlayModbusAddress.Name = "txtPlayModbusAddress";
             txtPlayModbusAddress.Size = new Size(100, 23);
-            txtPlayModbusAddress.TabIndex = 30;
+            txtPlayModbusAddress.TabIndex = 53;
             txtPlayModbusAddress.LostFocus += txtPlayModbusAddress_LostFocus;
             // 
             // lblPhase1
@@ -976,10 +989,10 @@
             // 
             // txtFrequencyModbusAddress
             // 
-            txtFrequencyModbusAddress.Location = new Point(78, 176);
+            txtFrequencyModbusAddress.Location = new Point(79, 176);
             txtFrequencyModbusAddress.Name = "txtFrequencyModbusAddress";
             txtFrequencyModbusAddress.Size = new Size(100, 23);
-            txtFrequencyModbusAddress.TabIndex = 31;
+            txtFrequencyModbusAddress.TabIndex = 54;
             txtFrequencyModbusAddress.LostFocus += txtFrequencyModbusAddress_LostFocus;
             // 
             // txtGainXModbusAddress
@@ -987,7 +1000,7 @@
             txtGainXModbusAddress.Location = new Point(78, 205);
             txtGainXModbusAddress.Name = "txtGainXModbusAddress";
             txtGainXModbusAddress.Size = new Size(100, 23);
-            txtGainXModbusAddress.TabIndex = 32;
+            txtGainXModbusAddress.TabIndex = 55;
             txtGainXModbusAddress.LostFocus += txtGainXModbusAddress_LostFocus;
             // 
             // txtGainYModbusAddress
@@ -995,7 +1008,7 @@
             txtGainYModbusAddress.Location = new Point(78, 234);
             txtGainYModbusAddress.Name = "txtGainYModbusAddress";
             txtGainYModbusAddress.Size = new Size(100, 23);
-            txtGainYModbusAddress.TabIndex = 33;
+            txtGainYModbusAddress.TabIndex = 56;
             txtGainYModbusAddress.LostFocus += txtGainYModbusAddress_LostFocus;
             // 
             // txtModbusServerPort
@@ -1003,7 +1016,7 @@
             txtModbusServerPort.Location = new Point(130, 64);
             txtModbusServerPort.Name = "txtModbusServerPort";
             txtModbusServerPort.Size = new Size(100, 23);
-            txtModbusServerPort.TabIndex = 29;
+            txtModbusServerPort.TabIndex = 52;
             txtModbusServerPort.LostFocus += txtModbusServerPort_LostFocus;
             // 
             // txtPhaseModbusAddress
@@ -1011,7 +1024,7 @@
             txtPhaseModbusAddress.Location = new Point(78, 263);
             txtPhaseModbusAddress.Name = "txtPhaseModbusAddress";
             txtPhaseModbusAddress.Size = new Size(100, 23);
-            txtPhaseModbusAddress.TabIndex = 34;
+            txtPhaseModbusAddress.TabIndex = 57;
             txtPhaseModbusAddress.LostFocus += txtPhaseModbusAddress_LostFocus;
             // 
             // txtFilterLPModbusAddress
@@ -1019,7 +1032,7 @@
             txtFilterLPModbusAddress.Location = new Point(78, 292);
             txtFilterLPModbusAddress.Name = "txtFilterLPModbusAddress";
             txtFilterLPModbusAddress.Size = new Size(100, 23);
-            txtFilterLPModbusAddress.TabIndex = 35;
+            txtFilterLPModbusAddress.TabIndex = 58;
             txtFilterLPModbusAddress.LostFocus += txtFilterLPModbusAddress_LostFocus;
             // 
             // txtModbusServerIP
@@ -1027,7 +1040,7 @@
             txtModbusServerIP.Location = new Point(130, 35);
             txtModbusServerIP.Name = "txtModbusServerIP";
             txtModbusServerIP.Size = new Size(100, 23);
-            txtModbusServerIP.TabIndex = 28;
+            txtModbusServerIP.TabIndex = 51;
             txtModbusServerIP.LostFocus += txtModbusServerIP_LostFocus;
             // 
             // txtFilterHPModbusAddress
@@ -1035,7 +1048,7 @@
             txtFilterHPModbusAddress.Location = new Point(78, 321);
             txtFilterHPModbusAddress.Name = "txtFilterHPModbusAddress";
             txtFilterHPModbusAddress.Size = new Size(100, 23);
-            txtFilterHPModbusAddress.TabIndex = 36;
+            txtFilterHPModbusAddress.TabIndex = 59;
             txtFilterHPModbusAddress.LostFocus += txtFilterHPModbusAddress_LostFocus;
             // 
             // txtPlayLastModbusValue
@@ -1044,7 +1057,7 @@
             txtPlayLastModbusValue.Name = "txtPlayLastModbusValue";
             txtPlayLastModbusValue.ReadOnly = true;
             txtPlayLastModbusValue.Size = new Size(100, 23);
-            txtPlayLastModbusValue.TabIndex = 101;
+            txtPlayLastModbusValue.TabIndex = 1001;
             txtPlayLastModbusValue.TabStop = false;
             // 
             // lblModbusServerPort
@@ -1071,7 +1084,7 @@
             txtFrequencyLastModbusValue.Name = "txtFrequencyLastModbusValue";
             txtFrequencyLastModbusValue.ReadOnly = true;
             txtFrequencyLastModbusValue.Size = new Size(100, 23);
-            txtFrequencyLastModbusValue.TabIndex = 102;
+            txtFrequencyLastModbusValue.TabIndex = 1002;
             txtFrequencyLastModbusValue.TabStop = false;
             // 
             // txtGainXLastModbusValue
@@ -1080,7 +1093,7 @@
             txtGainXLastModbusValue.Name = "txtGainXLastModbusValue";
             txtGainXLastModbusValue.ReadOnly = true;
             txtGainXLastModbusValue.Size = new Size(100, 23);
-            txtGainXLastModbusValue.TabIndex = 103;
+            txtGainXLastModbusValue.TabIndex = 1003;
             txtGainXLastModbusValue.TabStop = false;
             // 
             // txtGainYLastModbusValue
@@ -1089,7 +1102,7 @@
             txtGainYLastModbusValue.Name = "txtGainYLastModbusValue";
             txtGainYLastModbusValue.ReadOnly = true;
             txtGainYLastModbusValue.Size = new Size(100, 23);
-            txtGainYLastModbusValue.TabIndex = 104;
+            txtGainYLastModbusValue.TabIndex = 1004;
             txtGainYLastModbusValue.TabStop = false;
             // 
             // txtPhaseLastModbusValue
@@ -1098,7 +1111,7 @@
             txtPhaseLastModbusValue.Name = "txtPhaseLastModbusValue";
             txtPhaseLastModbusValue.ReadOnly = true;
             txtPhaseLastModbusValue.Size = new Size(100, 23);
-            txtPhaseLastModbusValue.TabIndex = 105;
+            txtPhaseLastModbusValue.TabIndex = 1005;
             txtPhaseLastModbusValue.TabStop = false;
             // 
             // txtFilterLPLastModbusValue
@@ -1107,7 +1120,7 @@
             txtFilterLPLastModbusValue.Name = "txtFilterLPLastModbusValue";
             txtFilterLPLastModbusValue.ReadOnly = true;
             txtFilterLPLastModbusValue.Size = new Size(100, 23);
-            txtFilterLPLastModbusValue.TabIndex = 106;
+            txtFilterLPLastModbusValue.TabIndex = 1006;
             txtFilterLPLastModbusValue.TabStop = false;
             // 
             // txtFilterHPLastModbusValue
@@ -1116,7 +1129,7 @@
             txtFilterHPLastModbusValue.Name = "txtFilterHPLastModbusValue";
             txtFilterHPLastModbusValue.ReadOnly = true;
             txtFilterHPLastModbusValue.Size = new Size(100, 23);
-            txtFilterHPLastModbusValue.TabIndex = 107;
+            txtFilterHPLastModbusValue.TabIndex = 1007;
             txtFilterHPLastModbusValue.TabStop = false;
             // 
             // lblModbusReadAdresses
@@ -1125,7 +1138,7 @@
             lblModbusReadAdresses.Location = new Point(64, 127);
             lblModbusReadAdresses.Name = "lblModbusReadAdresses";
             lblModbusReadAdresses.Size = new Size(129, 15);
-            lblModbusReadAdresses.TabIndex = 69;
+            lblModbusReadAdresses.TabIndex = 1008;
             lblModbusReadAdresses.Text = "Modbus Read Adresses";
             // 
             // lblModbusReadValue
@@ -1134,7 +1147,7 @@
             lblModbusReadValue.Location = new Point(198, 129);
             lblModbusReadValue.Name = "lblModbusReadValue";
             lblModbusReadValue.Size = new Size(105, 15);
-            lblModbusReadValue.TabIndex = 70;
+            lblModbusReadValue.TabIndex = 1009;
             lblModbusReadValue.Text = "ModbusReadValue";
             // 
             // chkDisableUserInput
@@ -1143,7 +1156,7 @@
             chkDisableUserInput.Location = new Point(78, 8);
             chkDisableUserInput.Name = "chkDisableUserInput";
             chkDisableUserInput.Size = new Size(121, 19);
-            chkDisableUserInput.TabIndex = 27;
+            chkDisableUserInput.TabIndex = 50;
             chkDisableUserInput.Text = "Disable User Input";
             chkDisableUserInput.UseVisualStyleBackColor = true;
             chkDisableUserInput.CheckedChanged += chkDisableUserInput_CheckedChanged;
@@ -1154,7 +1167,7 @@
             chkModbusLastSentAddressEnabled.Location = new Point(315, 151);
             chkModbusLastSentAddressEnabled.Name = "chkModbusLastSentAddressEnabled";
             chkModbusLastSentAddressEnabled.Size = new Size(201, 19);
-            chkModbusLastSentAddressEnabled.TabIndex = 39;
+            chkModbusLastSentAddressEnabled.TabIndex = 62;
             chkModbusLastSentAddressEnabled.Text = "Modbus Last Sent Value Enabled?";
             chkModbusLastSentAddressEnabled.UseVisualStyleBackColor = true;
             chkModbusLastSentAddressEnabled.CheckedChanged += chkModbusLastSentEnabled_CheckedChanged;
@@ -1173,7 +1186,7 @@
             txtFilterHPModbusLastSentAddress.Location = new Point(315, 321);
             txtFilterHPModbusLastSentAddress.Name = "txtFilterHPModbusLastSentAddress";
             txtFilterHPModbusLastSentAddress.Size = new Size(100, 23);
-            txtFilterHPModbusLastSentAddress.TabIndex = 45;
+            txtFilterHPModbusLastSentAddress.TabIndex = 68;
             txtFilterHPModbusLastSentAddress.LostFocus += txtFilterHPModbusLastSentAddress_LostFocus;
             // 
             // lblAlarm1ModbusSendAddress
@@ -1190,7 +1203,7 @@
             txtFilterLPModbusLastSentAddress.Location = new Point(315, 292);
             txtFilterLPModbusLastSentAddress.Name = "txtFilterLPModbusLastSentAddress";
             txtFilterLPModbusLastSentAddress.Size = new Size(100, 23);
-            txtFilterLPModbusLastSentAddress.TabIndex = 44;
+            txtFilterLPModbusLastSentAddress.TabIndex = 67;
             txtFilterLPModbusLastSentAddress.LostFocus += txtFilterLPModbusLastSentAddress_LostFocus;
             // 
             // txtAlarm1ModbusAddress
@@ -1198,7 +1211,7 @@
             txtAlarm1ModbusAddress.Location = new Point(78, 350);
             txtAlarm1ModbusAddress.Name = "txtAlarm1ModbusAddress";
             txtAlarm1ModbusAddress.Size = new Size(100, 23);
-            txtAlarm1ModbusAddress.TabIndex = 37;
+            txtAlarm1ModbusAddress.TabIndex = 60;
             txtAlarm1ModbusAddress.LostFocus += txtAlarm1ModbusAddress_LostFocus;
             // 
             // txtPhaseModbusLastSentAddress
@@ -1206,7 +1219,7 @@
             txtPhaseModbusLastSentAddress.Location = new Point(315, 263);
             txtPhaseModbusLastSentAddress.Name = "txtPhaseModbusLastSentAddress";
             txtPhaseModbusLastSentAddress.Size = new Size(100, 23);
-            txtPhaseModbusLastSentAddress.TabIndex = 43;
+            txtPhaseModbusLastSentAddress.TabIndex = 66;
             txtPhaseModbusLastSentAddress.LostFocus += txtPhaseModbusLastSentAddress_LostFocus;
             // 
             // txtAlarm2ModbusAddress
@@ -1214,7 +1227,7 @@
             txtAlarm2ModbusAddress.Location = new Point(79, 379);
             txtAlarm2ModbusAddress.Name = "txtAlarm2ModbusAddress";
             txtAlarm2ModbusAddress.Size = new Size(100, 23);
-            txtAlarm2ModbusAddress.TabIndex = 38;
+            txtAlarm2ModbusAddress.TabIndex = 61;
             txtAlarm2ModbusAddress.LostFocus += txtAlarm2ModbusAddress_LostFocus;
             // 
             // txtGainYModbusLastSentAddress
@@ -1222,7 +1235,7 @@
             txtGainYModbusLastSentAddress.Location = new Point(315, 234);
             txtGainYModbusLastSentAddress.Name = "txtGainYModbusLastSentAddress";
             txtGainYModbusLastSentAddress.Size = new Size(100, 23);
-            txtGainYModbusLastSentAddress.TabIndex = 42;
+            txtGainYModbusLastSentAddress.TabIndex = 65;
             txtGainYModbusLastSentAddress.LostFocus += txtGainYModbusLastSentAddress_LostFocus;
             // 
             // lblModbusLastSentValueAdress
@@ -1231,7 +1244,7 @@
             lblModbusLastSentValueAdress.Location = new Point(309, 129);
             lblModbusLastSentValueAdress.Name = "lblModbusLastSentValueAdress";
             lblModbusLastSentValueAdress.Size = new Size(133, 15);
-            lblModbusLastSentValueAdress.TabIndex = 77;
+            lblModbusLastSentValueAdress.TabIndex = 1010;
             lblModbusLastSentValueAdress.Text = "Last Sent Value Address:";
             // 
             // txtGainXModbusLastSentAddress
@@ -1239,7 +1252,7 @@
             txtGainXModbusLastSentAddress.Location = new Point(315, 205);
             txtGainXModbusLastSentAddress.Name = "txtGainXModbusLastSentAddress";
             txtGainXModbusLastSentAddress.Size = new Size(100, 23);
-            txtGainXModbusLastSentAddress.TabIndex = 41;
+            txtGainXModbusLastSentAddress.TabIndex = 64;
             txtGainXModbusLastSentAddress.LostFocus += txtGainXModbusLastSentAddress_LostFocus;
             // 
             // txtFrequencyModbusLastSentAddress
@@ -1247,20 +1260,20 @@
             txtFrequencyModbusLastSentAddress.Location = new Point(315, 176);
             txtFrequencyModbusLastSentAddress.Name = "txtFrequencyModbusLastSentAddress";
             txtFrequencyModbusLastSentAddress.Size = new Size(100, 23);
-            txtFrequencyModbusLastSentAddress.TabIndex = 40;
+            txtFrequencyModbusLastSentAddress.TabIndex = 63;
             txtFrequencyModbusLastSentAddress.LostFocus += txtFrequencyModbusLastSentAddress_LostFocus;
             // 
             // txtMaxPoints
             // 
-            txtMaxPoints.Location = new Point(224, 749);
+            txtMaxPoints.Location = new Point(224, 778);
             txtMaxPoints.Name = "txtMaxPoints";
             txtMaxPoints.Size = new Size(100, 23);
-            txtMaxPoints.TabIndex = 26;
+            txtMaxPoints.TabIndex = 27;
             txtMaxPoints.LostFocus += txtMaxPoints_LostFocus;
             // 
             // lblMaxPointsSettable
             // 
-            lblMaxPointsSettable.Location = new Point(23, 752);
+            lblMaxPointsSettable.Location = new Point(23, 782);
             lblMaxPointsSettable.Name = "lblMaxPointsSettable";
             lblMaxPointsSettable.Size = new Size(200, 15);
             lblMaxPointsSettable.TabIndex = 110;
@@ -1291,10 +1304,10 @@
             // 
             // chkScatterDrawPoints
             // 
-            chkScatterDrawPoints.Location = new Point(121, 720);
+            chkScatterDrawPoints.Location = new Point(106, 753);
             chkScatterDrawPoints.Name = "chkScatterDrawPoints";
-            chkScatterDrawPoints.Size = new Size(200, 19);
-            chkScatterDrawPoints.TabIndex = 25;
+            chkScatterDrawPoints.Size = new Size(220, 19);
+            chkScatterDrawPoints.TabIndex = 26;
             chkScatterDrawPoints.Text = "Scatter Draw Points?";
             chkScatterDrawPoints.TextAlign = ContentAlignment.MiddleCenter;
             chkScatterDrawPoints.UseVisualStyleBackColor = true;
@@ -1841,5 +1854,6 @@
         private Label lblModbusAlarmExpl;
         private Panel panelInfluxDBSettings;
         private Panel panelPassword;
+        private CheckBox chkEqualGain;
     }
 }
