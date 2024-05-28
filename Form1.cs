@@ -20,6 +20,8 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Windows.Forms;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace EtHerG
 {
@@ -72,10 +74,13 @@ namespace EtHerG
         public long SumY1;
         public Int32 AverageX1; //The Average Measured Value used to offset the current Value to the middle
         public Int32 AverageY1;
+        public int ChangeCounterStepper; //Test this, its supposed to 
+        public int ChangeCounterDivider; //Test this
         public int ChangeCounter;
         public int DisplayX1 = 0; //Corrected Measurement value (so its always in the middle) 
         public int DisplayY1 = 0;
-        public bool play = true; //can be controlled via Modbus to start / stop the measurement (machine running/tube in machine)
+        public bool Play = true; //can be controlled via Modbus to start / stop the measurement (machine running/tube in machine)
+        bool PlayModbusLastVal = false;
 
         public bool EtherConnected = false; //To block multiple connection attempts or disconnection attempts
         public bool login = false; //current login status 
@@ -96,7 +101,9 @@ namespace EtHerG
 
         private DateTime MouseWheelDebounce = DateTime.MinValue; //Debouncer for the MouseWheel Action so it will not send the parameters to modbus/influxdb/embedec on every mousewheel action
 
-
+        public double VectorLength;
+        private bool isClosing = false;
+        string lasterror = "";
 
         public Form1()
         {
@@ -229,6 +236,7 @@ namespace EtHerG
                 chkScatterDrawPoints.Checked = EtHerG.Properties.Settings.Default.ScatterDiagDrawPoints;
                 txtMaxPoints.Text = EtHerG.Properties.Settings.Default.MaxPoints.ToString();
                 chkEqualGain.Checked = EtHerG.Properties.Settings.Default.EqualGain;
+                txtAmountAveragePoints.Text = EtHerG.Properties.Settings.Default.AmountAveragePoints.ToString();
 
                 formLineDiag.Location = new Point(EtHerG.Properties.Settings.Default.LineDiagPosX, EtHerG.Properties.Settings.Default.LineDiagPosY);
                 formLineDiag.Size = new Size(EtHerG.Properties.Settings.Default.LineDiagSizeX, EtHerG.Properties.Settings.Default.LineDiagSizeY);
@@ -237,7 +245,7 @@ namespace EtHerG
 
                 Internationalization();
 
-                FormatDiags();
+                FormatLineDiag();
 
                 formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
 
@@ -265,10 +273,30 @@ namespace EtHerG
             {
                 Invoke(new Action(() =>
                 {
-                    txtPS.Text = counter.ToString();
+                    //I Put the If Condition in here to try and catch any write event when the form is closing. 
+                    if (!isClosing) { txtPS.Text = counter.ToString(); }
                 }));
             }
             counter = 0;
+
+
+            //I also added the Function in here to check if the Error String from the ether DLL has changed.
+            //If its changed it will add the errors to the list.
+            //Obviously only if we are actually connected.
+            if (EtherConnected)
+            {
+                string errorString = ether.GetError();
+
+                if (errorString != lasterror)
+                {
+                    Invoke(new Action(() =>
+                    {
+                        listEtherError.Items.Add(errorString);
+                    }));
+                }
+
+                lasterror = errorString;
+            }
         }
 
         private void ModbusTimer_Elapsed(object? sender, ElapsedEventArgs e)
@@ -325,7 +353,7 @@ namespace EtHerG
             AlarmReady = true;
         }
 
-        private void FormatDiags()
+        private void FormatLineDiag()
         {
             Invoke(new Action(() =>
             {
@@ -341,8 +369,7 @@ namespace EtHerG
                 StreamY.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.LineDiagColorY);
                 StreamY.ViewScrollLeft(); //This will Set up the Scroll Direction for StreamX
                 StreamX.ViewScrollLeft();
-                StreamX.ManageAxisLimits = false; //This will force that the LineDiagram will not auto size its diagram
-                StreamY.ManageAxisLimits = false;
+
 
                 //Yes the following Alarm naming scheme is confusing because im mixing the Alarm declarations for the Line Diagrams and the Alarm Naming which the User can specify. 
                 //Basically, the User can Specify Alarm1 (this will be Alarm 1 and Alarm 2 in the Diagram) and Alarm2 (which will be Alarm 3 and 4). 
@@ -365,10 +392,40 @@ namespace EtHerG
                 txtColorY.Enabled = false;
                 txtColorX.Enabled = false;
 
+                //TEST THIS:
+                formLineDiag.Plot.Axes.ContinuouslyAutoscale = true;
+                //StreamX.ManageAxisLimits = false; //This will force that the LineDiagram will not auto size its diagram
+                //StreamY.ManageAxisLimits = false;
+
                 //This will again force the Diagram into the User Specified Size, disable any interaction (so the User cannot scroll around in it maybe messing it up and Refresh the whole UI so it will load the Changes
-                formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
-                formLineDiag.Interaction.Disable();
+                //formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
+                //formLineDiag.Interaction.Disable(); //TEST THIS
                 formLineDiag.Refresh();
+            }));
+        }
+
+        public void FormatScatterDiag()
+        {
+            Invoke(new Action(() =>
+            {
+                //Then we clear the whole ScatterPlot and add all formatting again, starting with the Alarm Rectangles 
+                formScatter.Plot.Clear();
+                //var Alarm5 = formScatter.Plot.Add.Rectangle(-EtHerG.Properties.Settings.Default.Alarm1Value, EtHerG.Properties.Settings.Default.Alarm1Value, -EtHerG.Properties.Settings.Default.Alarm1Value, EtHerG.Properties.Settings.Default.Alarm1Value);
+                //var Alarm6 = formScatter.Plot.Add.Rectangle(-EtHerG.Properties.Settings.Default.Alarm2Value, EtHerG.Properties.Settings.Default.Alarm2Value, -EtHerG.Properties.Settings.Default.Alarm2Value, EtHerG.Properties.Settings.Default.Alarm2Value);
+
+                var Alarm5 = formScatter.Plot.Add.Circle(0, 0, EtHerG.Properties.Settings.Default.Alarm1Value);
+                var Alarm6 = formScatter.Plot.Add.Circle(0, 0, EtHerG.Properties.Settings.Default.Alarm2Value);
+                Alarm5.FillStyle.Color = ScottPlot.Color.FromHex("#D22B2B").WithAlpha(0);
+                Alarm6.FillStyle.Color = ScottPlot.Color.FromHex("#388e3c").WithAlpha(0);
+                Alarm5.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm1Color); // Alarm 1
+                Alarm6.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm2Color); // Alarm 2
+                Alarm5.LineStyle.Width = 3;
+                Alarm6.LineStyle.Width = 3;
+
+                //We will set the Size of the Diagram, Disable Interaction (so it cannot be scrolled around etc. and refresh the Diagram. 
+                formScatter.Plot.Axes.ContinuouslyAutoscale = true; //TEST THIS
+                //formScatter.Plot.Axes.SetLimits(-EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
+                formScatter.Interaction.Disable();
             }));
         }
 
@@ -377,10 +434,10 @@ namespace EtHerG
             //NewRealtimeData is the whole Method for Reading/Using Values from the EmbedEC. 
             counter++; //Adding a +1 to the Counter is the first Operation as no matter the Value of X1/Y1, it has run this method
 
-            if ((X1 > -50000 || X1 < 50000 || Y1 > -50000 || Y1 < 50000) && play)
+            if ((X1 > -50000 || X1 < 50000 || Y1 > -50000 || Y1 < 50000) && Play)
             {
                 //Sometimes the EmbedEC returns a crazy high/low Value so I just filter this out from the start. 
-                //Also I will only continue if play is true. This had to be changed up to here because the Offset Calculation shouldnt continue when theres no measurement active.
+                //Also I will only continue if Play is true. This had to be changed up to here because the Offset Calculation shouldnt continue when theres no measurement active.
                 //No Measurement active might mean no tube in machine which would result in a different average position due to different magnetic properties of tube present vs tube not present
                 //Maybe this has to be further tweaked. 
 
@@ -392,8 +449,25 @@ namespace EtHerG
                 SumX1 += Convert.ToInt64(X1);
                 SumY1 += Convert.ToInt64(Y1);
 
-                if (ChangeCounter >= 10000) //If the Counter exceeds 10000 we will create the Average Value, this can be changed. Perhaps you want a more accurate average or you want a faster reacting average. 
-                //10000 seems to be a good spot between accuracy and reaction time. Keep in Mind we are running at ~16.000 Meaasurements per Second
+
+                //The ChangeCounterStepper is supposed to smoothen the average on Measurement Startup. 
+                //This might be a good compromise between having a high average (= high accuracy but long "settlement time") and low average (low average but fast settlement)
+                //As Always, Test this
+                switch (ChangeCounterStepper)
+                {
+                    case 0:
+                        ChangeCounterDivider = Convert.ToInt32(EtHerG.Properties.Settings.Default.AmountAveragePoints * 0.01);
+                        break;
+                    case 1:
+                        ChangeCounterDivider = Convert.ToInt32(EtHerG.Properties.Settings.Default.AmountAveragePoints * 0.1);
+                        break;
+                    case 2:
+                        ChangeCounterDivider = Convert.ToInt32(EtHerG.Properties.Settings.Default.AmountAveragePoints * 1);
+                        break;
+                }
+
+
+                if (ChangeCounter >= ChangeCounterDivider) //If the Counter exceeds 10000 we will create the Average Value, this can be changed. Perhaps you want a more accurate average or you want a faster reacting average. 
                 {
                     AverageX1 = (int)(SumX1 / (long)ChangeCounter); //Im dividing with the ChangeCounter and not 10.000 Values because I might have run over the 10.000 Values 
                     AverageY1 = (int)(SumY1 / (long)ChangeCounter);
@@ -401,10 +475,15 @@ namespace EtHerG
                     SumX1 = 0; //and in the End reset the Sum and Counter
                     SumY1 = 0;
                     ChangeCounter = 0;
+                    if (ChangeCounterDivider < 2) { ChangeCounterDivider += 1; } //Test this
                 }
 
                 DisplayX1 = X1 - AverageX1; //Now Apply my Offset to the measured Values to create the functional Value it should Display. 
                 DisplayY1 = Y1 - AverageY1;
+
+
+
+                VectorLength = Math.Sqrt(Math.Pow(DisplayX1, 2) + Math.Pow(DisplayY1, 2));
 
 
                 //I have these Locked Down to limit access to the lists between my background worker and this method.
@@ -492,7 +571,8 @@ namespace EtHerG
 
         void HandleAlarm(int alarmValue, ushort alarmModbusAddress, ref bool singleWriteFlag, ref System.Timers.Timer alarmTimer)
         {
-            if ((DisplayX1 > alarmValue || DisplayX1 < -alarmValue || DisplayY1 > alarmValue || DisplayY1 < -alarmValue) && AlarmReady)
+            //TEST THIS WITH THE VECTOR LENGTH! 
+            if (VectorLength > alarmValue && AlarmReady)
             {
                 //If im outside of either Alarmvalue Bounds it will start the Timer (or restart) and then either or write the Alarm to the specified Modbus Coil and to the InfluxDB 
                 alarmTimer.Stop();
@@ -568,16 +648,8 @@ namespace EtHerG
                 lastSpecifiedYValues = ScatterY.Skip(Math.Max(0, ScatterY.Count - EtHerG.Properties.Settings.Default.ScatterPoints)).ToList(); // Get last Specified Y values
             }
 
-            //Then we clear the whole ScatterPlot and add all formatting again, starting with the Alarm Rectangles 
-            formScatter.Plot.Clear();
-            var Alarm5 = formScatter.Plot.Add.Rectangle(-EtHerG.Properties.Settings.Default.Alarm1Value, EtHerG.Properties.Settings.Default.Alarm1Value, -EtHerG.Properties.Settings.Default.Alarm1Value, EtHerG.Properties.Settings.Default.Alarm1Value);
-            var Alarm6 = formScatter.Plot.Add.Rectangle(-EtHerG.Properties.Settings.Default.Alarm2Value, EtHerG.Properties.Settings.Default.Alarm2Value, -EtHerG.Properties.Settings.Default.Alarm2Value, EtHerG.Properties.Settings.Default.Alarm2Value);
-            Alarm5.FillStyle.Color = ScottPlot.Color.FromHex("#D22B2B").WithAlpha(0);
-            Alarm6.FillStyle.Color = ScottPlot.Color.FromHex("#388e3c").WithAlpha(0);
-            Alarm5.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm1Color); // Alarm 1
-            Alarm6.LineStyle.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.Alarm2Color); // Alarm 2
-            Alarm5.LineStyle.Width = 3;
-            Alarm6.LineStyle.Width = 3;
+            FormatScatterDiag();
+
             //And then if checked we will add the EmbedEC Data via Points 
             if (EtHerG.Properties.Settings.Default.ScatterDiagDrawPoints)
             {
@@ -590,11 +662,6 @@ namespace EtHerG
                 var ScatterLine = formScatter.Plot.Add.ScatterLine(lastSpecifiedXValues, lastSpecifiedYValues);
                 ScatterLine.Color = ScottPlot.Color.FromHex(EtHerG.Properties.Settings.Default.ScatterDiagColor);
             }
-
-            //We will set the Size of the Diagram, Disable Interaction (so it cannot be scrolled around etc. and refresh the Diagram. 
-
-            formScatter.Plot.Axes.SetLimits(-EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
-            formScatter.Interaction.Disable();
             formScatter.Refresh();
 
             //Lastly we remove the Range beyond the Values which are outside of the user specified amount anyways. 
@@ -606,46 +673,89 @@ namespace EtHerG
 
         }
 
-        private void Form1_FormClosing(object? sender, FormClosingEventArgs e)
+        private async void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //When Closing the Form we will stop all timers and close all Connections
-            resetTimer.Stop();
+            // If already closing, do nothing
+            if (isClosing)
+            {
+                return;
+            }
 
+            // Set flag to indicate closing process is underway
+            isClosing = true;
+
+            // Prevent the form from closing immediately
+            e.Cancel = true;
+            this.Enabled = false;
+
+            // Stop all timers
+            resetTimer.Stop();
             ModbusTimer.Stop();
 
-            // Cancel the background worker's operation
-            DiagWorker.CancelAsync();
+            // Cancel the background workers and wait for them to complete
+            await CancelBackgroundWorkerAsync(DiagWorker);
+            await CancelBackgroundWorkerAsync(ModbusWorker);
 
-            // Wait for the background worker to complete
-            while (DiagWorker.IsBusy)
+            // Close connections if they are open
+            if (EtherConnected)
             {
-                Application.DoEvents(); // Allow the application to process events
-                System.Threading.Thread.Sleep(100); // Pause for a short duration
+                ether.CloseSerialConnection();
+                EtherConnected = false;
             }
 
-            ModbusWorker.CancelAsync();
-            while (ModbusWorker.IsBusy)
+            if (ModbusCon)
             {
-                Application.DoEvents(); // Allow the application to process events
-                System.Threading.Thread.Sleep(1000); // Pause for a short duration
+                CloseModbusConnection();
+                ModbusCon = false;
             }
 
-            if (EtherConnected) { ether.CloseSerialConnection(); }
-            if (ModbusCon) { CloseModbusConnection(); }
+            ether.ResetUSB();
+
+            // Allow the form to close
+            this.Close();
+        }
+
+        private Task CancelBackgroundWorkerAsync(BackgroundWorker worker)
+        {
+            var tcs = new TaskCompletionSource<object>();
+
+            if (worker != null && worker.IsBusy)
+            {
+                worker.RunWorkerCompleted += (s, e) => tcs.SetResult(null);
+                worker.CancelAsync();
+            }
+            else
+            {
+                tcs.SetResult(null);
+            }
+
+            return tcs.Task;
         }
 
         private void ModbusWorker_DoWork(object? sender, DoWorkEventArgs e)
         {
             if (EtHerG.Properties.Settings.Default.PlayModbusAddress != 0 && ModbusCon)
             {
-                play = modbusMaster.ReadCoils(1, EtHerG.Properties.Settings.Default.PlayModbusAddress, 1)[0];
+                Play = modbusMaster.ReadCoils(1, EtHerG.Properties.Settings.Default.PlayModbusAddress, 1)[0];
+                if (Play == true && PlayModbusLastVal == false)
+                {
+                    lastSpecifiedXValues.Clear();
+                    lastSpecifiedYValues.Clear();
+                    ScatterX.Clear();
+                    ScatterY.Clear();
+                    FormatScatterDiag();
+                    FormatLineDiag();
+                    ChangeCounterStepper = 0; //Test this
+                }
                 Invoke(new Action(() =>
                 {
-                    txtPlayLastModbusValue.Text = play.ToString();
+                    txtPlayLastModbusValue.Text = Play.ToString();
                 }));
+
+                PlayModbusLastVal = Play;
             }
 
-            //Try this and Delete Later
+            //Test this and Delete Later
             //Read Frequency
             if (EtHerG.Properties.Settings.Default.FrequencyModbusAddress != 0 && ModbusCon)
             {
@@ -900,7 +1010,7 @@ namespace EtHerG
             }
 
             // Check if ComPort is set to 0 or null
-            if (EtHerG.Properties.Settings.Default.ComPort == 0 || EtHerG.Properties.Settings.Default.ComPort == null)
+            if (EtHerG.Properties.Settings.Default.ComPort == null)
             {
                 PropertiesSetToZeroOrNull.Add("ComPort");
             }
@@ -939,6 +1049,9 @@ namespace EtHerG
                     {
                         EtherConnected = true;
                         txtEtherStatus.BackColor = System.Drawing.Color.Green;
+
+                        txtEtherVersion.Text = ether.GetVersion();
+
                     }
                     else
                     {
@@ -968,6 +1081,7 @@ namespace EtHerG
         private void btnEtherDisconnect_Click(object sender, EventArgs e)
         {
             if (EtherConnected == true) { ether.CloseSerialConnection(); EtherConnected = false; }
+            ether.ResetUSB(); //TEST THIS
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -981,10 +1095,10 @@ namespace EtHerG
             panelPassword.Visible = true;
             panelModbusSettings.Visible = true;
             panelInfluxDBSettings.Visible = true;
-            lblMaxPointsSettable.Visible = true;
-            txtMaxPoints.Visible = true;
+            panelLoggedInSettings.Visible = true;
             btnLogin.Visible = false;
             btnLogout.Visible = true;
+            panelEtherInformation.Visible = true;
         }
 
         private void LoggedOut()
@@ -992,10 +1106,10 @@ namespace EtHerG
             panelPassword.Visible = false;
             panelModbusSettings.Visible = false;
             panelInfluxDBSettings.Visible = false;
-            lblMaxPointsSettable.Visible = false;
-            txtMaxPoints.Visible = false;
+            panelLoggedInSettings.Visible = false;
             btnLogin.Visible = true;
             btnLogout.Visible = false;
+            panelEtherInformation.Visible = false;
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
@@ -1115,7 +1229,7 @@ namespace EtHerG
             {
                 EtHerG.Properties.Settings.Default.Alarm1Value = alarm1Value;
                 EtHerG.Properties.Settings.Default.Save();
-                FormatDiags();
+                FormatLineDiag();
             }
         }
 
@@ -1125,7 +1239,7 @@ namespace EtHerG
             {
                 EtHerG.Properties.Settings.Default.Alarm2Value = alarm2Value;
                 EtHerG.Properties.Settings.Default.Save();
-                FormatDiags();
+                FormatLineDiag();
             }
         }
 
@@ -1222,7 +1336,7 @@ namespace EtHerG
             {
                 EtHerG.Properties.Settings.Default.LineDiagPoints = LineDiagPoints;
                 EtHerG.Properties.Settings.Default.Save();
-                FormatDiags();
+                FormatLineDiag();
             }
         }
 
@@ -1232,7 +1346,7 @@ namespace EtHerG
             {
                 EtHerG.Properties.Settings.Default.DiagMaxPointSize = LineDiagHeight;
                 EtHerG.Properties.Settings.Default.Save();
-                FormatDiags();
+                FormatLineDiag();
             }
         }
 
@@ -1755,7 +1869,7 @@ namespace EtHerG
                 // Save the valid color to settings
                 EtHerG.Properties.Settings.Default[settingName] = textBox.Text;
                 EtHerG.Properties.Settings.Default.Save();
-                FormatDiags();
+                FormatLineDiag();
             }
             else
             {
@@ -2134,6 +2248,22 @@ namespace EtHerG
             EtHerG.Properties.Settings.Default.EqualGain = chkEqualGain.Checked;
             EtHerG.Properties.Settings.Default.Save();
             txtGainYUserInput.Visible = !EtHerG.Properties.Settings.Default.EqualGain;
+        }
+
+        private void txtAmountAveragePoints_LostFocus(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtAmountAveragePoints.Text) && int.TryParse(txtAmountAveragePoints.Text, out int Value))
+            {
+                EtHerG.Properties.Settings.Default.AmountAveragePoints = Convert.ToInt16(txtAmountAveragePoints.Text);
+                EtHerG.Properties.Settings.Default.Save();
+            }
+        }
+
+        private void chkAutoscale_CheckedChanged(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.Autoscale = chkAutoscale.Checked;
+            EtHerG.Properties.Settings.Default.Save();
+            FormatLineDiag();
         }
     }
 }

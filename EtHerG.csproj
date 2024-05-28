@@ -25,8 +25,8 @@
   <ItemGroup>
     <PackageReference Include="InfluxDB.Client" Version="4.14.0" />
     <PackageReference Include="NModbus" Version="3.0.81" />
-    <PackageReference Include="ScottPlot" Version="5.0.26" />
-    <PackageReference Include="ScottPlot.WinForms" Version="5.0.26" />
+    <PackageReference Include="ScottPlot" Version="5.0.34" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.34" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
     <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>

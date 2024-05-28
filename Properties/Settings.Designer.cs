@@ -730,5 +730,29 @@ namespace EtHerG.Properties {
                 this["EqualGain"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public int AmountAveragePoints {
+            get {
+                return ((int)(this["AmountAveragePoints"]));
+            }
+            set {
+                this["AmountAveragePoints"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Autoscale {
+            get {
+                return ((bool)(this["Autoscale"]));
+            }
+            set {
+                this["Autoscale"] = value;
+            }
+        }
     }
 }

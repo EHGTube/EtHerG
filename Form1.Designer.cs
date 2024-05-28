@@ -32,6 +32,12 @@
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             panelSettings = new Panel();
+            lblFilterHPkHz = new Label();
+            FilterLPHz = new Label();
+            lblPhaseDegree = new Label();
+            lblGainYdB = new Label();
+            lblGainXdb = new Label();
+            lblkHz = new Label();
             txtFilterHPLast = new TextBox();
             txtFilterLPLast = new TextBox();
             txtPhaseLast = new TextBox();
@@ -70,8 +76,23 @@
             formLineDiag = new ScottPlot.WinForms.FormsPlot();
             formScatter = new ScottPlot.WinForms.FormsPlot();
             tabPage2 = new TabPage();
-            panel1 = new Panel();
+            panelSettingsFill = new Panel();
+            panelLoggedInSettings = new Panel();
+            txtCOMPort = new TextBox();
+            chkAutoscale = new CheckBox();
+            lblComport = new Label();
             chkEqualGain = new CheckBox();
+            txtAmountAveragePoints = new TextBox();
+            chkScatterDrawPoints = new CheckBox();
+            label1 = new Label();
+            lblMaxPointsSettable = new Label();
+            txtMaxPoints = new TextBox();
+            panelEtherInformation = new Panel();
+            lblEtherInformationInformation = new Label();
+            lblEtherVersion = new Label();
+            lblEtherInformation = new Label();
+            listEtherError = new ListBox();
+            txtEtherVersion = new TextBox();
             panelPassword = new Panel();
             txtSetPassword = new TextBox();
             chkAutologin = new CheckBox();
@@ -131,11 +152,8 @@
             lblModbusLastSentValueAdress = new Label();
             txtGainXModbusLastSentAddress = new TextBox();
             txtFrequencyModbusLastSentAddress = new TextBox();
-            txtMaxPoints = new TextBox();
-            lblMaxPointsSettable = new Label();
             pictureBox1 = new PictureBox();
             pctrInternationalization = new PictureBox();
-            chkScatterDrawPoints = new CheckBox();
             txtScatterDiagColor = new TextBox();
             txtLineDiagColorY = new TextBox();
             txtLineDiagColorX = new TextBox();
@@ -166,8 +184,6 @@
             txtDiagMaxPointSize = new TextBox();
             lblLineDiagAmount = new Label();
             txtLineDiagPoints = new TextBox();
-            txtCOMPort = new TextBox();
-            lblComport = new Label();
             txtX = new TextBox();
             txtAlarm2Value = new TextBox();
             txtY = new TextBox();
@@ -185,7 +201,9 @@
             panelSettings.SuspendLayout();
             panelMain.SuspendLayout();
             tabPage2.SuspendLayout();
-            panel1.SuspendLayout();
+            panelSettingsFill.SuspendLayout();
+            panelLoggedInSettings.SuspendLayout();
+            panelEtherInformation.SuspendLayout();
             panelPassword.SuspendLayout();
             panelInfluxDBSettings.SuspendLayout();
             panelModbusSettings.SuspendLayout();
@@ -221,6 +239,12 @@
             // 
             // panelSettings
             // 
+            panelSettings.Controls.Add(lblFilterHPkHz);
+            panelSettings.Controls.Add(FilterLPHz);
+            panelSettings.Controls.Add(lblPhaseDegree);
+            panelSettings.Controls.Add(lblGainYdB);
+            panelSettings.Controls.Add(lblGainXdb);
+            panelSettings.Controls.Add(lblkHz);
             panelSettings.Controls.Add(txtFilterHPLast);
             panelSettings.Controls.Add(txtFilterLPLast);
             panelSettings.Controls.Add(txtPhaseLast);
@@ -244,9 +268,63 @@
             panelSettings.Size = new Size(331, 351);
             panelSettings.TabIndex = 5;
             // 
+            // lblFilterHPkHz
+            // 
+            lblFilterHPkHz.AutoSize = true;
+            lblFilterHPkHz.Location = new Point(301, 178);
+            lblFilterHPkHz.Name = "lblFilterHPkHz";
+            lblFilterHPkHz.Size = new Size(27, 15);
+            lblFilterHPkHz.TabIndex = 24;
+            lblFilterHPkHz.Text = "kHz";
+            // 
+            // FilterLPHz
+            // 
+            FilterLPHz.AutoSize = true;
+            FilterLPHz.Location = new Point(301, 149);
+            FilterLPHz.Name = "FilterLPHz";
+            FilterLPHz.Size = new Size(27, 15);
+            FilterLPHz.TabIndex = 23;
+            FilterLPHz.Text = "kHz";
+            // 
+            // lblPhaseDegree
+            // 
+            lblPhaseDegree.AutoSize = true;
+            lblPhaseDegree.Location = new Point(301, 120);
+            lblPhaseDegree.Name = "lblPhaseDegree";
+            lblPhaseDegree.Size = new Size(12, 15);
+            lblPhaseDegree.TabIndex = 22;
+            lblPhaseDegree.Text = "°";
+            // 
+            // lblGainYdB
+            // 
+            lblGainYdB.AutoSize = true;
+            lblGainYdB.Location = new Point(301, 91);
+            lblGainYdB.Name = "lblGainYdB";
+            lblGainYdB.Size = new Size(21, 15);
+            lblGainYdB.TabIndex = 21;
+            lblGainYdB.Text = "dB";
+            // 
+            // lblGainXdb
+            // 
+            lblGainXdb.AutoSize = true;
+            lblGainXdb.Location = new Point(301, 62);
+            lblGainXdb.Name = "lblGainXdb";
+            lblGainXdb.Size = new Size(21, 15);
+            lblGainXdb.TabIndex = 20;
+            lblGainXdb.Text = "dB";
+            // 
+            // lblkHz
+            // 
+            lblkHz.AutoSize = true;
+            lblkHz.Location = new Point(301, 33);
+            lblkHz.Name = "lblkHz";
+            lblkHz.Size = new Size(27, 15);
+            lblkHz.TabIndex = 19;
+            lblkHz.Text = "kHz";
+            // 
             // txtFilterHPLast
             // 
-            txtFilterHPLast.Location = new Point(215, 175);
+            txtFilterHPLast.Location = new Point(199, 175);
             txtFilterHPLast.Name = "txtFilterHPLast";
             txtFilterHPLast.ReadOnly = true;
             txtFilterHPLast.Size = new Size(100, 23);
@@ -255,7 +333,7 @@
             // 
             // txtFilterLPLast
             // 
-            txtFilterLPLast.Location = new Point(215, 146);
+            txtFilterLPLast.Location = new Point(199, 146);
             txtFilterLPLast.Name = "txtFilterLPLast";
             txtFilterLPLast.ReadOnly = true;
             txtFilterLPLast.Size = new Size(100, 23);
@@ -264,7 +342,7 @@
             // 
             // txtPhaseLast
             // 
-            txtPhaseLast.Location = new Point(215, 117);
+            txtPhaseLast.Location = new Point(199, 117);
             txtPhaseLast.Name = "txtPhaseLast";
             txtPhaseLast.ReadOnly = true;
             txtPhaseLast.Size = new Size(100, 23);
@@ -273,7 +351,7 @@
             // 
             // txtGainYLast
             // 
-            txtGainYLast.Location = new Point(215, 88);
+            txtGainYLast.Location = new Point(199, 88);
             txtGainYLast.Name = "txtGainYLast";
             txtGainYLast.ReadOnly = true;
             txtGainYLast.Size = new Size(100, 23);
@@ -282,7 +360,7 @@
             // 
             // txtGainXLast
             // 
-            txtGainXLast.Location = new Point(215, 59);
+            txtGainXLast.Location = new Point(199, 59);
             txtGainXLast.Name = "txtGainXLast";
             txtGainXLast.ReadOnly = true;
             txtGainXLast.Size = new Size(100, 23);
@@ -291,7 +369,7 @@
             // 
             // txtFrequencyLast
             // 
-            txtFrequencyLast.Location = new Point(215, 30);
+            txtFrequencyLast.Location = new Point(199, 30);
             txtFrequencyLast.Name = "txtFrequencyLast";
             txtFrequencyLast.ReadOnly = true;
             txtFrequencyLast.Size = new Size(100, 23);
@@ -300,7 +378,7 @@
             // 
             // lblFilterHP
             // 
-            lblFilterHP.Location = new Point(16, 178);
+            lblFilterHP.Location = new Point(0, 178);
             lblFilterHP.Name = "lblFilterHP";
             lblFilterHP.Size = new Size(95, 15);
             lblFilterHP.TabIndex = 12;
@@ -309,7 +387,7 @@
             // 
             // lblFilterLP
             // 
-            lblFilterLP.Location = new Point(16, 149);
+            lblFilterLP.Location = new Point(0, 149);
             lblFilterLP.Name = "lblFilterLP";
             lblFilterLP.Size = new Size(95, 15);
             lblFilterLP.TabIndex = 11;
@@ -318,7 +396,7 @@
             // 
             // lblPhase
             // 
-            lblPhase.Location = new Point(16, 120);
+            lblPhase.Location = new Point(0, 120);
             lblPhase.Name = "lblPhase";
             lblPhase.Size = new Size(95, 15);
             lblPhase.TabIndex = 9;
@@ -327,7 +405,7 @@
             // 
             // lblGainY
             // 
-            lblGainY.Location = new Point(16, 91);
+            lblGainY.Location = new Point(0, 91);
             lblGainY.Name = "lblGainY";
             lblGainY.Size = new Size(95, 15);
             lblGainY.TabIndex = 8;
@@ -336,7 +414,7 @@
             // 
             // lblGainX
             // 
-            lblGainX.Location = new Point(16, 62);
+            lblGainX.Location = new Point(0, 62);
             lblGainX.Name = "lblGainX";
             lblGainX.Size = new Size(95, 15);
             lblGainX.TabIndex = 7;
@@ -345,7 +423,7 @@
             // 
             // txtFilterHPUserInput
             // 
-            txtFilterHPUserInput.Location = new Point(109, 175);
+            txtFilterHPUserInput.Location = new Point(93, 175);
             txtFilterHPUserInput.Name = "txtFilterHPUserInput";
             txtFilterHPUserInput.Size = new Size(101, 23);
             txtFilterHPUserInput.TabIndex = 17;
@@ -354,7 +432,7 @@
             // 
             // txtFilterLPUserInput
             // 
-            txtFilterLPUserInput.Location = new Point(109, 146);
+            txtFilterLPUserInput.Location = new Point(93, 146);
             txtFilterLPUserInput.Name = "txtFilterLPUserInput";
             txtFilterLPUserInput.Size = new Size(101, 23);
             txtFilterLPUserInput.TabIndex = 16;
@@ -363,7 +441,7 @@
             // 
             // txtPhaseUserInput
             // 
-            txtPhaseUserInput.Location = new Point(109, 117);
+            txtPhaseUserInput.Location = new Point(93, 117);
             txtPhaseUserInput.Name = "txtPhaseUserInput";
             txtPhaseUserInput.Size = new Size(101, 23);
             txtPhaseUserInput.TabIndex = 15;
@@ -372,7 +450,7 @@
             // 
             // txtGainYUserInput
             // 
-            txtGainYUserInput.Location = new Point(109, 88);
+            txtGainYUserInput.Location = new Point(93, 88);
             txtGainYUserInput.Name = "txtGainYUserInput";
             txtGainYUserInput.Size = new Size(101, 23);
             txtGainYUserInput.TabIndex = 14;
@@ -381,7 +459,7 @@
             // 
             // txtGainXUserInput
             // 
-            txtGainXUserInput.Location = new Point(109, 59);
+            txtGainXUserInput.Location = new Point(93, 59);
             txtGainXUserInput.Name = "txtGainXUserInput";
             txtGainXUserInput.Size = new Size(101, 23);
             txtGainXUserInput.TabIndex = 13;
@@ -390,7 +468,7 @@
             // 
             // txtFrequencyUserInput
             // 
-            txtFrequencyUserInput.Location = new Point(109, 30);
+            txtFrequencyUserInput.Location = new Point(93, 30);
             txtFrequencyUserInput.Name = "txtFrequencyUserInput";
             txtFrequencyUserInput.Size = new Size(100, 23);
             txtFrequencyUserInput.TabIndex = 12;
@@ -399,7 +477,7 @@
             // 
             // lblFrequency
             // 
-            lblFrequency.Location = new Point(16, 33);
+            lblFrequency.Location = new Point(0, 33);
             lblFrequency.Name = "lblFrequency";
             lblFrequency.Size = new Size(95, 15);
             lblFrequency.TabIndex = 0;
@@ -616,7 +694,7 @@
             // 
             // tabPage2
             // 
-            tabPage2.Controls.Add(panel1);
+            tabPage2.Controls.Add(panelSettingsFill);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -625,75 +703,217 @@
             tabPage2.Text = "Settings";
             tabPage2.UseVisualStyleBackColor = true;
             // 
-            // panel1
+            // panelSettingsFill
             // 
-            panel1.Controls.Add(chkEqualGain);
-            panel1.Controls.Add(panelPassword);
-            panel1.Controls.Add(panelInfluxDBSettings);
-            panel1.Controls.Add(panelModbusSettings);
-            panel1.Controls.Add(txtMaxPoints);
-            panel1.Controls.Add(lblMaxPointsSettable);
-            panel1.Controls.Add(pictureBox1);
-            panel1.Controls.Add(pctrInternationalization);
-            panel1.Controls.Add(chkScatterDrawPoints);
-            panel1.Controls.Add(txtScatterDiagColor);
-            panel1.Controls.Add(txtLineDiagColorY);
-            panel1.Controls.Add(txtLineDiagColorX);
-            panel1.Controls.Add(txtAlarm2Color);
-            panel1.Controls.Add(txtAlarm1Color);
-            panel1.Controls.Add(lblScatterColor);
-            panel1.Controls.Add(lblColorY);
-            panel1.Controls.Add(lblAlarm2Color);
-            panel1.Controls.Add(lblColorX);
-            panel1.Controls.Add(lblAlarm1Color);
-            panel1.Controls.Add(lblLineDiagSizeY);
-            panel1.Controls.Add(lblLineDiagSizeX);
-            panel1.Controls.Add(lblLineDiagPosY);
-            panel1.Controls.Add(lblLineDiagPosX);
-            panel1.Controls.Add(txtLineDiagSizeY);
-            panel1.Controls.Add(txtLineDiagSizeX);
-            panel1.Controls.Add(txtLineDiagPosY);
-            panel1.Controls.Add(txtLineDiagPosX);
-            panel1.Controls.Add(lblScatterDiagSize);
-            panel1.Controls.Add(lblScatterDiagPosY);
-            panel1.Controls.Add(txtScatterDiagSize);
-            panel1.Controls.Add(txtScatterDiagPosY);
-            panel1.Controls.Add(txtScatterDiagPosX);
-            panel1.Controls.Add(lblScatterDiagPosX);
-            panel1.Controls.Add(lblScatterAmount);
-            panel1.Controls.Add(txtScatterPoints);
-            panel1.Controls.Add(lblDiagMaxPointSize);
-            panel1.Controls.Add(txtDiagMaxPointSize);
-            panel1.Controls.Add(lblLineDiagAmount);
-            panel1.Controls.Add(txtLineDiagPoints);
-            panel1.Controls.Add(txtCOMPort);
-            panel1.Controls.Add(lblComport);
-            panel1.Controls.Add(txtX);
-            panel1.Controls.Add(txtAlarm2Value);
-            panel1.Controls.Add(txtY);
-            panel1.Controls.Add(txtAlarm1Value);
-            panel1.Controls.Add(txtPS);
-            panel1.Controls.Add(lblPS);
-            panel1.Controls.Add(lblAlarm1);
-            panel1.Controls.Add(lblYVal);
-            panel1.Controls.Add(lblXVal);
-            panel1.Controls.Add(lblAlarm2);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(3, 3);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(1890, 1007);
-            panel1.TabIndex = 54;
+            panelSettingsFill.Controls.Add(panelLoggedInSettings);
+            panelSettingsFill.Controls.Add(panelEtherInformation);
+            panelSettingsFill.Controls.Add(panelPassword);
+            panelSettingsFill.Controls.Add(panelInfluxDBSettings);
+            panelSettingsFill.Controls.Add(panelModbusSettings);
+            panelSettingsFill.Controls.Add(pictureBox1);
+            panelSettingsFill.Controls.Add(pctrInternationalization);
+            panelSettingsFill.Controls.Add(txtScatterDiagColor);
+            panelSettingsFill.Controls.Add(txtLineDiagColorY);
+            panelSettingsFill.Controls.Add(txtLineDiagColorX);
+            panelSettingsFill.Controls.Add(txtAlarm2Color);
+            panelSettingsFill.Controls.Add(txtAlarm1Color);
+            panelSettingsFill.Controls.Add(lblScatterColor);
+            panelSettingsFill.Controls.Add(lblColorY);
+            panelSettingsFill.Controls.Add(lblAlarm2Color);
+            panelSettingsFill.Controls.Add(lblColorX);
+            panelSettingsFill.Controls.Add(lblAlarm1Color);
+            panelSettingsFill.Controls.Add(lblLineDiagSizeY);
+            panelSettingsFill.Controls.Add(lblLineDiagSizeX);
+            panelSettingsFill.Controls.Add(lblLineDiagPosY);
+            panelSettingsFill.Controls.Add(lblLineDiagPosX);
+            panelSettingsFill.Controls.Add(txtLineDiagSizeY);
+            panelSettingsFill.Controls.Add(txtLineDiagSizeX);
+            panelSettingsFill.Controls.Add(txtLineDiagPosY);
+            panelSettingsFill.Controls.Add(txtLineDiagPosX);
+            panelSettingsFill.Controls.Add(lblScatterDiagSize);
+            panelSettingsFill.Controls.Add(lblScatterDiagPosY);
+            panelSettingsFill.Controls.Add(txtScatterDiagSize);
+            panelSettingsFill.Controls.Add(txtScatterDiagPosY);
+            panelSettingsFill.Controls.Add(txtScatterDiagPosX);
+            panelSettingsFill.Controls.Add(lblScatterDiagPosX);
+            panelSettingsFill.Controls.Add(lblScatterAmount);
+            panelSettingsFill.Controls.Add(txtScatterPoints);
+            panelSettingsFill.Controls.Add(lblDiagMaxPointSize);
+            panelSettingsFill.Controls.Add(txtDiagMaxPointSize);
+            panelSettingsFill.Controls.Add(lblLineDiagAmount);
+            panelSettingsFill.Controls.Add(txtLineDiagPoints);
+            panelSettingsFill.Controls.Add(txtX);
+            panelSettingsFill.Controls.Add(txtAlarm2Value);
+            panelSettingsFill.Controls.Add(txtY);
+            panelSettingsFill.Controls.Add(txtAlarm1Value);
+            panelSettingsFill.Controls.Add(txtPS);
+            panelSettingsFill.Controls.Add(lblPS);
+            panelSettingsFill.Controls.Add(lblAlarm1);
+            panelSettingsFill.Controls.Add(lblYVal);
+            panelSettingsFill.Controls.Add(lblXVal);
+            panelSettingsFill.Controls.Add(lblAlarm2);
+            panelSettingsFill.Dock = DockStyle.Fill;
+            panelSettingsFill.Location = new Point(3, 3);
+            panelSettingsFill.Name = "panelSettingsFill";
+            panelSettingsFill.Size = new Size(1890, 1007);
+            panelSettingsFill.TabIndex = 54;
+            // 
+            // panelLoggedInSettings
+            // 
+            panelLoggedInSettings.Controls.Add(txtCOMPort);
+            panelLoggedInSettings.Controls.Add(chkAutoscale);
+            panelLoggedInSettings.Controls.Add(lblComport);
+            panelLoggedInSettings.Controls.Add(chkEqualGain);
+            panelLoggedInSettings.Controls.Add(txtAmountAveragePoints);
+            panelLoggedInSettings.Controls.Add(chkScatterDrawPoints);
+            panelLoggedInSettings.Controls.Add(label1);
+            panelLoggedInSettings.Controls.Add(lblMaxPointsSettable);
+            panelLoggedInSettings.Controls.Add(txtMaxPoints);
+            panelLoggedInSettings.Location = new Point(18, 686);
+            panelLoggedInSettings.Name = "panelLoggedInSettings";
+            panelLoggedInSettings.Size = new Size(324, 257);
+            panelLoggedInSettings.TabIndex = 31;
+            // 
+            // txtCOMPort
+            // 
+            txtCOMPort.Location = new Point(206, 6);
+            txtCOMPort.Name = "txtCOMPort";
+            txtCOMPort.Size = new Size(100, 23);
+            txtCOMPort.TabIndex = 25;
+            txtCOMPort.LostFocus += txtCOMPort_LostFocus;
+            // 
+            // chkAutoscale
+            // 
+            chkAutoscale.Location = new Point(86, 99);
+            chkAutoscale.Name = "chkAutoscale";
+            chkAutoscale.Size = new Size(220, 19);
+            chkAutoscale.TabIndex = 28;
+            chkAutoscale.Text = "Autoscale  ?";
+            chkAutoscale.TextAlign = ContentAlignment.MiddleCenter;
+            chkAutoscale.UseVisualStyleBackColor = true;
+            chkAutoscale.CheckedChanged += chkAutoscale_CheckedChanged;
+            // 
+            // lblComport
+            // 
+            lblComport.Location = new Point(5, 10);
+            lblComport.Name = "lblComport";
+            lblComport.Size = new Size(200, 15);
+            lblComport.TabIndex = 46;
+            lblComport.Text = "COM-Port:";
+            lblComport.TextAlign = ContentAlignment.MiddleRight;
             // 
             // chkEqualGain
             // 
-            chkEqualGain.Location = new Point(106, 720);
+            chkEqualGain.Location = new Point(86, 35);
             chkEqualGain.Name = "chkEqualGain";
             chkEqualGain.Size = new Size(220, 19);
-            chkEqualGain.TabIndex = 25;
+            chkEqualGain.TabIndex = 26;
             chkEqualGain.Text = "GainX = GainY";
             chkEqualGain.TextAlign = ContentAlignment.MiddleCenter;
             chkEqualGain.UseVisualStyleBackColor = true;
             chkEqualGain.CheckedChanged += chkEqualGain_CheckedChanged;
+            // 
+            // txtAmountAveragePoints
+            // 
+            txtAmountAveragePoints.Location = new Point(204, 170);
+            txtAmountAveragePoints.Name = "txtAmountAveragePoints";
+            txtAmountAveragePoints.Size = new Size(100, 23);
+            txtAmountAveragePoints.TabIndex = 30;
+            txtAmountAveragePoints.LostFocus += txtAmountAveragePoints_LostFocus;
+            // 
+            // chkScatterDrawPoints
+            // 
+            chkScatterDrawPoints.Location = new Point(86, 68);
+            chkScatterDrawPoints.Name = "chkScatterDrawPoints";
+            chkScatterDrawPoints.Size = new Size(220, 19);
+            chkScatterDrawPoints.TabIndex = 27;
+            chkScatterDrawPoints.Text = "Scatter Draw Points?";
+            chkScatterDrawPoints.TextAlign = ContentAlignment.MiddleCenter;
+            chkScatterDrawPoints.UseVisualStyleBackColor = true;
+            chkScatterDrawPoints.CheckedChanged += chkScatterDrawPoints_CheckedChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(38, 170);
+            label1.Name = "label1";
+            label1.Size = new Size(165, 15);
+            label1.TabIndex = 114;
+            label1.Text = "Amount of Points for Average";
+            // 
+            // lblMaxPointsSettable
+            // 
+            lblMaxPointsSettable.Location = new Point(3, 138);
+            lblMaxPointsSettable.Name = "lblMaxPointsSettable";
+            lblMaxPointsSettable.Size = new Size(200, 15);
+            lblMaxPointsSettable.TabIndex = 110;
+            lblMaxPointsSettable.Text = "Maximum Amount of Points Allowed:";
+            lblMaxPointsSettable.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // txtMaxPoints
+            // 
+            txtMaxPoints.Location = new Point(204, 134);
+            txtMaxPoints.Name = "txtMaxPoints";
+            txtMaxPoints.Size = new Size(100, 23);
+            txtMaxPoints.TabIndex = 29;
+            txtMaxPoints.LostFocus += txtMaxPoints_LostFocus;
+            // 
+            // panelEtherInformation
+            // 
+            panelEtherInformation.BorderStyle = BorderStyle.FixedSingle;
+            panelEtherInformation.Controls.Add(lblEtherInformationInformation);
+            panelEtherInformation.Controls.Add(lblEtherVersion);
+            panelEtherInformation.Controls.Add(lblEtherInformation);
+            panelEtherInformation.Controls.Add(listEtherError);
+            panelEtherInformation.Controls.Add(txtEtherVersion);
+            panelEtherInformation.Location = new Point(907, 41);
+            panelEtherInformation.Name = "panelEtherInformation";
+            panelEtherInformation.Size = new Size(392, 412);
+            panelEtherInformation.TabIndex = 115;
+            // 
+            // lblEtherInformationInformation
+            // 
+            lblEtherInformationInformation.AutoSize = true;
+            lblEtherInformationInformation.Location = new Point(52, 200);
+            lblEtherInformationInformation.Name = "lblEtherInformationInformation";
+            lblEtherInformationInformation.Size = new Size(315, 45);
+            lblEtherInformationInformation.TabIndex = 1017;
+            lblEtherInformationInformation.Text = "Acceptable Errors include \"Array not read\" or \"No Error ....\"\r\n\r\nFor more Information check Ether Realtime\r\n";
+            // 
+            // lblEtherVersion
+            // 
+            lblEtherVersion.AutoSize = true;
+            lblEtherVersion.Location = new Point(42, 74);
+            lblEtherVersion.Name = "lblEtherVersion";
+            lblEtherVersion.Size = new Size(98, 15);
+            lblEtherVersion.TabIndex = 1016;
+            lblEtherVersion.Text = "Ether DLL Version";
+            // 
+            // lblEtherInformation
+            // 
+            lblEtherInformation.AutoSize = true;
+            lblEtherInformation.Location = new Point(123, 18);
+            lblEtherInformation.Name = "lblEtherInformation";
+            lblEtherInformation.Size = new Size(100, 15);
+            lblEtherInformation.TabIndex = 1015;
+            lblEtherInformation.Text = "Ether Information";
+            // 
+            // listEtherError
+            // 
+            listEtherError.FormattingEnabled = true;
+            listEtherError.ItemHeight = 15;
+            listEtherError.Location = new Point(42, 107);
+            listEtherError.Name = "listEtherError";
+            listEtherError.Size = new Size(309, 64);
+            listEtherError.TabIndex = 1014;
+            // 
+            // txtEtherVersion
+            // 
+            txtEtherVersion.Location = new Point(146, 69);
+            txtEtherVersion.Name = "txtEtherVersion";
+            txtEtherVersion.ReadOnly = true;
+            txtEtherVersion.Size = new Size(185, 23);
+            txtEtherVersion.TabIndex = 1013;
             // 
             // panelPassword
             // 
@@ -751,7 +971,7 @@
             panelInfluxDBSettings.Location = new Point(355, 463);
             panelInfluxDBSettings.Name = "panelInfluxDBSettings";
             panelInfluxDBSettings.Size = new Size(537, 276);
-            panelInfluxDBSettings.TabIndex = 112;
+            panelInfluxDBSettings.TabIndex = 106;
             // 
             // chkInfluxDBEnabled
             // 
@@ -905,7 +1125,7 @@
             panelModbusSettings.Location = new Point(355, 41);
             panelModbusSettings.Name = "panelModbusSettings";
             panelModbusSettings.Size = new Size(537, 412);
-            panelModbusSettings.TabIndex = 111;
+            panelModbusSettings.TabIndex = 70;
             // 
             // lblModbusAlarmExpl
             // 
@@ -1263,23 +1483,6 @@
             txtFrequencyModbusLastSentAddress.TabIndex = 63;
             txtFrequencyModbusLastSentAddress.LostFocus += txtFrequencyModbusLastSentAddress_LostFocus;
             // 
-            // txtMaxPoints
-            // 
-            txtMaxPoints.Location = new Point(224, 778);
-            txtMaxPoints.Name = "txtMaxPoints";
-            txtMaxPoints.Size = new Size(100, 23);
-            txtMaxPoints.TabIndex = 27;
-            txtMaxPoints.LostFocus += txtMaxPoints_LostFocus;
-            // 
-            // lblMaxPointsSettable
-            // 
-            lblMaxPointsSettable.Location = new Point(23, 782);
-            lblMaxPointsSettable.Name = "lblMaxPointsSettable";
-            lblMaxPointsSettable.Size = new Size(200, 15);
-            lblMaxPointsSettable.TabIndex = 110;
-            lblMaxPointsSettable.Text = "Maximum Amount of Points Allowed:";
-            lblMaxPointsSettable.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.Kartes_;
@@ -1302,20 +1505,9 @@
             pctrInternationalization.TabStop = false;
             pctrInternationalization.Click += pctrInternationalization_Click;
             // 
-            // chkScatterDrawPoints
-            // 
-            chkScatterDrawPoints.Location = new Point(106, 753);
-            chkScatterDrawPoints.Name = "chkScatterDrawPoints";
-            chkScatterDrawPoints.Size = new Size(220, 19);
-            chkScatterDrawPoints.TabIndex = 26;
-            chkScatterDrawPoints.Text = "Scatter Draw Points?";
-            chkScatterDrawPoints.TextAlign = ContentAlignment.MiddleCenter;
-            chkScatterDrawPoints.UseVisualStyleBackColor = true;
-            chkScatterDrawPoints.CheckedChanged += chkScatterDrawPoints_CheckedChanged;
-            // 
             // txtScatterDiagColor
             // 
-            txtScatterDiagColor.Location = new Point(224, 691);
+            txtScatterDiagColor.Location = new Point(224, 662);
             txtScatterDiagColor.Name = "txtScatterDiagColor";
             txtScatterDiagColor.Size = new Size(100, 23);
             txtScatterDiagColor.TabIndex = 24;
@@ -1323,7 +1515,7 @@
             // 
             // txtLineDiagColorY
             // 
-            txtLineDiagColorY.Location = new Point(224, 662);
+            txtLineDiagColorY.Location = new Point(224, 633);
             txtLineDiagColorY.Name = "txtLineDiagColorY";
             txtLineDiagColorY.Size = new Size(100, 23);
             txtLineDiagColorY.TabIndex = 23;
@@ -1331,7 +1523,7 @@
             // 
             // txtLineDiagColorX
             // 
-            txtLineDiagColorX.Location = new Point(224, 633);
+            txtLineDiagColorX.Location = new Point(224, 604);
             txtLineDiagColorX.Name = "txtLineDiagColorX";
             txtLineDiagColorX.Size = new Size(100, 23);
             txtLineDiagColorX.TabIndex = 22;
@@ -1339,7 +1531,7 @@
             // 
             // txtAlarm2Color
             // 
-            txtAlarm2Color.Location = new Point(224, 604);
+            txtAlarm2Color.Location = new Point(224, 575);
             txtAlarm2Color.Name = "txtAlarm2Color";
             txtAlarm2Color.Size = new Size(100, 23);
             txtAlarm2Color.TabIndex = 21;
@@ -1347,7 +1539,7 @@
             // 
             // txtAlarm1Color
             // 
-            txtAlarm1Color.Location = new Point(224, 575);
+            txtAlarm1Color.Location = new Point(224, 546);
             txtAlarm1Color.Name = "txtAlarm1Color";
             txtAlarm1Color.Size = new Size(100, 23);
             txtAlarm1Color.TabIndex = 20;
@@ -1355,7 +1547,7 @@
             // 
             // lblScatterColor
             // 
-            lblScatterColor.Location = new Point(23, 695);
+            lblScatterColor.Location = new Point(23, 666);
             lblScatterColor.Name = "lblScatterColor";
             lblScatterColor.Size = new Size(200, 15);
             lblScatterColor.TabIndex = 100;
@@ -1364,7 +1556,7 @@
             // 
             // lblColorY
             // 
-            lblColorY.Location = new Point(23, 666);
+            lblColorY.Location = new Point(23, 637);
             lblColorY.Name = "lblColorY";
             lblColorY.Size = new Size(200, 15);
             lblColorY.TabIndex = 98;
@@ -1373,7 +1565,7 @@
             // 
             // lblAlarm2Color
             // 
-            lblAlarm2Color.Location = new Point(23, 608);
+            lblAlarm2Color.Location = new Point(23, 579);
             lblAlarm2Color.Name = "lblAlarm2Color";
             lblAlarm2Color.Size = new Size(200, 15);
             lblAlarm2Color.TabIndex = 97;
@@ -1382,7 +1574,7 @@
             // 
             // lblColorX
             // 
-            lblColorX.Location = new Point(23, 637);
+            lblColorX.Location = new Point(23, 608);
             lblColorX.Name = "lblColorX";
             lblColorX.Size = new Size(200, 15);
             lblColorX.TabIndex = 96;
@@ -1391,7 +1583,7 @@
             // 
             // lblAlarm1Color
             // 
-            lblAlarm1Color.Location = new Point(23, 579);
+            lblAlarm1Color.Location = new Point(23, 550);
             lblAlarm1Color.Name = "lblAlarm1Color";
             lblAlarm1Color.Size = new Size(200, 15);
             lblAlarm1Color.TabIndex = 96;
@@ -1400,7 +1592,7 @@
             // 
             // lblLineDiagSizeY
             // 
-            lblLineDiagSizeY.Location = new Point(23, 550);
+            lblLineDiagSizeY.Location = new Point(23, 521);
             lblLineDiagSizeY.Name = "lblLineDiagSizeY";
             lblLineDiagSizeY.Size = new Size(200, 15);
             lblLineDiagSizeY.TabIndex = 65;
@@ -1409,7 +1601,7 @@
             // 
             // lblLineDiagSizeX
             // 
-            lblLineDiagSizeX.Location = new Point(23, 521);
+            lblLineDiagSizeX.Location = new Point(23, 492);
             lblLineDiagSizeX.Name = "lblLineDiagSizeX";
             lblLineDiagSizeX.Size = new Size(200, 15);
             lblLineDiagSizeX.TabIndex = 64;
@@ -1418,7 +1610,7 @@
             // 
             // lblLineDiagPosY
             // 
-            lblLineDiagPosY.Location = new Point(23, 492);
+            lblLineDiagPosY.Location = new Point(23, 463);
             lblLineDiagPosY.Name = "lblLineDiagPosY";
             lblLineDiagPosY.Size = new Size(200, 15);
             lblLineDiagPosY.TabIndex = 63;
@@ -1427,7 +1619,7 @@
             // 
             // lblLineDiagPosX
             // 
-            lblLineDiagPosX.Location = new Point(23, 463);
+            lblLineDiagPosX.Location = new Point(23, 434);
             lblLineDiagPosX.Name = "lblLineDiagPosX";
             lblLineDiagPosX.Size = new Size(200, 15);
             lblLineDiagPosX.TabIndex = 62;
@@ -1436,7 +1628,7 @@
             // 
             // txtLineDiagSizeY
             // 
-            txtLineDiagSizeY.Location = new Point(224, 546);
+            txtLineDiagSizeY.Location = new Point(224, 517);
             txtLineDiagSizeY.Name = "txtLineDiagSizeY";
             txtLineDiagSizeY.Size = new Size(100, 23);
             txtLineDiagSizeY.TabIndex = 19;
@@ -1444,7 +1636,7 @@
             // 
             // txtLineDiagSizeX
             // 
-            txtLineDiagSizeX.Location = new Point(224, 517);
+            txtLineDiagSizeX.Location = new Point(224, 488);
             txtLineDiagSizeX.Name = "txtLineDiagSizeX";
             txtLineDiagSizeX.Size = new Size(100, 23);
             txtLineDiagSizeX.TabIndex = 18;
@@ -1452,7 +1644,7 @@
             // 
             // txtLineDiagPosY
             // 
-            txtLineDiagPosY.Location = new Point(224, 488);
+            txtLineDiagPosY.Location = new Point(224, 459);
             txtLineDiagPosY.Name = "txtLineDiagPosY";
             txtLineDiagPosY.Size = new Size(100, 23);
             txtLineDiagPosY.TabIndex = 17;
@@ -1460,7 +1652,7 @@
             // 
             // txtLineDiagPosX
             // 
-            txtLineDiagPosX.Location = new Point(224, 459);
+            txtLineDiagPosX.Location = new Point(224, 430);
             txtLineDiagPosX.Name = "txtLineDiagPosX";
             txtLineDiagPosX.Size = new Size(100, 23);
             txtLineDiagPosX.TabIndex = 16;
@@ -1468,7 +1660,7 @@
             // 
             // lblScatterDiagSize
             // 
-            lblScatterDiagSize.Location = new Point(23, 434);
+            lblScatterDiagSize.Location = new Point(23, 405);
             lblScatterDiagSize.Name = "lblScatterDiagSize";
             lblScatterDiagSize.Size = new Size(200, 15);
             lblScatterDiagSize.TabIndex = 57;
@@ -1477,7 +1669,7 @@
             // 
             // lblScatterDiagPosY
             // 
-            lblScatterDiagPosY.Location = new Point(23, 405);
+            lblScatterDiagPosY.Location = new Point(23, 376);
             lblScatterDiagPosY.Name = "lblScatterDiagPosY";
             lblScatterDiagPosY.Size = new Size(200, 15);
             lblScatterDiagPosY.TabIndex = 56;
@@ -1486,7 +1678,7 @@
             // 
             // txtScatterDiagSize
             // 
-            txtScatterDiagSize.Location = new Point(224, 430);
+            txtScatterDiagSize.Location = new Point(224, 401);
             txtScatterDiagSize.Name = "txtScatterDiagSize";
             txtScatterDiagSize.Size = new Size(100, 23);
             txtScatterDiagSize.TabIndex = 15;
@@ -1494,7 +1686,7 @@
             // 
             // txtScatterDiagPosY
             // 
-            txtScatterDiagPosY.Location = new Point(224, 401);
+            txtScatterDiagPosY.Location = new Point(224, 372);
             txtScatterDiagPosY.Name = "txtScatterDiagPosY";
             txtScatterDiagPosY.Size = new Size(100, 23);
             txtScatterDiagPosY.TabIndex = 14;
@@ -1502,7 +1694,7 @@
             // 
             // txtScatterDiagPosX
             // 
-            txtScatterDiagPosX.Location = new Point(224, 372);
+            txtScatterDiagPosX.Location = new Point(224, 343);
             txtScatterDiagPosX.Name = "txtScatterDiagPosX";
             txtScatterDiagPosX.Size = new Size(100, 23);
             txtScatterDiagPosX.TabIndex = 13;
@@ -1510,7 +1702,7 @@
             // 
             // lblScatterDiagPosX
             // 
-            lblScatterDiagPosX.Location = new Point(23, 376);
+            lblScatterDiagPosX.Location = new Point(23, 347);
             lblScatterDiagPosX.Name = "lblScatterDiagPosX";
             lblScatterDiagPosX.Size = new Size(200, 15);
             lblScatterDiagPosX.TabIndex = 53;
@@ -1567,23 +1759,6 @@
             txtLineDiagPoints.Size = new Size(100, 23);
             txtLineDiagPoints.TabIndex = 7;
             txtLineDiagPoints.LostFocus += txtLineDiagPoints_LostFocus;
-            // 
-            // txtCOMPort
-            // 
-            txtCOMPort.Location = new Point(224, 343);
-            txtCOMPort.Name = "txtCOMPort";
-            txtCOMPort.Size = new Size(100, 23);
-            txtCOMPort.TabIndex = 12;
-            txtCOMPort.LostFocus += txtCOMPort_LostFocus;
-            // 
-            // lblComport
-            // 
-            lblComport.Location = new Point(23, 347);
-            lblComport.Name = "lblComport";
-            lblComport.Size = new Size(200, 15);
-            lblComport.TabIndex = 46;
-            lblComport.Text = "COM-Port:";
-            lblComport.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtX
             // 
@@ -1689,8 +1864,12 @@
             panelMain.ResumeLayout(false);
             panelMain.PerformLayout();
             tabPage2.ResumeLayout(false);
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            panelSettingsFill.ResumeLayout(false);
+            panelSettingsFill.PerformLayout();
+            panelLoggedInSettings.ResumeLayout(false);
+            panelLoggedInSettings.PerformLayout();
+            panelEtherInformation.ResumeLayout(false);
+            panelEtherInformation.PerformLayout();
             panelPassword.ResumeLayout(false);
             panelPassword.PerformLayout();
             panelInfluxDBSettings.ResumeLayout(false);
@@ -1782,7 +1961,7 @@
         private Label lblModbusServerIP;
         private TextBox txtCOMPort;
         private Label lblComport;
-        private Panel panel1;
+        private Panel panelSettingsFill;
         private TextBox txtScatterDiagPosX;
         private Label lblScatterDiagPosX;
         private Label lblDiagMaxPointSize;
@@ -1855,5 +2034,21 @@
         private Panel panelInfluxDBSettings;
         private Panel panelPassword;
         private CheckBox chkEqualGain;
+        private TextBox txtAmountAveragePoints;
+        private Label label1;
+        private Label lblFilterHPkHz;
+        private Label FilterLPHz;
+        private Label lblPhaseDegree;
+        private Label lblGainYdB;
+        private Label lblGainXdb;
+        private Label lblkHz;
+        private TextBox txtEtherVersion;
+        private Panel panelEtherInformation;
+        private Label lblEtherInformation;
+        private ListBox listEtherError;
+        private Label lblEtherVersion;
+        private Label lblEtherInformationInformation;
+        private CheckBox chkAutoscale;
+        private Panel panelLoggedInSettings;
     }
 }
