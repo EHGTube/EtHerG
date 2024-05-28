@@ -120,6 +120,41 @@
   <metadata name="formLineDiag.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="lblSpoolInformation.Text" xml:space="preserve">
+    <value>Spool Connection Tutorial: 
+
+Spools should be connected depending on their layout. 
+You need an LCR Device like the Peak atlas LCR40
+If its a differential Spool it should have the following impedances:
+1 Spool with a higher inductivity. (atleast higher than the second Spool)
+2 Spools with a common cable and two similar but lower inducitivites.
+Every Spool has to have an inductive resistance. Capacitive resistances can be discarded when measuring.
+
+For Example: 
+You measure 3.314 millihenry between Cable A and Cable B
+You measure 336 mikrohenry between Cable C and Cable D
+You measure 340 mikrohenry between Cable C and Cable E
+In this Case the Spool between A/B is the Drive Spool and the Spools C/D/E are the Pickup Spools.
+Either A or B has to be connected to Pin 1 and the other to Pin 6. Cable C has to be connected to Pin 1.
+Cable D has to be connected to Pin 2 and Cable E to Pin 4 (or vice versa it will change the Signal 180°).
+At the bottom of this text is an explanation regarding the pin layout of the lemo connector. 
+
+If its an absolute spool you have two spools, where one spool presumably has a higher inductivity than the other.
+If both have the same inductivitiy then you would have to integrate a resistor between the two spools (contact Ether again in this case)
+
+For example:
+You measure 239 mikrohenry between Cable A and Cable B
+You measure 3,31 millihenry between Cable C and Cable D
+In this case the spool between A/B is the Drive Spool and the Spool C/D is the Pickup Spool.
+Cable A and B have to be connected to Pin 1 and 4. Cable C and D have to be connected to Pin 1 and 4.
+Additionally, the device Pins 2 and 3 have to be connected. 
+Additionally, the device Pins 4 and 5 have to be connected. 
+
+The Lemo Connector has 7 Pins but you only need to use the outside pins. 
+If the Gold Pins from the Connector are looking away from you, Pin 1 is to the Left of the "middle".
+Pin 2 etc then go counter clockwise. Pin 7 is in the middle (unused). 
+</value>
+  </data>
   <data name="lblInstructions.Text" xml:space="preserve">
     <value>1. Connect Ether and Modbus
 2. Set Values for all parameters (perhaps excluding influx and modbus last sent)

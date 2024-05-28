@@ -88,6 +88,7 @@
             lblMaxPointsSettable = new Label();
             txtMaxPoints = new TextBox();
             panelEtherInformation = new Panel();
+            lblSpoolInformation = new Label();
             lblEtherInformationInformation = new Label();
             lblEtherVersion = new Label();
             lblEtherInformation = new Label();
@@ -861,6 +862,7 @@
             // panelEtherInformation
             // 
             panelEtherInformation.BorderStyle = BorderStyle.FixedSingle;
+            panelEtherInformation.Controls.Add(lblSpoolInformation);
             panelEtherInformation.Controls.Add(lblEtherInformationInformation);
             panelEtherInformation.Controls.Add(lblEtherVersion);
             panelEtherInformation.Controls.Add(lblEtherInformation);
@@ -868,13 +870,22 @@
             panelEtherInformation.Controls.Add(txtEtherVersion);
             panelEtherInformation.Location = new Point(907, 41);
             panelEtherInformation.Name = "panelEtherInformation";
-            panelEtherInformation.Size = new Size(392, 412);
+            panelEtherInformation.Size = new Size(742, 699);
             panelEtherInformation.TabIndex = 115;
+            // 
+            // lblSpoolInformation
+            // 
+            lblSpoolInformation.AutoSize = true;
+            lblSpoolInformation.Location = new Point(3, 208);
+            lblSpoolInformation.Name = "lblSpoolInformation";
+            lblSpoolInformation.Size = new Size(713, 480);
+            lblSpoolInformation.TabIndex = 1018;
+            lblSpoolInformation.Text = resources.GetString("lblSpoolInformation.Text");
             // 
             // lblEtherInformationInformation
             // 
             lblEtherInformationInformation.AutoSize = true;
-            lblEtherInformationInformation.Location = new Point(52, 200);
+            lblEtherInformationInformation.Location = new Point(3, 143);
             lblEtherInformationInformation.Name = "lblEtherInformationInformation";
             lblEtherInformationInformation.Size = new Size(315, 45);
             lblEtherInformationInformation.TabIndex = 1017;
@@ -883,7 +894,7 @@
             // lblEtherVersion
             // 
             lblEtherVersion.AutoSize = true;
-            lblEtherVersion.Location = new Point(42, 74);
+            lblEtherVersion.Location = new Point(3, 43);
             lblEtherVersion.Name = "lblEtherVersion";
             lblEtherVersion.Size = new Size(98, 15);
             lblEtherVersion.TabIndex = 1016;
@@ -892,7 +903,7 @@
             // lblEtherInformation
             // 
             lblEtherInformation.AutoSize = true;
-            lblEtherInformation.Location = new Point(123, 18);
+            lblEtherInformation.Location = new Point(12, 8);
             lblEtherInformation.Name = "lblEtherInformation";
             lblEtherInformation.Size = new Size(100, 15);
             lblEtherInformation.TabIndex = 1015;
@@ -902,14 +913,14 @@
             // 
             listEtherError.FormattingEnabled = true;
             listEtherError.ItemHeight = 15;
-            listEtherError.Location = new Point(42, 107);
+            listEtherError.Location = new Point(3, 76);
             listEtherError.Name = "listEtherError";
             listEtherError.Size = new Size(309, 64);
             listEtherError.TabIndex = 1014;
             // 
             // txtEtherVersion
             // 
-            txtEtherVersion.Location = new Point(146, 69);
+            txtEtherVersion.Location = new Point(107, 38);
             txtEtherVersion.Name = "txtEtherVersion";
             txtEtherVersion.ReadOnly = true;
             txtEtherVersion.Size = new Size(185, 23);
@@ -2051,5 +2062,6 @@
         private Label lblEtherInformationInformation;
         private CheckBox chkAutoscale;
         private Panel panelLoggedInSettings;
+        private Label lblSpoolInformation;
     }
 }
