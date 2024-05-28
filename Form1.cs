@@ -237,6 +237,7 @@ namespace EtHerG
                 txtMaxPoints.Text = EtHerG.Properties.Settings.Default.MaxPoints.ToString();
                 chkEqualGain.Checked = EtHerG.Properties.Settings.Default.EqualGain;
                 txtAmountAveragePoints.Text = EtHerG.Properties.Settings.Default.AmountAveragePoints.ToString();
+                chkAutoscale.Checked = EtHerG.Properties.Settings.Default.Autoscale;
 
                 formLineDiag.Location = new Point(EtHerG.Properties.Settings.Default.LineDiagPosX, EtHerG.Properties.Settings.Default.LineDiagPosY);
                 formLineDiag.Size = new Size(EtHerG.Properties.Settings.Default.LineDiagSizeX, EtHerG.Properties.Settings.Default.LineDiagSizeY);
@@ -392,14 +393,21 @@ namespace EtHerG
                 txtColorY.Enabled = false;
                 txtColorX.Enabled = false;
 
-                //TEST THIS:
-                formLineDiag.Plot.Axes.ContinuouslyAutoscale = true;
-                //StreamX.ManageAxisLimits = false; //This will force that the LineDiagram will not auto size its diagram
-                //StreamY.ManageAxisLimits = false;
 
-                //This will again force the Diagram into the User Specified Size, disable any interaction (so the User cannot scroll around in it maybe messing it up and Refresh the whole UI so it will load the Changes
-                //formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
-                //formLineDiag.Interaction.Disable(); //TEST THIS
+
+                //Here we just decide on wether the Diagram will autoscale to size (probaply useful for in line applications?) 
+                if (EtHerG.Properties.Settings.Default.Autoscale)
+                {
+                    formLineDiag.Plot.Axes.ContinuouslyAutoscale = true;
+                }
+                else //And wether it should force a certain size and stay in this window. This will probaply be the more used application
+                {
+                    StreamX.ManageAxisLimits = false; //This will force that the LineDiagram will not auto size its diagram
+                    StreamY.ManageAxisLimits = false;
+                    //This will again force the Diagram into the User Specified Size, disable any interaction (so the User cannot scroll around in it maybe messing it up and Refresh the whole UI so it will load the Changes
+                    formLineDiag.Plot.Axes.SetLimits(0, EtHerG.Properties.Settings.Default.LineDiagPoints, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
+                }
+                formLineDiag.Interaction.Disable();
                 formLineDiag.Refresh();
             }));
         }
@@ -423,9 +431,17 @@ namespace EtHerG
                 Alarm6.LineStyle.Width = 3;
 
                 //We will set the Size of the Diagram, Disable Interaction (so it cannot be scrolled around etc. and refresh the Diagram. 
-                formScatter.Plot.Axes.ContinuouslyAutoscale = true; //TEST THIS
-                //formScatter.Plot.Axes.SetLimits(-EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
+
+                if (EtHerG.Properties.Settings.Default.Autoscale)
+                {
+                    formScatter.Plot.Axes.ContinuouslyAutoscale = true;
+                }
+                else
+                {
+                    formScatter.Plot.Axes.SetLimits(-EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize, -EtHerG.Properties.Settings.Default.DiagMaxPointSize, EtHerG.Properties.Settings.Default.DiagMaxPointSize);
+                }
                 formScatter.Interaction.Disable();
+
             }));
         }
 
@@ -2264,6 +2280,12 @@ namespace EtHerG
             EtHerG.Properties.Settings.Default.Autoscale = chkAutoscale.Checked;
             EtHerG.Properties.Settings.Default.Save();
             FormatLineDiag();
+        }
+
+        private void chkAutologin_CheckedChanged(object sender, EventArgs e)
+        {
+            EtHerG.Properties.Settings.Default.Autologin = chkAutologin.Checked;
+            EtHerG.Properties.Settings.Default.Save();
         }
     }
 }

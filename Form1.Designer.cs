@@ -942,6 +942,7 @@
             chkAutologin.TabIndex = 2;
             chkAutologin.Text = "Autologin";
             chkAutologin.UseVisualStyleBackColor = true;
+            chkAutologin.CheckedChanged += chkAutologin_CheckedChanged;
             // 
             // btnSetPassword
             // 
