@@ -734,9 +734,9 @@ namespace EtHerG.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10000")]
-        public int AmountAveragePoints {
+        public long AmountAveragePoints {
             get {
-                return ((int)(this["AmountAveragePoints"]));
+                return ((long)(this["AmountAveragePoints"]));
             }
             set {
                 this["AmountAveragePoints"] = value;

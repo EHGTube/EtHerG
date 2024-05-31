@@ -274,18 +274,18 @@
             lblFilterHPkHz.AutoSize = true;
             lblFilterHPkHz.Location = new Point(301, 178);
             lblFilterHPkHz.Name = "lblFilterHPkHz";
-            lblFilterHPkHz.Size = new Size(27, 15);
+            lblFilterHPkHz.Size = new Size(21, 15);
             lblFilterHPkHz.TabIndex = 24;
-            lblFilterHPkHz.Text = "kHz";
+            lblFilterHPkHz.Text = "Hz";
             // 
             // FilterLPHz
             // 
             FilterLPHz.AutoSize = true;
             FilterLPHz.Location = new Point(301, 149);
             FilterLPHz.Name = "FilterLPHz";
-            FilterLPHz.Size = new Size(27, 15);
+            FilterLPHz.Size = new Size(21, 15);
             FilterLPHz.TabIndex = 23;
-            FilterLPHz.Text = "kHz";
+            FilterLPHz.Text = "Hz";
             // 
             // lblPhaseDegree
             // 

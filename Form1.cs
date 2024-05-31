@@ -22,6 +22,8 @@ using System.IO;
 using System.Windows.Forms;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Text;
+
 
 namespace EtHerG
 {
@@ -76,7 +78,7 @@ namespace EtHerG
         public Int32 AverageY1;
         public int ChangeCounterStepper; //Test this, its supposed to 
         public int ChangeCounterDivider; //Test this
-        public int ChangeCounter;
+        public long ChangeCounter;
         public int DisplayX1 = 0; //Corrected Measurement value (so its always in the middle) 
         public int DisplayY1 = 0;
         public bool Play = true; //can be controlled via Modbus to start / stop the measurement (machine running/tube in machine)
@@ -295,7 +297,6 @@ namespace EtHerG
                         listEtherError.Items.Add(errorString);
                     }));
                 }
-
                 lasterror = errorString;
             }
         }
@@ -450,7 +451,7 @@ namespace EtHerG
             //NewRealtimeData is the whole Method for Reading/Using Values from the EmbedEC. 
             counter++; //Adding a +1 to the Counter is the first Operation as no matter the Value of X1/Y1, it has run this method
 
-            if ((X1 > -50000 || X1 < 50000 || Y1 > -50000 || Y1 < 50000) && Play)
+            if (X1 > -50000 && X1 < 50000 && Y1 > -50000 && Y1 < 50000 && Play)
             {
                 //Sometimes the EmbedEC returns a crazy high/low Value so I just filter this out from the start. 
                 //Also I will only continue if Play is true. This had to be changed up to here because the Offset Calculation shouldnt continue when theres no measurement active.
@@ -465,38 +466,18 @@ namespace EtHerG
                 SumX1 += Convert.ToInt64(X1);
                 SumY1 += Convert.ToInt64(Y1);
 
-
-                //The ChangeCounterStepper is supposed to smoothen the average on Measurement Startup. 
-                //This might be a good compromise between having a high average (= high accuracy but long "settlement time") and low average (low average but fast settlement)
-                //As Always, Test this
-                switch (ChangeCounterStepper)
+                if (ChangeCounter >= EtHerG.Properties.Settings.Default.AmountAveragePoints) //If the Counter exceeds 10000 we will create the Average Value, this can be changed. Perhaps you want a more accurate average or you want a faster reacting average. 
                 {
-                    case 0:
-                        ChangeCounterDivider = Convert.ToInt32(EtHerG.Properties.Settings.Default.AmountAveragePoints * 0.01);
-                        break;
-                    case 1:
-                        ChangeCounterDivider = Convert.ToInt32(EtHerG.Properties.Settings.Default.AmountAveragePoints * 0.1);
-                        break;
-                    case 2:
-                        ChangeCounterDivider = Convert.ToInt32(EtHerG.Properties.Settings.Default.AmountAveragePoints * 1);
-                        break;
-                }
-
-
-                if (ChangeCounter >= ChangeCounterDivider) //If the Counter exceeds 10000 we will create the Average Value, this can be changed. Perhaps you want a more accurate average or you want a faster reacting average. 
-                {
-                    AverageX1 = (int)(SumX1 / (long)ChangeCounter); //Im dividing with the ChangeCounter and not 10.000 Values because I might have run over the 10.000 Values 
-                    AverageY1 = (int)(SumY1 / (long)ChangeCounter);
+                    AverageX1 = (int)(SumX1 / ChangeCounter); //Im dividing with the ChangeCounter and not 10.000 Values because I might have run over the 10.000 Values 
+                    AverageY1 = (int)(SumY1 / ChangeCounter);
 
                     SumX1 = 0; //and in the End reset the Sum and Counter
                     SumY1 = 0;
                     ChangeCounter = 0;
-                    if (ChangeCounterDivider < 2) { ChangeCounterDivider += 1; } //Test this
                 }
 
                 DisplayX1 = X1 - AverageX1; //Now Apply my Offset to the measured Values to create the functional Value it should Display. 
                 DisplayY1 = Y1 - AverageY1;
-
 
 
                 VectorLength = Math.Sqrt(Math.Pow(DisplayX1, 2) + Math.Pow(DisplayY1, 2));
@@ -707,6 +688,9 @@ namespace EtHerG
             // Stop all timers
             resetTimer.Stop();
             ModbusTimer.Stop();
+            resetTimer.Dispose();
+            resetTimer.Elapsed -= ResetTimer_Elapsed;
+
 
             // Cancel the background workers and wait for them to complete
             await CancelBackgroundWorkerAsync(DiagWorker);
@@ -761,7 +745,10 @@ namespace EtHerG
                     ScatterY.Clear();
                     FormatScatterDiag();
                     FormatLineDiag();
-                    ChangeCounterStepper = 0; //Test this
+
+                    SumX1 = 0;
+                    SumY1 = 0;
+                    ChangeCounter = 0;
                 }
                 Invoke(new Action(() =>
                 {
@@ -1720,6 +1707,8 @@ namespace EtHerG
                         }
 
                     }));
+
+                    MessageBox.Show("<FILTER_LP>" + EtHerG.Properties.Settings.Default.FilterLP * 100 + "</FILTER_LP>");
                     break;
 
                 case "FilterHP":
@@ -2268,9 +2257,9 @@ namespace EtHerG
 
         private void txtAmountAveragePoints_LostFocus(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(txtAmountAveragePoints.Text) && int.TryParse(txtAmountAveragePoints.Text, out int Value))
+            if (!string.IsNullOrWhiteSpace(txtAmountAveragePoints.Text) && long.TryParse(txtAmountAveragePoints.Text, out long Value))
             {
-                EtHerG.Properties.Settings.Default.AmountAveragePoints = Convert.ToInt16(txtAmountAveragePoints.Text);
+                EtHerG.Properties.Settings.Default.AmountAveragePoints = Value;
                 EtHerG.Properties.Settings.Default.Save();
             }
         }
