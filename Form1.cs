@@ -501,54 +501,8 @@ namespace EtHerG
                 }
 
 
-                //Test the Handle Alarm Function if its working then remove the commented out code.
-                //Test this with InfluxDB!!
                 HandleAlarm(EtHerG.Properties.Settings.Default.Alarm1Value, EtHerG.Properties.Settings.Default.Alarm1ModbusAddress, ref Alarm1SingleWrite, ref Alarm1Timer);
                 HandleAlarm(EtHerG.Properties.Settings.Default.Alarm2Value, EtHerG.Properties.Settings.Default.Alarm2ModbusAddress, ref Alarm2SingleWrite, ref Alarm2Timer);
-
-                //if ((DisplayX1 > EtHerG.Properties.Settings.Default.Alarm1Value || DisplayX1 < -EtHerG.Properties.Settings.Default.Alarm1Value || DisplayY1 > EtHerG.Properties.Settings.Default.Alarm1Value || DisplayY1 < -EtHerG.Properties.Settings.Default.Alarm1Value) && ModbusCon && AlarmReady)
-                //{
-                //    Alarm1Timer.Stop();
-                //    Alarm1Timer.Start();
-                //    if (Alarm1SingleWrite == false)
-                //    {
-                //        Alarm1SingleWrite = true;
-                //        modbusMaster.WriteSingleCoil(1, EtHerG.Properties.Settings.Default.Alarm1ModbusAddress, true);
-
-                //        if (EtHerG.Properties.Settings.Default.InfluxDBEnabled)
-                //        {
-                //            var Alarm1 = PointData.Measurement("Alarms")
-                //                .Tag("device", EtHerG.Properties.Settings.Default.InfluxDBMachine)
-                //                .Field("Alarm1", true)
-                //                .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
-
-                //            influxDBClient.GetWriteApi().WritePoint(Alarm1, EtHerG.Properties.Settings.Default.InfluxDBBucket, EtHerG.Properties.Settings.Default.InfluxDBOrgID);
-                //        }
-                //    }
-                //}
-
-                //if ((DisplayX1 > EtHerG.Properties.Settings.Default.Alarm2Value || DisplayX1 < -EtHerG.Properties.Settings.Default.Alarm2Value || DisplayY1 > EtHerG.Properties.Settings.Default.Alarm2Value || DisplayY1 < -EtHerG.Properties.Settings.Default.Alarm2Value) && ModbusCon && AlarmReady)
-                //{
-                //    Alarm2Timer.Stop();
-                //    Alarm2Timer.Start();
-                //    if (Alarm2SingleWrite == false)
-                //    {
-                //        Alarm2SingleWrite = true;
-                //        modbusMaster.WriteSingleCoil(1, EtHerG.Properties.Settings.Default.Alarm2ModbusAddress, true);
-
-                //        if (EtHerG.Properties.Settings.Default.InfluxDBEnabled)
-                //        {
-                //            var Alarm2 = PointData.Measurement("Alarms")
-                //                .Tag("device", EtHerG.Properties.Settings.Default.InfluxDBMachine)
-                //                .Field("Alarm2", true)
-                //                .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
-
-                //            influxDBClient.GetWriteApi().WritePoint(Alarm2, EtHerG.Properties.Settings.Default.InfluxDBBucket, EtHerG.Properties.Settings.Default.InfluxDBOrgID);
-                //        }
-                //    }
-                //}
-
-
 
 
                 //If dataX list is full, it will run the background worker 
@@ -568,7 +522,6 @@ namespace EtHerG
 
         void HandleAlarm(int alarmValue, ushort alarmModbusAddress, ref bool singleWriteFlag, ref System.Timers.Timer alarmTimer)
         {
-            //TEST THIS WITH THE VECTOR LENGTH! 
             if (VectorLength > alarmValue && AlarmReady)
             {
                 //If im outside of either Alarmvalue Bounds it will start the Timer (or restart) and then either or write the Alarm to the specified Modbus Coil and to the InfluxDB 
