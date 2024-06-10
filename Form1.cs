@@ -1660,8 +1660,6 @@ namespace EtHerG
                         }
 
                     }));
-
-                    MessageBox.Show("<FILTER_LP>" + EtHerG.Properties.Settings.Default.FilterLP * 100 + "</FILTER_LP>");
                     break;
 
                 case "FilterHP":
